@@ -23,7 +23,7 @@ const menu = [
     },
     {
         key: "Sub1",
-        label: <><span>Departments</span> <ArrowDown /></>,
+        label: <><span>Departments</span></>,
         icon: <HiOutlineUserGroup />,
         children: [
             {
@@ -42,7 +42,7 @@ const menu = [
 
     }, {
         key: "Sub2",
-        label: <><span>Your Idea</span> <ArrowDown /></>,
+        label: <><span>Your Idea</span></>,
         icon: <FcIdea />,
         children: [
             {
