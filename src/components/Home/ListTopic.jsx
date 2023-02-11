@@ -3,7 +3,7 @@ import { LikeOutlined, DislikeOutlined, MessageOutlined, } from '@ant-design/ico
 import { FcIdea } from "react-icons/fc"
 import { GrView } from "react-icons/gr"
 import { HiPencilAlt } from "react-icons/hi"
-import { CiViewList } from "react-icons/ci"
+import { MdList } from "react-icons/md";
 import { FcInfo } from "react-icons/fc"
 import React from 'react';
 
@@ -49,8 +49,8 @@ export default function ListTopic() {
                                 <Tooltip placement="leftTop" title={"Submit Idea To Topic"}>
                                     <HiPencilAlt size={36} style={{ cursor: "pointer" }} />
                                 </Tooltip>
-                                <Tooltip placement="leftTop" title={"View Ideas Of Topic"}>
-                                    <CiViewList size={36} style={{ cursor: "pointer" }} />
+                                <Tooltip placement="leftTop" title="View Ideas Of Topic">
+                                    <MdList size={36} style={{ cursor: "pointer" }} />
                                 </Tooltip>
                                 <Tooltip placement="leftTop" color={"cyan"}
                                     title={<>
