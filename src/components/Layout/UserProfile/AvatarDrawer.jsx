@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 
 export default function AvatarDrawer() {
     const [form] = Form.useForm()
-    useEffect(() => {
-        form.setFieldValue("email", "email@gmail.com")
-    }, [])
+    // useEffect(() => {
+    //     form.setFieldValue("email", "email@gmail.com")
+    // }, [])
 
     const [open, setOpen] = useState(false);
 
@@ -52,9 +52,12 @@ export default function AvatarDrawer() {
                     </Space>
                 }
             >
-                <Form form={form} labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
+                <Form form={form} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
                     <Form.Item label="Email" name="email">
                         <Input type="text" defaultValue="phamcaosang@gmail.com" disabled />
+                    </Form.Item>
+                    <Form.Item label="Department" name="department">
+                        <Input type="text" defaultValue="Department A" disabled />
                     </Form.Item>
                     <Form.Item label="Username" name="username">
                         <Input type="text" defaultValue="phamcaosang135" />
