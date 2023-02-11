@@ -1,0 +1,66 @@
+User:
+    email: patterns ?
+    password: string
+    avatar: default string
+    role: (Ad, QAM, QAC, Staff, None)
+
+Department:
+    name: unique, string
+    dsc: long text
+
+Topic:
+    name:  unique, string
+    dsc: text editor
+    departmentId: FK: 1-1
+    closure_date_idea: date
+    closure_date_comment: date
+
+File:
+    name: string
+    ideaId: FK: n-1
+
+Comment:
+    content: string
+    userId: FK: n-1
+    ideaId: FK: n-1
+    anonymously: default of false
+    answerTo: commentId: FK 
+    level: int: default of 0
+    visible: boolean: default of true
+    hiddenBy: "" || Role (Ad, QAM, QAC)
+
+Emoticon:
+    name: string
+    icon: string
+
+Emoticon_Idea:
+    emoticonId: FK
+    ideaId: FK
+    userID: FK
+
+Emoticon_Comment:
+    emoticonId: FK
+    commentId: FK
+    userID: FK
+
+Category:
+    name: string
+
+Category_Idea:
+    categoryId: FK
+    ideaId: FK
+
+Idea:
+    title: string
+    dsc: text editor
+    userId: FK: 1-1
+    anonymously: default of false
+    visible: boolean: default of true
+
+
+
+    
+
+
+
+

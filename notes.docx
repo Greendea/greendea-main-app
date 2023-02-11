@@ -1,0 +1,39 @@
+An administrator:
+    Maintain any system data: Closure dates for each academic year, staff details.
+A Quality Assurance Manager:
+    Oversee the process
+    Can add and delete categories at any time
+    Be able to download all the data after the final closure date in a CSV file for transfer out of the system.  Any uploaded documents need to be downloaded in a ZIP file.
+A QA Coordinator: controll each department
+Staff (everyone in system): 
+    Submit one or more ideas
+    Must agree to Terms and Conditions before they can submit
+    Optionally upload documents to support their ideas
+    Can see all submitted ideas and can comment on any idea
+    Can give the Thumbs Up or Thumbs Down for any idea
+
+Ideas:
+    Can be categorised (tagged) from a list of categories
+    Can be posted anonymously
+    Are disabled after a closure date for new ideas
+Comments:
+    Can be posted anonymously 
+    Can continue to be done until a final closure date
+
+Features:
+    Once an idea is submitted the system emails a notification to the Department’s QA Coordinator
+    The author of an idea receives an automatic email notification whenever a comment is submitted to any of their ideas
+    Lists of Most Popular Ideas (+1 for Thumbs Up, -1 for Thumbs Down), Most Viewed Ideas, Latest Ideas and Latest Comments must be made available to all users.
+    Lists of Ideas need to be paginated (5 per page)
+
+Statistical analysis: ? Role
+    Number of ideas made by each Department.
+    Percentage of ideas by each Department.
+    Number of contributors within each Department
+    Exceptions:
+        Ideas without a comment.
+        Anonymous ideas and comments.
+
+
+
+
