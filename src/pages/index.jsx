@@ -15,13 +15,6 @@ export default function Home() {
   const { data, isLoading } = useGetUsersQuery()
   console.log(data, isLoading)
 
-  useEffect(() => {
-    fetch("http://localhost:3000/api/user", {
-      method: "GET"
-    }).then(res => res.json()).then(res => console.log(res))
-  }, [])
-
-  // console.log(session, status)
   return (
     <>
       <Layout>

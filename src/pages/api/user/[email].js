@@ -20,6 +20,6 @@ export default async function handler(req, res) {
         return await GetUserByEmail(req, res, userSession)
     } catch (error) {
         console.log(error)
-        res.status(500).send({ message: 'Server error!' });
+        res.status(500).send({ message: 'Server error!', error: error });
     }
 }
