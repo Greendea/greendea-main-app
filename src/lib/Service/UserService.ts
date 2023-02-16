@@ -1,3 +1,4 @@
+import prisma from "../prisma"
 export const GetAllUser = async (req, res, userSession) => {
     if (userSession.Role.name !== "admin") {
         return res.status(404).json({
