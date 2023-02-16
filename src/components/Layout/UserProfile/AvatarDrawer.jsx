@@ -1,11 +1,27 @@
+import { useGetUserByEmailQuery } from '@/redux/apiSlicers/User';
 import { Avatar, Button, Divider, Drawer, Form, Input, List, Space, Typography, Upload } from 'antd'
+import { signOut, useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 
 export default function AvatarDrawer() {
+    const { data: session, status } = useSession()
+    const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session?.user.email, {
+        skip: !status === "authenticated"
+    })//.unwrap().then(res => console.log(res)).catch(err => console.log(err))
     const [form] = Form.useForm()
-    // useEffect(() => {
-    //     form.setFieldValue("email", "email@gmail.com")
-    // }, [])
+
+
+    useEffect(() => {
+        if (isSuccess) {
+            console.log(User)
+            form.setFieldsValue({
+                email: User?.email,
+                username: User?.name,
+                department: User?.Department?.name,
+                role: User?.Role?.name,
+            })
+        }
+    }, [isSuccess])
 
     const [open, setOpen] = useState(false);
 
@@ -28,11 +44,15 @@ export default function AvatarDrawer() {
         'You commented on idea "dsaddsasddd"',
         'Man commented on comment "dsa gdgfd as"',
         'Los Angeles battles huge wildfires.',
+        'You disliked the comment lorem is pul...',
+        'You commented on idea "dsaddsasddd"',
+        'Man commented on comment "dsa gdgfd as"',
+        'Los Angeles battles huge wildfires.',
     ];
 
     return (
         <>
-            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+            <Avatar src={session?.user.image}
                 onClick={showDrawer}
                 className="avatar"
                 style={{
@@ -45,35 +65,28 @@ export default function AvatarDrawer() {
                 extra={
                     <Space>
                         <Button onClick={onClose} type="default">Cancel</Button>
-                        <Button onClick={onClose} danger>Logout</Button>
-                        <Button onClick={onClose} type="primary">
+                        <Button onClick={() => {
+                            signOut()
+                            onClose()
+                        }} danger>Logout</Button>
+                        {/* <Button onClick={onClose} type="primary">
                             Save Changes
-                        </Button>
+                        </Button> */}
                     </Space>
                 }
             >
                 <Form form={form} labelCol={{ span: 7 }} wrapperCol={{ span: 17 }}>
-                    <Form.Item label="Email" name="email">
-                        <Input type="text" defaultValue="phamcaosang@gmail.com" disabled />
+                    <Form.Item label="Email" name="email" colon={false}>
+                        <Input type="text" disabled />
                     </Form.Item>
-                    <Form.Item label="Department" name="department">
-                        <Input type="text" defaultValue="Department A" disabled />
+                    <Form.Item label="Department" name="department" colon={false}>
+                        <Input type="text" disabled />
                     </Form.Item>
-                    <Form.Item label="Username" name="username">
-                        <Input type="text" defaultValue="phamcaosang135" />
+                    <Form.Item label="Role" name="role" colon={false}>
+                        <Input type="text" disabled />
                     </Form.Item>
-                    <Form.Item label="Avatar" name="avatar">
-                        <Upload
-                            name="avatar"
-                            listType="picture-card"
-                            className="avatar-uploader"
-                            showUploadList={false}
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        // beforeUpload={beforeUpload}
-                        // onChange={handleChange}
-                        >
-                            + Upload
-                        </Upload>
+                    <Form.Item label="Username" name="username" colon={false}>
+                        <Input type="text" disabled />
                     </Form.Item>
                 </Form>
                 <Divider>

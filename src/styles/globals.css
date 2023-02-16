@@ -22,17 +22,28 @@
 @media screen and (min-width: 1580px) {
 
   .ant-layout-header,
-  .departmentWrapper {
-    width: 1580px !important;
+  .departmentWrapper,
+  .privilegeWrapper,
+  .stucture {
+    width: 1520px !important;
     margin: 0 auto;
+    padding-inline: 0px !important;
   }
+
+
+}
+
+.privilegeWrapper {
+  padding: 0 10px;
 }
 
 
 @media screen and (max-width: 640px) {
 
   .layout-header,
-  .ant-layout-header {
+  .ant-layout-header,
+  .privilegeWrapper,
+  .stucture {
     padding-inline: 10px !important;
   }
 

@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Department {
+  id    String @id @default(cuid())
+  name  String
+  users User[]
+
+  @@map(name: "department")
+}
+
+model Role {
+  id    String @id @default(cuid())
+  name  String
+  users User[]
+
+  @@map(name: "roles")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  status        Boolean   @default(true)
+  accounts      Account[]
+  sessions      Session[]
+  ideas         Idea[]
+  views         View[]
+  reacts        React[]
+
+  Department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?
+  Role         Role?       @relation(fields: [roleId], references: [id])
+  roleId       String?
+
+  @@map(name: "users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String
+  ideas Idea[]
+
+  @@map(name: "categories")
+}
+
+model Topic {
+  id               String   @id @default(cuid())
+  name             String
+  closureDateIdea  DateTime @map(name: "closure_date_idea")
+  closureDateTopic DateTime @map(name: "closure_date_topic")
+  createdAt        DateTime @default(now()) @map(name: "created_at")
+  updatedAt        DateTime @updatedAt @map(name: "updated_at")
+  ideas            Idea[]
+
+  @@map(name: "topics")
+}
+
+model Idea {
+  id         String    @id @default(cuid())
+  content    String
+  file       String?
+  createdAt  DateTime  @default(now()) @map(name: "created_at")
+  updatedAt  DateTime  @updatedAt @map(name: "updated_at")
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  Topic      Topic?    @relation(fields: [topicId], references: [id])
+  topicId    String?
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+
+  views  View[]
+  reacts React[]
+
+  @@map(name: "views")
+}
+
+model View {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+
+  Idea   Idea?   @relation(fields: [ideaId], references: [id])
+  ideaId String?
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+model React {
+  id String @id @default(cuid())
+
+  Idea   Idea?   @relation(fields: [ideaId], references: [id])
+  ideaId String?
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+}
+
+// model Post {
+//   id        String  @id @default(cuid())
+//   title     String
+//   content   String?
+//   published Boolean @default(false)
+
+//   author   User?   @relation(fields: [authorId], references: [id])
+//   authorId String?
+// }
+
+// model User {
+//   id        String   @id @default(cuid())
+//   name      String?
+//   email     String?  @unique
+//   createdAt DateTime @default(now()) @map(name: "created_at")
+//   updatedAt DateTime @updatedAt @map(name: "updated_at")
+
+//   posts Post[]
+
+//   @@map(name: "users")
+// }

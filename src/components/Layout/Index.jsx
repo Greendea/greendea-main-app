@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Avatar, Breadcrumb, Layout, Menu, theme } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { HiOutlineUserGroup } from "react-icons/hi";
@@ -9,11 +9,13 @@ import { ImTree } from "react-icons/im"
 import { FcIdea } from "react-icons/fc"
 import Link from 'next/link';
 import AvatarDrawer from './UserProfile/AvatarDrawer';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 const { Header, Content, Footer } = Layout;
-function ArrowDown() {
-    return <AiOutlineDown style={{ position: "relative", top: 1, fontSize: 10 }} />
-}
+// function ArrowDown() {
+//     return <AiOutlineDown style={{ position: "relative", top: 1, fontSize: 10 }} />
+// }
 
 const menu = [
     {
@@ -70,7 +72,17 @@ const menu = [
 ]
 
 
-export default function index({ children }) {
+export default function Index({ children }) {
+    const router = useRouter();
+    const { status } = useSession();
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/api/auth/signin")
+        }
+    }, [status])
+
+
     return (
         <Layout style={{
             backgroundColor: "#fff"
