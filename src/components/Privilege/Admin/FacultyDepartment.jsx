@@ -7,6 +7,7 @@ import { validateMessages } from '@/utils/validateMessage'
 import { Button, Divider, Form, Input, Modal, Select, Table, Tag, message, Descriptions } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { searchColumn } from '@/utils/tableFilters'
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     const [updateDeparment, { isLoading }] = useUpdateDepartmentByIdMutation()
@@ -121,19 +122,23 @@ const ConfirmDelete = ({ id, name, status }, deleteDepartment) => {
         },
     });
 }
-export default function FacultyDepartment() {
-    const { data, isloading } = useGetDepartmentsQuery()
+
+const Columns = () => {
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+    const [searchInput, setSearchInput] = useState('');
     const [deleteDepartment] = useDeleteDepartmentByIdMutation()
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataView, setDataView] = useState(null)
+    const searchFeature = (dataIndex) => {
+        return searchColumn({ dataIndex, searchedColumn, setSearchedColumn, searchText, setSearchText, searchInput, setSearchInput })
+    }
 
-
-    const columns = [
+    return [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            width: "40%"
+            width: "40%",
+            ...searchFeature("name")
         },
         {
             title: 'Created At',
@@ -149,6 +154,7 @@ export default function FacultyDepartment() {
             dataIndex: 'updatedAt',
             key: 'updated_at',
             width: "20%",
+            // sorter: (a, b) => Date.parse(a) - Date.parse(b),
             render: (value) => {
                 return <>{ParseDate(value)}</>
             }
@@ -182,11 +188,16 @@ export default function FacultyDepartment() {
             }
         }
     ];
+}
+export default function FacultyDepartment() {
+    const { data, isloading } = useGetDepartmentsQuery()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [dataView, setDataView] = useState(null)
 
     return (
         <div>
             <AddModal />
-            <Table loading={isloading} dataSource={data || []} columns={columns} bordered
+            <Table loading={isloading} dataSource={data || []} columns={Columns()} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF FACULTIES AND DEPARTMENTS</h2></Divider>} />
 
