@@ -110,7 +110,10 @@ export default function Staff() {
             width: "10%",
             render: (value, record) => {
                 return <>
-                    <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>ENABLED</Tag>
+                    {
+                        value ? <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>ENABLED</Tag> :
+                            <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>
+                    }
                 </>
             }
         },

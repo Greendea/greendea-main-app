@@ -12,17 +12,22 @@ generator client {
 }
 
 model Department {
-  id    String @id @default(cuid())
-  name  String
-  users User[]
+  id        String   @id @default(cuid())
+  name      String
+  status    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  users     User[]
 
   @@map(name: "department")
 }
 
 model Role {
-  id    String @id @default(cuid())
-  name  String
-  users User[]
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  users     User[]
 
   @@map(name: "roles")
 }
@@ -61,6 +66,8 @@ model User {
   emailVerified DateTime?
   image         String?
   status        Boolean   @default(true)
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   accounts      Account[]
   sessions      Session[]
   ideas         Idea[]
@@ -84,9 +91,11 @@ model VerificationToken {
 }
 
 model Category {
-  id    String @id @default(cuid())
-  name  String
-  ideas Idea[]
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  ideas     Idea[]
 
   @@map(name: "categories")
 }
@@ -125,6 +134,7 @@ model Idea {
 model View {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   Idea   Idea?   @relation(fields: [ideaId], references: [id])
   ideaId String?
@@ -133,7 +143,9 @@ model View {
 }
 
 model React {
-  id String @id @default(cuid())
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @updatedAt @map(name: "updated_at")
 
   Idea   Idea?   @relation(fields: [ideaId], references: [id])
   ideaId String?

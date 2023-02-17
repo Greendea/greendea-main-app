@@ -19,7 +19,7 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: item,
             }),
-            invalidatesTags: ["TypeName"]
+            invalidatesTags: [TypeName]
         }),
 
     }),
