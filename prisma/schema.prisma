@@ -67,7 +67,7 @@ model User {
   image         String?
   status        Boolean   @default(true)
   createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  updatedAt     DateTime? @updatedAt @map(name: "updated_at")
   accounts      Account[]
   sessions      Session[]
   ideas         Idea[]
