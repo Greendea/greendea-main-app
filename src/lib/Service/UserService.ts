@@ -1,18 +1,30 @@
 import prisma from "../prisma"
 export const GetAllUser = async (req, res, userSession) => {
-    if (userSession.Role.name !== "admin") {
+    if (!userSession.Role) {
         return res.status(404).json({
             message: "You are not authorized"
         })
+    } else {
+        if (userSession.Role.name !== "admin") {
+            return res.status(404).json({
+                message: "You are not authorized"
+            })
+        }
     }
     const users = await getAllUsers()
     return res.status(200).json(users)
 }
 
 export const GetUserByEmail = async (req, res, userSession) => {
-    if (userSession.Role.name === "admin" || userSession.email === req.query.email) {
-        const user = await findUserByEmail(req.query.email)
-        return res.status(200).json(user)
+    console.log("userSession", userSession)
+    if (userSession.email === req.query.email) {
+        return res.status(200).json(await findUserByEmail(req.query.email))
+    } else {
+        if (userSession.Role) {
+            if (userSession.Role.name === "admin") {
+                return res.status(200).json(await findUserByEmail(req.query.email))
+            }
+        }
     }
     return res.status(404).json({
         message: "You are not authorized"
