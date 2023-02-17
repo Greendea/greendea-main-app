@@ -35,12 +35,11 @@ export const getAllDepartment = async () => {
         orderBy: [
             {
                 updatedAt: 'desc',
-
             },
             {
-                createdAt: 'desc'
-            }
-        ]
+                createdAt: 'desc',
+            },
+        ],
     })
 }
 
