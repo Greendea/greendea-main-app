@@ -14,6 +14,7 @@ export default function Privilege() {
     const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session?.user.email, {
         skip: !status === "authenticated"
     })
+    console.log(role)
     useEffect(() => {
         if (isSuccess) {
             setRole(User?.Role?.name)
@@ -23,7 +24,7 @@ export default function Privilege() {
     return (
         <Layout>
             <div className='privilegeWrapper'>
-                {role === null && <Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} />}
+                {role ?? <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}
                 {role === "coordinator" && <Coordinatior />}
                 {["manager", "head"].includes(role) && <Manager_Head role={role} />}
