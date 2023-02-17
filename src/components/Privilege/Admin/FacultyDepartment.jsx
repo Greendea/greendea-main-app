@@ -1,34 +1,44 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department'
-import { Button, Divider, Form, Input, Modal, Select, Table, Tag } from 'antd'
+import { useAddDepartmentMutation, useDeleteDepartmentByIdMutation, useGetDepartmentsQuery, useUpdateDepartmentByIdMutation } from '@/redux/apiSlicers/Department'
+import { ParseDate } from '@/utils/dataParser'
+import { loading } from '@/utils/orgchart'
+import { validateMessages } from '@/utils/validateMessage'
+import { Button, Divider, Form, Input, Modal, Select, Table, Tag, message, Descriptions } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
-    console.log(dataView)
+    const [updateDeparment, { isLoading }] = useUpdateDepartmentByIdMutation()
     const [form] = Form.useForm()
-    const handleOk = () => {
-        setIsModalOpen(false);
-        setDataView(null)
-    };
+    const handleSubmit = (values) => {
+        updateDeparment({ ...values, id: dataView.id }).unwrap().then(res => {
+            form.resetFields()
+            setIsModalOpen(false)
+            message.success("Departmend Updated")
+        }).catch(res => {
+            console.log(res.data)
+            message.error(res.data.message)
+        })
+    }
     useEffect(() => {
         form.setFieldsValue({
             ...dataView,
         })
     }, [dataView])
 
-    return <Modal title="EDIT DEPARTMENT / FACULTY" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={400}
+    return <Modal title="EDIT DEPARTMENT / FACULTY" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={600}
         footer={[
             <Button key="Close" onClick={() => setIsModalOpen(false)}>Close</Button>,
-            <Button key="Save" type='primary' onClick={() => handleOk()}>Save Changes</Button>,
+            <Button key="Save" type='primary' onClick={() => form.submit()} loading={isLoading}>Save Changes</Button>,
         ]}
     >
-        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form}>
-            <Form.Item label="Name" name="name" colon={false}>
+        <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} onFinish={handleSubmit} validateMessages={validateMessages}>
+            <Form.Item label="Name" name="name" colon={false} rules={[{ required: true }]}>
                 <Input type="text" />
             </Form.Item>
 
-            <Form.Item label="Status" name="status" colon={false}>
+            <Form.Item label="Status" name="status" colon={false} rules={[{ required: true }]}>
                 {/* <Input type="text" /> */}
                 <Select>
                     <Select.Option value={false}>
@@ -40,12 +50,80 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
                 </Select>
             </Form.Item>
         </Form>
-    </Modal>
+    </Modal >
 }
 
+const AddModal = () => {
+    const [addDepartment, { isLoading }] = useAddDepartmentMutation()
+    const [form] = Form.useForm()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleSubmit = (values) => {
+        console.log(values)
+        // addDepartment
+        addDepartment(values).unwrap().then(res => {
+            console.log(res)
+            form.resetFields()
+            setIsModalOpen(false)
+            message.success("Departmend Added")
+        }).catch(res => {
+            console.log(res.data)
+            message.error(res.data.message)
+        })
+    }
+    return <div style={{ textAlign: "right", margin: "20px 0 10px 0" }}>
+        <Button type='primary' size='large' onClick={() => setIsModalOpen(true)}>ADD NEW</Button>
+        <Modal title="ADD DEPARTMENT / FACULTY" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={600}
+            footer={[
+                <Button key="Close" onClick={() => setIsModalOpen(false)}>Close</Button>,
+                <Button key="Save" type='primary' onClick={() => form.submit()} loading={isLoading}>Add New</Button>,
+            ]}
+        >
+            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} validateMessages={validateMessages} onFinish={handleSubmit}>
+                <Form.Item label="Name" name="name" colon={false} rules={[{ required: true }]}>
+                    <Input type="text" />
+                </Form.Item>
+
+                <Form.Item label="Status" name="status" colon={false} rules={[{ required: true }]}>
+                    {/* <Input type="text" /> */}
+                    <Select>
+                        <Select.Option value={false}>
+                            DISABLED
+                        </Select.Option>
+                        <Select.Option value={true}>
+                            ENABLED
+                        </Select.Option>
+                    </Select>
+                </Form.Item>
+            </Form>
+        </Modal>
+    </div>
+}
+const ConfirmDelete = ({ id, name, status }, deleteDepartment) => {
+    console.log(id)
+    Modal.confirm({
+        title: 'Do you Want to delete this item ?',
+        icon: <ExclamationCircleFilled />,
+        content: <>
+            <Descriptions column={1}>
+                <Descriptions.Item label="name">{name}</Descriptions.Item>
+                <Descriptions.Item label="status">{status ? "ENABLED" : "DISABLED"}</Descriptions.Item>
+            </Descriptions>
+        </>,
+        onOk() {
+            console.log(id)
+            deleteDepartment(id).unwrap().then(res => message.success("Department Deleted")).catch(err => {
+                console.log(err)
+                message.error("Failed To Delete This!")
+            })
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
+}
 export default function FacultyDepartment() {
     const { data, isloading } = useGetDepartmentsQuery()
-    console.log(data)
+    const [deleteDepartment] = useDeleteDepartmentByIdMutation()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
 
@@ -61,13 +139,19 @@ export default function FacultyDepartment() {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'created_at',
-            width: "20%"
+            width: "20%",
+            render: (value) => {
+                return <>{ParseDate(value)}</>
+            }
         },
         {
             title: 'Updated At',
             dataIndex: 'updatedAt',
             key: 'updated_at',
             width: "20%",
+            render: (value) => {
+                return <>{ParseDate(value)}</>
+            }
         },
         {
             title: "Status",
@@ -78,7 +162,7 @@ export default function FacultyDepartment() {
                 return <>
                     {
                         value ? <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>ENABLED</Tag> :
-                            <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>}
+                            <Tag color="red" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>}
                 </>
             }
         },
@@ -93,6 +177,7 @@ export default function FacultyDepartment() {
                         setDataView(record)
                         setIsModalOpen(true)
                     }}>EDIT</Tag>
+                    <Tag color="red" style={{ cursor: "pointer", padding: "5px 10px" }} onClick={() => ConfirmDelete(record, deleteDepartment)}>Delete</Tag>
                 </div>
             }
         }
@@ -100,6 +185,7 @@ export default function FacultyDepartment() {
 
     return (
         <div>
+            <AddModal />
             <Table loading={isloading} dataSource={data || []} columns={columns} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF FACULTIES AND DEPARTMENTS</h2></Divider>} />

@@ -19,27 +19,26 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: item
             }),
-            providesTags: [TypeName]
+            invalidatesTags: [TypeName]
         }),
         updateDepartmentById: builder.mutation({
             query: (item) => ({
-                url: `${TypeAPI}/${item.id}`,
+                url: `${TypeAPI}/${id}`,
                 method: 'PUT',
                 body: item,
             }),
-            invalidatesTags: ["TypeName"]
+            invalidatesTags: [TypeName]
         }),
-        // deleteDepartmentById: builder.mutation({
-        //     query: (item) => ({
-        //         url: `${TypeAPI}/${item.id}`,
-        //         method: 'PUT',
-        //         body: item,
-        //     }),
-        //     invalidatesTags: ["TypeName"]
-        // }),
+        deleteDepartmentById: builder.mutation({
+            query: (id) => ({
+                url: `${TypeAPI}/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: [TypeName]
+        }),
 
     }),
     overrideExisting: false,
 })
 
-export const { useGetDepartmentsQuery, useGetDepartmentByIdQuery, useAddDepartmentMutation, useUpdateDepartmentByIdMutation } = extendedApi;
+export const { useGetDepartmentsQuery, useGetDepartmentByIdQuery, useAddDepartmentMutation, useUpdateDepartmentByIdMutation, useDeleteDepartmentByIdMutation } = extendedApi;

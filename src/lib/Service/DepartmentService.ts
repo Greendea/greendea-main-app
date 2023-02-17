@@ -9,6 +9,11 @@ export const GetDepartmentByID = async (req, res, userSession) => {
 }
 
 export const AddDepartment = async (req, res, userSession) => {
+    if (await getDepartmentByName(req.body.name)) {
+        return res.status(400).json({
+            message: "Department Name Existed"
+        })
+    }
     return res.status(200).json(await addDepartment(req.body))
 }
 
@@ -26,20 +31,32 @@ export const DeleteDepartmentByID = async (req, res, userSession) => {
 
 
 export const getAllDepartment = async () => {
-    return await prisma.department.findMany({})
+    return await prisma.department.findMany({
+        orderBy: [
+            {
+                updatedAt: 'desc',
+
+            },
+            {
+                createdAt: 'desc'
+            }
+        ]
+    })
 }
 
 
 export const getDepartmentByID = async (id) => {
-    console.log(id)
-    console.log(await prisma.department.findUnique({
-        where: {
-            id: id
-        }
-    }))
     return await prisma.department.findFirst({
         where: {
             id: id
+        }
+    })
+}
+
+export const getDepartmentByName = async (name) => {
+    return await prisma.department.findFirst({
+        where: {
+            name: name
         }
     })
 }
