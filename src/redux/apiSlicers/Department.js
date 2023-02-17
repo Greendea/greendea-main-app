@@ -23,7 +23,7 @@ const extendedApi = apiSlice.injectEndpoints({
         }),
         updateDepartmentById: builder.mutation({
             query: (item) => ({
-                url: `${TypeAPI}/${id}`,
+                url: `${TypeAPI}/${item.id}`,
                 method: 'PUT',
                 body: item,
             }),

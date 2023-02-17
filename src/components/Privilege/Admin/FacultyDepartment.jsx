@@ -123,7 +123,7 @@ const ConfirmDelete = ({ id, name, status }, deleteDepartment) => {
     });
 }
 
-const Columns = () => {
+const Columns = (setDataView, setIsModalOpen) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [searchInput, setSearchInput] = useState('');
@@ -154,7 +154,6 @@ const Columns = () => {
             dataIndex: 'updatedAt',
             key: 'updated_at',
             width: "20%",
-            // sorter: (a, b) => Date.parse(a) - Date.parse(b),
             render: (value) => {
                 return <>{ParseDate(value)}</>
             }
@@ -197,7 +196,7 @@ export default function FacultyDepartment() {
     return (
         <div>
             <AddModal />
-            <Table loading={isloading} dataSource={data || []} columns={Columns()} bordered
+            <Table loading={isloading} dataSource={data || []} columns={Columns(setDataView, setIsModalOpen)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF FACULTIES AND DEPARTMENTS</h2></Divider>} />
 
