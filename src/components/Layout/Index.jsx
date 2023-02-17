@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react'
-import { Avatar, Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Avatar, Breadcrumb, Layout, Menu, Spin, theme } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { AiOutlineDown, AiOutlinePlusSquare, AiOutlineHistory } from "react-icons/ai"
@@ -12,10 +12,7 @@ import AvatarDrawer from './UserProfile/AvatarDrawer';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-const { Header, Content, Footer } = Layout;
-// function ArrowDown() {
-//     return <AiOutlineDown style={{ position: "relative", top: 1, fontSize: 10 }} />
-// }
+const { Header } = Layout;
 
 const menu = [
     {
@@ -71,47 +68,48 @@ const menu = [
     }
 ]
 
-
 export default function Index({ children }) {
     const router = useRouter();
     const { status } = useSession();
 
-    useEffect(() => {
-        if (status === "unauthenticated") {
-            router.push("/api/auth/signin")
-        }
-    }, [status])
-
+    if (status === "unauthenticated") {
+        router.push("/api/auth/signin")
+    }
 
     return (
-        <Layout style={{
-            backgroundColor: "#fff"
-        }}>
-            <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
-                <div
-                    style={{
-                        float: 'left',
-                        width: 120,
-                        height: "100%",
-                    }}
-                >
-                    <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
-                        style={{
-                            width: "100%"
-                            // height: "100%"
-                        }}
-                    />
-                </div>
-                <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    items={menu}
-                    style={{ marginRight: 50 }}
-                />
-                <AvatarDrawer />
-            </Header>
-            {children}
-        </Layout>
+        <Spin size='large' spinning={status !== "authenticated"} style={{ marginTop: 300 }}>
+            {
+                status === "authenticated" &&
+                <Layout style={{
+                    backgroundColor: "#fff"
+                }}>
+                    <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
+                        <div
+                            style={{
+                                float: 'left',
+                                width: 120,
+                                height: "100%",
+                            }}
+                        >
+                            <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
+                                style={{
+                                    width: "100%"
+                                    // height: "100%"
+                                }}
+                            />
+                        </div>
+                        <Menu
+                            theme="light"
+                            mode="horizontal"
+                            defaultSelectedKeys={['2']}
+                            items={menu}
+                            style={{ marginRight: 50 }}
+                        />
+                        <AvatarDrawer />
+                    </Header>
+                    {children}
+                </Layout>
+            }
+        </Spin>
     )
 }

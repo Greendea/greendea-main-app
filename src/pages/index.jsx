@@ -12,8 +12,8 @@ import { useGetUsersQuery } from '@/redux/apiSlicers/User'
 
 export default function Home() {
 
-  const { data, isLoading } = useGetUsersQuery()
-  console.log(data, isLoading)
+  // const { data, isLoading } = useGetUsersQuery()
+  // console.log(data, isLoading)
 
   return (
     <>
