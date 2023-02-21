@@ -1,15 +1,30 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { useGetUsersQuery } from '@/redux/apiSlicers/User';
-import { Button, Divider, Form, Input, Modal, Select, Table, Tag } from 'antd'
+import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
+import { useGetRolesQuery } from '@/redux/apiSlicers/Role';
+import { useGetUsersQuery, useUpdateUserMutation } from '@/redux/apiSlicers/User';
+import { SelectStatus } from '@/utils/selectEnable';
+import { validateMessages } from '@/utils/validateMessage';
+import { Button, Divider, Form, Input, message, Modal, Select, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 
 const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
-    console.log(dataView)
+    const { data: departments } = useGetDepartmentsQuery()
+    const { data: roles } = useGetRolesQuery()
+    const [updateUser, { isLoading }] = useUpdateUserMutation()
     const [form] = Form.useForm()
-    const handleOk = () => {
-        setIsModalOpen(false);
-        setDataView(null)
+    const handleSubmit = (values) => {
+        updateUser({
+            ...values,
+            id: dataView.id
+        }).unwrap().then(res => {
+            message.success("User updated")
+            setIsModalOpen(false);
+            setDataView(null)
+        }).catch(err => {
+            console.log(err)
+            message.error("Failed to update user")
+        })
     };
     useEffect(() => {
         form.setFieldsValue({
@@ -18,29 +33,50 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
             role: dataView?.Role?.name,
             status: dataView?.status ? "ENABLED" : "DISABLED"
         })
-    }, [dataView])
+    }, [JSON.stringify(dataView)])
 
-    return <Modal title="EDIT STAFF" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={400}
+    return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={400}
         footer={[
-            <Button key="Close" onClick={() => setIsModalOpen(false)}>Close</Button>,
-            <Button key="Save" type='primary' onClick={() => handleOk()}>Save Changes</Button>,
+            <Button key="Close" onClick={() => {
+                form.resetFields()
+                setIsModalOpen(false)
+            }}>Close</Button>,
+            <Button key="Save" type='primary' onClick={() => form.submit()} loading={isLoading}>Save Changes</Button>,
         ]}
     >
-        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form}>
+        <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} form={form} validateMessages={validateMessages} onFinish={handleSubmit}>
             <Form.Item label="Username" name="name" colon={false}>
                 <Input type="text" disabled />
             </Form.Item>
             <Form.Item label="Email" name="email" colon={false}>
                 <Input type="text" disabled />
             </Form.Item>
+
             <Form.Item label="Department" name="department" colon={false}>
-                <Input type="text" />
+                <Select allowClear defaultValue="Select deparment" options={departments?.map(i => {
+                    return {
+                        value: i.id,
+                        label: i.name
+                    }
+                })} />
             </Form.Item>
             <Form.Item label="Role" name="role" colon={false}>
-                <Input type="text" />
+                <Select allowClear defaultValue="Select deparment" options={roles?.map(i => {
+                    return {
+                        value: i.id,
+                        label: i.name
+                    }
+                })} />
             </Form.Item>
-            <Form.Item label="Status" name="status" colon={false}>
-                <Input type="text" />
+            <Form.Item label="Status" name="status" colon={false} rules={[{ required: true }]}>
+                <Select>
+                    <Select.Option value={false}>
+                        DISABLED
+                    </Select.Option>
+                    <Select.Option value={true}>
+                        ENABLED
+                    </Select.Option>
+                </Select>
             </Form.Item>
         </Form>
     </Modal>
@@ -50,7 +86,6 @@ export default function Staff() {
     const { data, isloading } = useGetUsersQuery()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
-
 
     const columns = [
         {
@@ -112,7 +147,7 @@ export default function Staff() {
                 return <>
                     {
                         value ? <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>ENABLED</Tag> :
-                            <Tag color="blue" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>
+                            <Tag color="red" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>
                     }
                 </>
             }
@@ -132,16 +167,15 @@ export default function Staff() {
             }
         }
     ];
-
     return (
         <div>
-            <Table loading={isloading} dataSource={data && Array(50).fill(data[0])} columns={columns} bordered
+            <Table loading={isloading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")} columns={columns} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF ASSIGNED STAFF</h2></Divider>} />
             <br />
             <br />
             <br />
-            <Table loading={isloading} dataSource={data && Array(50).fill(data[0])} columns={columns} bordered
+            <Table loading={isloading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")} columns={columns} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
 

@@ -11,6 +11,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model TermAndCondition {
+  id          Int    @id
+  description String
+}
+
 model Department {
   id        String   @id @default(cuid())
   name      String

@@ -12,6 +12,8 @@
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.3.52",
     "@balkangraph/orgchart.js": "^8.9.24",
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
+    "@ckeditor/ckeditor5-react": "^5.0.6",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@next/font": "13.1.5",
     "@prisma/client": "^4.10.1",

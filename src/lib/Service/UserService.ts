@@ -34,14 +34,43 @@ export const GetUserByEmail = async (req, res, userSession) => {
 
 
 export const UpdateUser = async (req, res, userSession) => {
-    return res.status(200).json({ name: 'John Doe' })
+    if (!userSession.Role) {
+        return res.status(404).json({
+            message: "You are not authorized"
+        })
+    }
+    if (userSession.Role.name !== "admin") {
+        return res.status(404).json({
+            message: "You are not authorized"
+        })
+    }
+    const user = await updateUserById(req.body.id, req.body)
+
+    return res.status(200).json({ user })
 }
 
 
 
 
-export const updateUserById = async (req, res, userSession) => {
-    return res.status(200).json({ name: 'John Doe' })
+export const updateUserById = async (id, { department, role, status }) => {
+    return await prisma.user.update({
+        where: {
+            id: id
+        },
+        data: {
+            Department: {
+                connect: {
+                    id: department
+                }
+            },
+            Role: {
+                connect: {
+                    id: role
+                }
+            },
+            status: status
+        }
+    })
 }
 
 export const findUserByEmail = async (email) => {

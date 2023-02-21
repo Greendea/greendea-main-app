@@ -1,19 +1,15 @@
 import { apiSlice } from "./_index";
 
-const TypeName = "User"
-const TypeAPI = "user"
+const TypeName = "Term"
+const TypeAPI = "term"
 
 const extendedApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        getUsers: builder.query({
+        getTermAndCondition: builder.query({
             query: () => TypeAPI,
             providesTags: [TypeName]
         }),
-        getUserByEmail: builder.query({
-            query: (email) => `${TypeAPI}/${email}`,
-            providesTags: [TypeName]
-        }),
-        updateUser: builder.mutation({
+        updateTermAndCondition: builder.mutation({
             query: (item) => ({
                 url: TypeAPI,
                 method: 'PUT',
@@ -26,4 +22,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetUsersQuery, useGetUserByEmailQuery, useUpdateUserMutation } = extendedApi;
+export const { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation } = extendedApi;

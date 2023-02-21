@@ -1,7 +1,8 @@
-import { GetAllUser, findUserByEmail, UpdateUser } from "@/lib/Service/UserService";
+import { GetAllRoles } from "@/lib/Service/RoleService";
+import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-const allowedMethods = ['GET', 'PUT'];
+const allowedMethods = ['GET'];
 
 export default async function handler(req, res) {
     try {
@@ -16,13 +17,7 @@ export default async function handler(req, res) {
             })
         }
 
-        const userSession = await findUserByEmail(session.user.email)
-        switch (req.method) {
-            case 'GET':
-                return GetAllUser(req, res, userSession)
-            case 'PUT':
-                return UpdateUser(req, res, userSession)
-        }
+        return GetAllRoles(req, res, authOptions)
 
     } catch (error) {
         console.log(error)
