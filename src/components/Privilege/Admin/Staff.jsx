@@ -3,7 +3,9 @@
 import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
 import { useGetRolesQuery } from '@/redux/apiSlicers/Role';
 import { useGetUsersQuery, useUpdateUserMutation } from '@/redux/apiSlicers/User';
+import { exposeFilters } from '@/utils/exposeFilter';
 import { SelectStatus } from '@/utils/selectEnable';
+import { searchColumn } from '@/utils/tableFilters';
 import { validateMessages } from '@/utils/validateMessage';
 import { Button, Divider, Form, Input, message, Modal, Select, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
@@ -82,23 +84,27 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
     </Modal>
 }
 
-export default function Staff() {
-    const { data, isloading } = useGetUsersQuery()
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [dataView, setDataView] = useState(null)
-
-    const columns = [
+const Columns = (setDataView, setIsModalOpen, data) => {
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+    const [searchInput, setSearchInput] = useState('');
+    const searchFeature = (dataIndex) => {
+        return searchColumn({ dataIndex, searchedColumn, setSearchedColumn, searchText, setSearchText, searchInput, setSearchInput })
+    }
+    return [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            width: "20%"
+            width: "20%",
+            ...searchFeature("name")
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
-            width: "20%"
+            width: "20%",
+            ...searchFeature("email")
         },
         {
             title: 'Department / Faculty',
@@ -109,7 +115,9 @@ export default function Staff() {
                 return <>
                     {value?.name}
                 </>
-            }
+            },
+            filters: data && exposeFilters(data.map(item => item.Department?.name)),
+            onFilter: (value, record) => record.Department?.name.includes(value.toString())
         },
         {
             title: 'Role',
@@ -120,7 +128,9 @@ export default function Staff() {
                 return <>
                     {value?.name}
                 </>
-            }
+            },
+            filters: data && exposeFilters(data.map(item => item.Role?.name)),
+            onFilter: (value, record) => record.Role?.name.includes(value.toString())
         },
         {
             title: "Avatar",
@@ -150,7 +160,9 @@ export default function Staff() {
                             <Tag color="red" style={{ cursor: "pointer", padding: "5px 10px" }}>DISABLED</Tag>
                     }
                 </>
-            }
+            },
+            filters: data && exposeFilters(data.map(item => item.status ? "ENABLED" : "DISABLED")),
+            onFilter: (value, record) => (record.status ? "ENABLED" : "DISABLED") === value
         },
         {
             title: "Action",
@@ -167,15 +179,26 @@ export default function Staff() {
             }
         }
     ];
+
+}
+
+export default function Staff() {
+    const { data, isloading } = useGetUsersQuery()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [dataView, setDataView] = useState(null)
+
+
     return (
         <div>
-            <Table loading={isloading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")} columns={columns} bordered
+            <Table loading={isloading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")}
+                columns={Columns(setDataView, setIsModalOpen, data)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF ASSIGNED STAFF</h2></Divider>} />
             <br />
             <br />
             <br />
-            <Table loading={isloading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")} columns={columns} bordered
+            <Table loading={isloading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
+                columns={Columns(setDataView, setIsModalOpen, data)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
 
