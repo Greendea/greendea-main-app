@@ -34,10 +34,10 @@ export const getAllDepartment = async () => {
     return await prisma.department.findMany({
         orderBy: [
             {
-                updatedAt: 'desc',
+                updated_at: 'desc',
             },
             {
-                createdAt: 'desc',
+                created_at: 'desc',
             },
         ],
     })

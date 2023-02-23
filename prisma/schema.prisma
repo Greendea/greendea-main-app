@@ -1,14 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
-// schema.prisma
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model TermAndCondition {
@@ -16,25 +12,27 @@ model TermAndCondition {
   description String
 }
 
-model Department {
-  id        String   @id @default(cuid())
-  name      String
-  status    Boolean  @default(true)
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-  users     User[]
-
-  @@map(name: "department")
-}
-
 model Role {
   id        String   @id @default(cuid())
   name      String
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   users     User[]
 
-  @@map(name: "roles")
+  @@map("roles")
+}
+
+model Department {
+  id           String         @id @default(cuid())
+  name         String
+  created_at   DateTime       @default(now()) @map("created_at")
+  updated_at   DateTime       @updatedAt @map("updated_at")
+  status       Boolean        @default(true)
+  topics       Topic[]
+  users        User[]
+  Announcement Announcement[]
+
+  @@map("departments")
 }
 
 model Account {
@@ -43,15 +41,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -65,26 +62,27 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
-  status        Boolean   @default(true)
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime? @updatedAt @map(name: "updated_at")
+  departmentId  String?
+  roleId        String?
+  topicId       String?
+  status        Boolean     @default(true)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime?   @updatedAt @map("updated_at")
   accounts      Account[]
-  sessions      Session[]
-  ideas         Idea[]
-  views         View[]
   reacts        React[]
+  sessions      Session[]
+  views         View[]
+  Department    Department? @relation(fields: [departmentId], references: [id])
+  Role          Role?       @relation(fields: [roleId], references: [id])
+  ideas         Idea[]
+  Topic         Topic[]
 
-  Department   Department? @relation(fields: [departmentId], references: [id])
-  departmentId String?
-  Role         Role?       @relation(fields: [roleId], references: [id])
-  roleId       String?
-
-  @@map(name: "users")
+  @@map("users")
 }
 
 model VerificationToken {
@@ -98,84 +96,76 @@ model VerificationToken {
 model Category {
   id        String   @id @default(cuid())
   name      String
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   ideas     Idea[]
 
-  @@map(name: "categories")
+  @@map("categories")
 }
 
 model Topic {
-  id               String   @id @default(cuid())
+  id               String      @id @default(cuid())
   name             String
-  closureDateIdea  DateTime @map(name: "closure_date_idea")
-  closureDateTopic DateTime @map(name: "closure_date_topic")
-  createdAt        DateTime @default(now()) @map(name: "created_at")
-  updatedAt        DateTime @updatedAt @map(name: "updated_at")
+  closureDateIdea  DateTime    @map("closure_date_idea")
+  closureDateTopic DateTime    @map("closure_date_topic")
+  openDate         DateTime    @map("open_date")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  departmentId     String?
+  Department       Department? @relation(fields: [departmentId], references: [id])
   ideas            Idea[]
+  User             User?       @relation(fields: [userId], references: [id])
+  userId           String?
 
-  @@map(name: "topics")
+  @@map("topics")
+}
+
+model Announcement {
+  id           String      @id @default(cuid())
+  title        String
+  content      String
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  departmentId String?
+  Department   Department? @relation(fields: [departmentId], references: [id])
+
+  @@map("announcements")
 }
 
 model Idea {
   id         String    @id @default(cuid())
   content    String
   file       String?
-  createdAt  DateTime  @default(now()) @map(name: "created_at")
-  updatedAt  DateTime  @updatedAt @map(name: "updated_at")
-  Category   Category? @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
   categoryId String?
-  Topic      Topic?    @relation(fields: [topicId], references: [id])
   topicId    String?
-  User       User?     @relation(fields: [userId], references: [id])
   userId     String?
+  reacts     React[]
+  views      View[]
+  Category   Category? @relation(fields: [categoryId], references: [id])
+  Topic      Topic?    @relation(fields: [topicId], references: [id])
+  User       User?     @relation(fields: [userId], references: [id])
 
-  views  View[]
-  reacts React[]
-
-  @@map(name: "views")
+  @@map("views")
 }
 
 model View {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  Idea   Idea?   @relation(fields: [ideaId], references: [id])
-  ideaId String?
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  createdAt DateTime @default(now()) @map("created_at")
+  ideaId    String?
+  userId    String?
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Idea      Idea?    @relation(fields: [ideaId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
 }
 
 model React {
   id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-  Idea   Idea?   @relation(fields: [ideaId], references: [id])
-  ideaId String?
-  User   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  ideaId    String?
+  userId    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  Idea      Idea?    @relation(fields: [ideaId], references: [id])
+  User      User?    @relation(fields: [userId], references: [id])
 }
-
-// model Post {
-//   id        String  @id @default(cuid())
-//   title     String
-//   content   String?
-//   published Boolean @default(false)
-
-//   author   User?   @relation(fields: [authorId], references: [id])
-//   authorId String?
-// }
-
-// model User {
-//   id        String   @id @default(cuid())
-//   name      String?
-//   email     String?  @unique
-//   createdAt DateTime @default(now()) @map(name: "created_at")
-//   updatedAt DateTime @updatedAt @map(name: "updated_at")
-
-//   posts Post[]
-
-//   @@map(name: "users")
-// }

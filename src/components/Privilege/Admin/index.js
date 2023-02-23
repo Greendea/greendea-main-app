@@ -4,7 +4,7 @@ import FacultyDepartment from './FacultyDepartment';
 import Staff from './Staff';
 import Statistic from './Statistic';
 import TermConditon from './TermConditon';
-import Topic from './Topic';
+import TopicIdea from './TopicIdea';
 const onChange = (key) => {
     console.log(key);
 };
@@ -12,7 +12,7 @@ const items = [
     {
         key: '1',
         label: `STAFF`,
-        children: <Staff />,
+        children: <Staff isAdmin={true} department={true} />,
     },
     {
         key: '2',
@@ -22,20 +22,15 @@ const items = [
     {
         key: '3',
         label: `TOPICS`,
-        children: <Topic />,
+        children: <TopicIdea department={true} />,
     },
     {
         key: '4',
-        label: `ANNOUNCEMENTS`,
-        children: <Announcement />,
-    },
-    {
-        key: '5',
         label: `TERMS AND CONDITIONS`,
         children: <TermConditon />,
     },
     {
-        key: '6',
+        key: '5',
         label: `STATISTICS`,
         children: <Statistic />,
     },

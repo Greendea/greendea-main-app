@@ -16,6 +16,7 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
     const [updateUser, { isLoading }] = useUpdateUserMutation()
     const [form] = Form.useForm()
     const handleSubmit = (values) => {
+        console.log(values)
         updateUser({
             ...values,
             id: dataView.id
@@ -29,15 +30,16 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
         })
     };
     useEffect(() => {
+        console.log(dataView)
         form.setFieldsValue({
             ...dataView,
-            deparment: dataView?.Department?.name,
-            role: dataView?.Role?.name,
-            status: dataView?.status ? "ENABLED" : "DISABLED"
+            deparment: dataView?.Department?.id,
+            role: dataView?.Role?.id,
+            status: dataView?.status
         })
     }, [JSON.stringify(dataView)])
 
-    return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={400}
+    return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} width={400}
         footer={[
             <Button key="Close" onClick={() => {
                 form.resetFields()
@@ -84,7 +86,7 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
     </Modal>
 }
 
-const Columns = (setDataView, setIsModalOpen, data) => {
+const Columns = (setDataView, setIsModalOpen, data, isAdmin) => {
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [searchInput, setSearchInput] = useState('');
@@ -164,45 +166,56 @@ const Columns = (setDataView, setIsModalOpen, data) => {
             filters: data && exposeFilters(data.map(item => item.status ? "ENABLED" : "DISABLED")),
             onFilter: (value, record) => (record.status ? "ENABLED" : "DISABLED") === value
         },
-        {
-            title: "Action",
-            dataIndex: "action",
-            key: "action",
-            width: "10%",
-            render: (value, record) => {
-                return <div style={{ textAlign: "center" }}>
-                    <Tag color="cyan" style={{ cursor: "pointer", padding: "5px 10px" }} onClick={() => {
-                        setDataView(record)
-                        setIsModalOpen(true)
-                    }}>EDIT</Tag>
-                </div>
-            }
-        }
+        isAdmin ?
+            {
+                title: "Action",
+                dataIndex: "action",
+                key: "action",
+                width: "10%",
+                render: (value, record) => {
+                    return <div style={{ textAlign: "center" }}>
+                        <Tag color="cyan" style={{ cursor: "pointer", padding: "5px 10px" }} onClick={() => {
+                            setDataView(record)
+                            setIsModalOpen(true)
+                        }}>EDIT</Tag>
+                    </div>
+                }
+            } : {}
     ];
 
 }
 
-export default function Staff() {
-    const { data, isloading } = useGetUsersQuery()
+export default function Staff({ isAdmin, department }) {
+    const { data, isLoading } = useGetUsersQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => ({
+            isLoading,
+            data: department === true ? data : data?.filter(i => i.Department?.id === department.id)
+        })
+    })
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
 
 
     return (
         <div>
-            <Table loading={isloading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")}
-                columns={Columns(setDataView, setIsModalOpen, data)} bordered
+            <Table loading={isLoading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")}
+                columns={Columns(setDataView, setIsModalOpen, data, isAdmin)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF ASSIGNED STAFF</h2></Divider>} />
             <br />
             <br />
             <br />
-            <Table loading={isloading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
-                columns={Columns(setDataView, setIsModalOpen, data)} bordered
-                pagination={{ pageSize: 5 }}
-                title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
+            {
+                isAdmin &&
+                <>
+                    <Table loading={isLoading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
+                        columns={Columns(setDataView, setIsModalOpen, data)} bordered
+                        pagination={{ pageSize: 5 }}
+                        title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
+                    <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
+                </>
+            }
 
-            <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
         </div>
     )
 }

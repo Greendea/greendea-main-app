@@ -10,6 +10,7 @@ import Manager_Head from "../components/Privilege/Manager_Head"
 
 export default function Privilege() {
     const [role, setRole] = useState(null)
+    const [department, setDepartment] = useState(null)
     const { data: session, status } = useSession()
     const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session?.user.email, {
         skip: !status === "authenticated"
@@ -18,6 +19,7 @@ export default function Privilege() {
     useEffect(() => {
         if (isSuccess) {
             setRole(User?.Role?.name)
+            setDepartment(User?.Department)
         }
     }, [isSuccess])
 
@@ -26,7 +28,7 @@ export default function Privilege() {
             <div className='privilegeWrapper'>
                 {role ?? <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}
-                {role === "coordinator" && <Coordinatior />}
+                {role === "coordinator" && <Coordinatior department={department} />}
                 {["manager", "head"].includes(role) && <Manager_Head role={role} />}
             </div>
         </Layout>

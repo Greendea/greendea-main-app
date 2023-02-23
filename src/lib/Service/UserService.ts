@@ -5,11 +5,11 @@ export const GetAllUser = async (req, res, userSession) => {
             message: "You are not authorized"
         })
     } else {
-        if (userSession.Role.name !== "admin") {
-            return res.status(404).json({
-                message: "You are not authorized"
-            })
-        }
+        // if (userSession.Role.name) {
+        //     return res.status(404).json({
+        //         message: "You are not authorized"
+        //     })
+        // }
     }
     const users = await getAllUsers()
     return res.status(200).json(users)
@@ -58,16 +58,8 @@ export const updateUserById = async (id, { department, role, status }) => {
             id: id
         },
         data: {
-            Department: {
-                connect: {
-                    id: department
-                }
-            },
-            Role: {
-                connect: {
-                    id: role
-                }
-            },
+            Department: department ? { connect: { id: department } } : { disconnect: true },
+            Role: role ? { connect: { id: role } } : { disconnect: true },
             status: status
         }
     })
@@ -86,11 +78,13 @@ export const findUserByEmail = async (email) => {
             status: true,
             Role: {
                 select: {
+                    id: true,
                     name: true
                 }
             },
             Department: {
                 select: {
+                    id: true,
                     name: true
                 }
             }
@@ -108,11 +102,13 @@ export const getAllUsers = async () => {
             status: true,
             Role: {
                 select: {
+                    id: true,
                     name: true
                 }
             },
             Department: {
                 select: {
+                    id: true,
                     name: true
                 }
             }

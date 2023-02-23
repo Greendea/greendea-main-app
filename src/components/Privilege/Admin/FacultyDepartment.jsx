@@ -16,6 +16,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
         updateDeparment({ ...values, id: dataView.id }).unwrap().then(res => {
             form.resetFields()
             setIsModalOpen(false)
+            setDataView(null)
             message.success("Departmend Updated")
         }).catch(res => {
             console.log(res.data)
@@ -142,7 +143,7 @@ const Columns = (setDataView, setIsModalOpen) => {
         },
         {
             title: 'Created At',
-            dataIndex: 'createdAt',
+            dataIndex: 'created_at',
             key: 'created_at',
             width: "20%",
             render: (value) => {
@@ -151,7 +152,7 @@ const Columns = (setDataView, setIsModalOpen) => {
         },
         {
             title: 'Updated At',
-            dataIndex: 'updatedAt',
+            dataIndex: 'updated_at',
             key: 'updated_at',
             width: "20%",
             render: (value) => {

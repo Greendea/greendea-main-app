@@ -11,8 +11,8 @@ const Editor = ({
             editor={ClassicEditor}
             data={value}
             onChange={(event, editor) => {
-                const data = editor.getData();
-                onChange(data);
+                // const data = editor.getData();
+                onChange(editor.getData());
             }}
         />
     );

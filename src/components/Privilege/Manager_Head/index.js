@@ -36,7 +36,7 @@ export default function Index({ role }) {
     return (
         <div>
             <h1 style={{ textAlign: "center", fontSize: 36, margin: "20px 0 0 0" }}>
-                {role.toUppercase()} Panel
+                {role?.toUppercase()} Panel
             </h1>
             <Tabs defaultActiveKey="1" items={items} onChange={onChange} size="large" />
         </div>

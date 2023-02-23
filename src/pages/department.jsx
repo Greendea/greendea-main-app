@@ -1,5 +1,5 @@
 import AnnouncementTable from "@/components/Department/AnnouncementTable";
-import DepartmentTable from "@/components/Department/DepartmentTable";
+import DepartmentTable from "@/components/Department/DepartmentTableIdeaTopic";
 import React from "react"
 import Layout from "../components/Layout/Index"
 
