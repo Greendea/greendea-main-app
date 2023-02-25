@@ -75,7 +75,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
 }
 
 
-export default function DepartmentTable({ department }) {
+export default function DepartmentTable({ department, editable = false }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading } = useGetTopicsQuery(undefined, {
@@ -166,6 +166,7 @@ export default function DepartmentTable({ department }) {
             }
         },
     ] : []
+
     const columns = [
         {
             title: 'Topic',
@@ -212,7 +213,7 @@ export default function DepartmentTable({ department }) {
                 return <>{ParseDate(value)}</>
             }
         },
-        {
+        editable ? {
             title: "Action",
             dataIndex: "action",
             key: "action",
@@ -227,7 +228,8 @@ export default function DepartmentTable({ department }) {
                     >Edit</Tag>
                 </>
             }
-        }
+        } : {}
+
     ];
     console.log(data)
 
@@ -250,6 +252,7 @@ export default function DepartmentTable({ department }) {
                     defaultExpandedRowKeys: ['0'],
                 }}
                 dataSource={data}
+                rowKey={(record) => record.id}
             />
             <ModalEdit isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
         </>

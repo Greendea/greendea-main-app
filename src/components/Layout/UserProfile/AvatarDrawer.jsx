@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react'
 
 export default function AvatarDrawer() {
     const { data: session, status } = useSession()
-    const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session?.user.email, {
-        skip: !status === "authenticated" || !session?.user
+    const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session.user.email, {
+        skip: session.user.email ? false : true
     })//.unwrap().then(res => console.log(res)).catch(err => console.log(err))
     const [form] = Form.useForm()
 

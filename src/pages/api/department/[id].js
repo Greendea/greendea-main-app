@@ -22,11 +22,6 @@ export default async function handler(req, res) {
                 message: "You are not authorized"
             })
         }
-        if (userSession.Role.name !== "admin") {
-            return res.status(404).json({
-                message: "You are not authorized"
-            })
-        }
 
         switch (req.method) {
             case 'GET':

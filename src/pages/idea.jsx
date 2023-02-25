@@ -11,6 +11,8 @@ import {
 import { CheckSquareOutlined, CloseSquareOutlined, EyeOutlined, InboxOutlined, SendOutlined } from '@ant-design/icons';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import Layout from "../components/Layout/Index"
+import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
+import { useState } from 'react';
 const props = {
     name: 'file',
     multiple: true,
@@ -32,8 +34,8 @@ const props = {
 };
 
 const Idea = () => {
-    const onFormLayoutChange = () => {
-    };
+    const { data: departments } = useGetDepartmentsQuery()
+    const [form] = Form.useForm()
 
     return (
         <Layout>
@@ -42,6 +44,7 @@ const Idea = () => {
                     IDEA SUBMISSION
                 </h1>
                 <Form
+                    form={form}
                     labelCol={{
                         span: 3,
                     }}
@@ -52,21 +55,27 @@ const Idea = () => {
                     initialValues={{
                         size: 'large',
                     }}
-                    onValuesChange={onFormLayoutChange}
                     size={'Large'}
                     style={{
                         maxWidth: "100%",
                     }}
                 >
                     <Form.Item label="Department">
-                        <Select>
-                            <Select.Option value="A">Department A</Select.Option>
+                        <Select
+                            options={departments?.map(item => {
+                                return {
+                                    value: item.id,
+                                    label: item.name
+                                }
+                            })}
+                        />
+                        {/* <Select.Option value="A">Department A</Select.Option>
                             <Select.Option value="B">Department B</Select.Option>
                             <Select.Option value="C">Department C</Select.Option>
-                        </Select>
+                        </Select> */}
                     </Form.Item>
                     <Form.Item label="Topic">
-                        <Select>
+                        <Select disabled={form.getFieldValue("Department") ? false : true}>
                             <Select.Option value="A">Topic A</Select.Option>
                             <Select.Option value="B">Topic B</Select.Option>
                             <Select.Option value="C">Topic C</Select.Option>

@@ -11,66 +11,63 @@ import Link from 'next/link';
 import AvatarDrawer from './UserProfile/AvatarDrawer';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
 
 const { Header } = Layout;
 
-const menu = [
-    {
-        key: "Cat1",
-        label: <Link href="/">Home</Link>,
-        icon: <HomeOutlined />
-    },
-    {
-        key: "Sub1",
-        label: <><span>Departments</span></>,
-        icon: <HiOutlineUserGroup />,
-        children: [
-            {
-                key: "Sub1-1",
-                label: <Link href="/department">Department A</Link>,
-            },
-            {
-                key: "Sub1-2",
-                label: <Link href="/department">Department B</Link>,
-            },
-            {
-                key: "Sub1-3",
-                label: <Link href="/department">Department C</Link>,
-            }
-        ]
+const menu = (departments) => {
+    return [
+        {
+            key: "Cat1",
+            label: <Link href="/">Home</Link>,
+            icon: <HomeOutlined />
+        },
+        {
+            key: "Sub1",
+            label: <><span>Departments</span></>,
+            icon: <HiOutlineUserGroup />,
+            children: departments?.map(department => {
+                return {
+                    key: `Sub-${department.id}`,
+                    label: <Link href={`/department/${department.id}`}>{department.name}</Link>,
+                }
+            })
 
-    }, {
-        key: "Sub2",
-        label: <><span>Your Idea</span></>,
-        icon: <FcIdea />,
-        children: [
-            {
-                key: "Sub2-1",
-                label: <Link href="/idea">Submit A New Idea</Link>,
-                icon: <AiOutlinePlusSquare />
-            },
-            {
-                key: "Sub2-2",
-                label: "Your Past Ideas",
-                icon: <AiOutlineHistory />
-            },
-        ]
-    }, {
-        key: "Cat2",
-        label: <Link href="/system">System</Link>,
-        icon: < ImTree />
-    },
-    {
-        key: "Cat3",
-        label: <Link href="/privilege">Privilege</Link>,
-        icon: <MdAdminPanelSettings />
+        }, {
+            key: "Sub2",
+            label: <><span>Your Idea</span></>,
+            icon: <FcIdea />,
+            children: [
+                {
+                    key: "Sub2-1",
+                    label: <Link href="/idea">Submit A New Idea</Link>,
+                    icon: <AiOutlinePlusSquare />
+                },
+                {
+                    key: "Sub2-2",
+                    label: "Your Past Ideas",
+                    icon: <AiOutlineHistory />
+                },
+            ]
+        }, {
+            key: "Cat2",
+            label: <Link href="/system">System</Link>,
+            icon: < ImTree />
+        },
+        {
+            key: "Cat3",
+            label: <Link href="/privilege">Privilege</Link>,
+            icon: <MdAdminPanelSettings />
 
-    }
-]
+        }
+    ]
+}
 
 export default function Index({ children }) {
     const router = useRouter();
     const { status } = useSession();
+
+    const { data: departments } = useGetDepartmentsQuery()
 
     if (status === "unauthenticated") {
         router.push("/api/auth/signin")
@@ -102,7 +99,7 @@ export default function Index({ children }) {
                             theme="light"
                             mode="horizontal"
                             defaultSelectedKeys={['2']}
-                            items={menu}
+                            items={menu(departments)}
                             style={{ marginRight: 50 }}
                         />
                         <AvatarDrawer />

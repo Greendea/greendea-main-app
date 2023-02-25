@@ -6,7 +6,7 @@ export default function Announcement({ department }) {
     return (
         <div>
             <AnnouncementForm department={department} />
-            <AnnouncementTable department={department} />
+            <AnnouncementTable department={department} editable={true} />
         </div>
     )
 }

@@ -17,16 +17,6 @@ export default async function handler(req, res) {
             })
         }
         const userSession = await findUserByEmail(session.user.email)
-        if (!userSession.Role) {
-            return res.status(404).json({
-                message: "You are not authorized"
-            })
-        }
-        if (userSession.Role.name !== "admin") {
-            return res.status(404).json({
-                message: "You are not authorized"
-            })
-        }
         if (req.method === "GET") {
             return GetAllDepartment(req, res, userSession)
         } else {

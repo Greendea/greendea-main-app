@@ -29,6 +29,15 @@ export const getAllAnnouncement = async () => {
                 createdAt: 'desc',
             },
         ],
+        select: {
+            id: true, title: true, content: true, createdAt: true, updatedAt: true,
+            Department: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
+        }
     })
 }
 

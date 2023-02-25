@@ -106,7 +106,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
-export default function AnnouncementTable({ department }) {
+export default function AnnouncementTable({ department, editable = false }) {
     const [isModalOpenView, setIsModalOpenView] = useState(false);
     const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
     const [dataView, setDataView] = useState(null)
@@ -116,6 +116,8 @@ export default function AnnouncementTable({ department }) {
             data: data?.filter(i => i.Department?.id === department.id)
         })
     })
+    console.log(department)
+    console.log(data)
     const columns = [
         {
             title: 'Title',
@@ -157,10 +159,12 @@ export default function AnnouncementTable({ department }) {
                         setDataView(record)
                         setIsModalOpenView(true)
                     }}>View Detail</Tag>
-                    <Tag color="cyan" style={{ cursor: "pointer" }} onClick={() => {
-                        setDataView(record)
-                        setIsModalOpenEdit(true)
-                    }}>Edit</Tag>
+                    {editable &&
+                        <Tag color="cyan" style={{ cursor: "pointer" }} onClick={() => {
+                            setDataView(record)
+                            setIsModalOpenEdit(true)
+                        }}>Edit</Tag>
+                    }
                 </Space>
             ),
         },

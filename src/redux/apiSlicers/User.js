@@ -10,7 +10,10 @@ const extendedApi = apiSlice.injectEndpoints({
             providesTags: [TypeName]
         }),
         getUserByEmail: builder.query({
-            query: (email) => `${TypeAPI}/${email}`,
+            query: (email) => {
+                console.log("EMAIL", email)
+                return `${TypeAPI}/${email}`
+            },
             providesTags: [TypeName]
         }),
         updateUser: builder.mutation({
