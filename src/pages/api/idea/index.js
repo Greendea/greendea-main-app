@@ -1,6 +1,6 @@
 import { uploadImage } from "@/lib/cloudinary";
 import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "@/lib/Service/DepartmentService";
-import { AddIdea, GetAllIdeas } from "@/lib/Service/IdeaService";
+import { AddIdea, GetAllIdeas, GetPersonalIdea } from "@/lib/Service/IdeaService";
 import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
@@ -48,6 +48,9 @@ export default async function handler(req, res) {
         }
 
         if (req.method === "GET") {
+            if (req.query.personal) {
+                return GetPersonalIdea(req, res, userSession)
+            }
             return GetAllIdeas(req, res, userSession)
         }
 

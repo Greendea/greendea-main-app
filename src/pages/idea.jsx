@@ -85,7 +85,7 @@ const Idea = () => {
             ...vals,
             files: uploadfiles
         }).unwrap().then(res => {
-            message.success("Idea added")
+            message.success("Idea Submitted")
             form.resetFields()
             setFiles([])
         }).catch(err => {

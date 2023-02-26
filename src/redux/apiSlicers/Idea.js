@@ -9,6 +9,10 @@ const extendedApi = apiSlice.injectEndpoints({
             query: () => TypeAPI,
             providesTags: [TypeName]
         }),
+        getPersonalIdeas: builder.query({
+            query: () => `${TypeAPI}?personal=true`,
+            providesTags: [TypeName]
+        }),
         addIdea: builder.mutation({
             query: (item) => ({
                 url: TypeAPI,
@@ -17,8 +21,18 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [TypeName]
         }),
+        updateIdeaStatus: builder.mutation({
+            query: (item) => ({
+                url: `${TypeAPI}/${item.id}`,
+                method: "PUT",
+                body: {
+                    status: item.status
+                }
+            }),
+            invalidatesTags: [TypeName]
+        }),
     }),
     overrideExisting: false,
 })
 
-export const { useAddIdeaMutation, useGetIdeasQuery } = extendedApi;
+export const { useAddIdeaMutation, useGetIdeasQuery, useUpdateIdeaStatusMutation, useGetPersonalIdeasQuery } = extendedApi;

@@ -46,7 +46,7 @@ const menu = (departments) => {
                 {
                     key: "Sub2-2",
                     label: "Your Past Ideas",
-                    icon: <AiOutlineHistory />
+                    icon: <Link href="/past"><AiOutlineHistory /></Link>
                 },
             ]
         }, {
