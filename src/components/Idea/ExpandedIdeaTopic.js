@@ -19,11 +19,12 @@ export const ExpandedIdeaRender = ({ topic }) => {
         selectFromResult: ({ data, isLoading }) => {
             return {
                 isLoading,
-                data: data?.filter(i => i?.Topic.id === topic.id)
+                data: data?.filter(i => i?.Topic.id === topic.id && i.status === 1)
             }
         },
         skip: !topic.id
     })
+    console.log(ideas)
     const [isShowIdea, setIsShowIdea] = useState(false)
     const [dataIdea, setDataIdea] = useState(null)
     const columns = [

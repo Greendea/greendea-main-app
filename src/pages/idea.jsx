@@ -6,7 +6,8 @@ import {
     Switch,
     message,
     Button,
-    Steps
+    Steps,
+    Spin
 } from 'antd';
 import { CheckSquareOutlined, CloseSquareOutlined, EyeOutlined, InboxOutlined, SendOutlined } from '@ant-design/icons';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
@@ -69,6 +70,9 @@ const Idea = () => {
         },
     };
     const handleSubmit = (vals) => {
+        if (files.length > 5) {
+            return message.error("Exceed maximum quantity of files allow!, less than 6 files")
+        }
         const dateNow = Date.now()
         const uploadfiles = files.map(({ url, name }) => {
             return {
@@ -76,7 +80,6 @@ const Idea = () => {
                 name: `${vals.department}/${vals.topic}/${dateNow}/${name}`,
             }
         })
-
         addIdea({
             id: dateNow,
             ...vals,
@@ -96,98 +99,70 @@ const Idea = () => {
                 <h1 style={{ textAlign: "center", marginBottom: 20 }}>
                     IDEA SUBMISSION
                 </h1>
-                <Form
-                    form={form}
-                    labelCol={{
-                        span: 4,
-                    }}
-                    wrapperCol={{
-                        span: 20,
-                    }}
-                    layout="horizontal"
-                    initialValues={{
-                        size: 'large',
-                    }}
-                    size={'Large'}
-                    style={{
-                        maxWidth: "100%",
-                    }}
-                    validateMessages={validateMessages}
-                    onFinish={handleSubmit}
-                >
-                    <Form.Item label="Department" rules={[{ required: true }]} name="department">
-                        <Select
-                            onChange={val => setDepartment(val)}
-                            options={departments?.map(item => {
-                                return {
-                                    value: item.id,
-                                    label: item.name
-                                }
-                            })}
-                        />
-                    </Form.Item>
-                    <Form.Item label="Topic" rules={[{ required: true }]} name="topic">
-                        <Select disabled={!!!department}
-                            options={topics?.map(item => {
-                                return {
-                                    value: item.id,
-                                    label: item.name
-                                }
-                            })}
-                        />
-                    </Form.Item>
-                    <Form.Item label="Anomyous" valuePropName="checked" name="isAnomyous">
-                        <Switch />
-                    </Form.Item>
-                    <Form.Item label="Idea" tooltip="From 10 to 1000 letters" rules={[{ min: 10 }, { required: true }]} name="content">
-                        <Input.TextArea rows={7} showCount maxLength={1000} />
-                    </Form.Item>
-                    <Form.Item label="Files" tooltip={`Allow files: ${allowFilesShow.join(", ")}`}>
-                        <Upload.Dragger {...props} >
-                            <p className="ant-upload-drag-icon">
-                                <InboxOutlined />
-                            </p>
-                            <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                            <p className="ant-upload-hint">
-                                Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                                band files
-                            </p>
-                        </Upload.Dragger>
-                    </Form.Item>
-                    <div style={{ textAlign: "right" }}>
-                        <Button type='primary' htmlType='submit' loading={isLoading}>Submit</Button>
-                    </div>
-                </Form>
-                {/* <div>
-                    <Steps
-                        items={[
-                            {
-                                title: 'Sent',
-                                status: 'finish',
-                                icon: <SendOutlined />,
-                            },
-                            {
-                                title: 'Viewed',
-                                status: 'finish',
-                                icon: <EyeOutlined />,
-                            },
-                            {
-                                title: 'Verified',
-                                status: 'finish',
-                                icon: <SolutionOutlined />,
-                            },
-                            // {
-                            //     title: 'Voting',
-                            //     status: 'process',
-                            //     icon: <CheckSquareOutlined />,
-                            // },
-                            {
-                                title: 'Close',
-                                status: 'wait',
-                                icon: <CloseSquareOutlined />,
-                            },
-                        ]} />
-                </div> */}
+                <Spin spinning={isLoading} size="large">
+                    <Form
+                        form={form}
+                        labelCol={{
+                            span: 4,
+                        }}
+                        wrapperCol={{
+                            span: 20,
+                        }}
+                        layout="horizontal"
+                        initialValues={{
+                            size: 'large',
+                        }}
+                        size={'Large'}
+                        style={{
+                            maxWidth: "100%",
+                        }}
+                        validateMessages={validateMessages}
+                        onFinish={handleSubmit}
+                    >
+                        <Form.Item label="Department" rules={[{ required: true }]} name="department">
+                            <Select
+                                onChange={val => setDepartment(val)}
+                                options={departments?.map(item => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name
+                                    }
+                                })}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Topic" rules={[{ required: true }]} name="topic">
+                            <Select disabled={!!!department}
+                                options={topics?.map(item => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name
+                                    }
+                                })}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Anomyous" valuePropName="checked" name="isAnomyous">
+                            <Switch />
+                        </Form.Item>
+                        <Form.Item label="Idea" tooltip="From 10 to 1000 letters" rules={[{ min: 10 }, { required: true }]} name="content">
+                            <Input.TextArea rows={7} showCount maxLength={1000} />
+                        </Form.Item>
+                        <Form.Item label="Files" tooltip={`Allow files: ${allowFilesShow.join(", ")}`}>
+                            <Upload.Dragger {...props} >
+                                <p className="ant-upload-drag-icon">
+                                    <InboxOutlined />
+                                </p>
+                                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                                <p className="ant-upload-hint">
+                                    Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                    band files
+                                </p>
+                            </Upload.Dragger>
+                        </Form.Item>
+                        <div style={{ textAlign: "right" }}>
+                            <Button type='primary' htmlType='submit' loading={isLoading}>Submit</Button>
+                        </div>
+                    </Form>
+                </Spin>
             </div>
         </Layout>
 

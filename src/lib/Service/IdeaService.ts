@@ -39,6 +39,7 @@ export const getAllIdeas = async () => {
             id: true,
             content: true,
             isAnomyous: true,
+            status: true,
             User: {
                 select: {
                     id: true,
@@ -48,7 +49,13 @@ export const getAllIdeas = async () => {
             Topic: {
                 select: {
                     id: true,
-                    name: true
+                    name: true,
+                    Department: {
+                        select: {
+                            id: true,
+                            name: true
+                        }
+                    }
                 }
             },
             files: {

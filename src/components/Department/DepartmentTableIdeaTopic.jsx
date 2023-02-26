@@ -8,6 +8,7 @@ import { validateMessages } from '@/utils/validateMessage';
 import dayjs from 'dayjs';
 import { ExpandedIdeaRender } from '../Idea/ExpandedIdeaTopic';
 import { HiOutlineDownload } from 'react-icons/hi';
+import WaitingIdea from './WaitingIdea';
 
 
 
@@ -166,7 +167,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         <>
             <Divider>
                 <span style={{ fontSize: 24 }}>
-                    Table Of Topics And Ideas
+                    Table Of Available Topics And Ideas
                 </span>
             </Divider>
             <Table
@@ -184,6 +185,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                 rowKey={(record) => record.id}
             />
             <ModalEdit isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
+            {editable && <WaitingIdea department={department} />}
         </>
     )
 }
