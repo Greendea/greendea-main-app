@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
-import { GrView } from "react-icons/gr"
-import { LikeOutlined, DislikeOutlined, MessageOutlined, } from '@ant-design/icons';
-import { Badge, Button, DatePicker, Divider, Dropdown, Form, Input, message, Modal, Select, Space, Table, Tag } from 'antd';
+import { Button, DatePicker, Descriptions, Divider, Dropdown, Form, Input, message, Modal, Select, Space, Table, Tag, Tooltip } from 'antd';
 import { useGetTopicsQuery, useUpdateTopicMutation } from '@/redux/apiSlicers/Topic';
 import { ParseDate } from '@/utils/dataParser';
 import { validateMessages } from '@/utils/validateMessage';
 import dayjs from 'dayjs';
-import { useGetIdeasQuery } from '@/redux/apiSlicers/Idea';
-const IconText = ({ icon, text }) => (
-    <Space>
-        {React.createElement(icon)}
-        {text}
-    </Space>
-);
+import { ExpandedIdeaRender } from '../Idea/ExpandedIdeaTopic';
+
 
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
@@ -75,71 +68,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
-const ExpandedIdeaRender = ({ topicId }) => {
-    const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
-        selectFromResult: ({ data, isLoading }) => {
-            return {
-                isLoading,
-                data: data?.filter(i => i?.Topic.id === topicId)
-            }
-        },
-        skip: !topicId
-    })
-    const columns = [
-        {
-            title: 'Idea',
-            dataIndex: 'content',
-            key: 'content',
-            width: "40%",
-        },
-        {
-            title: 'Submittor',
-            dataIndex: 'User',
-            key: 'User',
-            width: "15%",
-            render: (value, record) => {
-                return record.isAnomyous ? "ANOMYOUS" : value?.name
-            }
-        },
-        {
-            title: 'Created At',
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            width: "15%",
-            render: (val) => {
-                return ParseDate(val)
-            }
-        },
-        {
-            title: "Reaction",
-            dataIndex: 'reaction',
-            key: 'reaction',
-            width: "20%",
-            render: () => (
-                <Space size="middle">
-                    <IconText icon={GrView} text="1000" key="list-vertical-view-o" />
-                    <IconText icon={LikeOutlined} text="150" key="list-vertical-like-o" />
-                    <IconText icon={DislikeOutlined} text="30" key="list-vertical-dislike-o" />
-                    <IconText icon={MessageOutlined} text="500" key="list-vertical-message" />
-                </Space>
-            ),
-        },
-        {
-            title: 'Action',
-            dataIndex: 'operation',
-            key: 'operation',
-            width: "10%",
-            render: () => (
-                <Space size="middle">
-                    <a>View Detail</a>
-                </Space>
-            ),
-        },
-    ];
-    return <Table columns={columns} dataSource={ideas} pagination={false} loading={isLoading} />;
-};
-
-export default function DepartmentTable({ department, editable = false }) {
+export default function DepartmentTableTopic({ department, editable = false }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading } = useGetTopicsQuery(undefined, {
@@ -244,7 +173,7 @@ export default function DepartmentTable({ department, editable = false }) {
                 }}
                 columns={columns}
                 expandable={{
-                    expandedRowRender: record => <ExpandedIdeaRender topicId={record.id} />,
+                    expandedRowRender: record => <ExpandedIdeaRender topic={record} />,
                     defaultExpandedRowKeys: ['0'],
                 }}
                 dataSource={data}

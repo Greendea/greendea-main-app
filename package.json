@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/compatible": "^5.1.1",
     "@ant-design/icons": "^5.0.1",
     "@ant-design/pro-components": "^2.3.52",
     "@balkangraph/orgchart.js": "^8.9.24",
@@ -31,6 +32,7 @@
     "react-dom": "18.2.0",
     "react-highlight-words": "^0.20.0",
     "react-icons": "^4.7.1",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^8.0.5"
   }
 }
