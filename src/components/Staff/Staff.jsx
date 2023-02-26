@@ -209,7 +209,7 @@ export default function Staff({ isAdmin, department }) {
                 isAdmin &&
                 <>
                     <Table loading={isLoading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
-                        columns={Columns(setDataView, setIsModalOpen, data)} bordered
+                        columns={Columns(setDataView, setIsModalOpen, data, isAdmin)} bordered
                         pagination={{ pageSize: 5 }}
                         title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
                     <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
