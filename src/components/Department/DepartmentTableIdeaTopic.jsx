@@ -7,6 +7,7 @@ import { ParseDate } from '@/utils/dataParser';
 import { validateMessages } from '@/utils/validateMessage';
 import dayjs from 'dayjs';
 import { ExpandedIdeaRender } from '../Idea/ExpandedIdeaTopic';
+import { HiOutlineDownload } from 'react-icons/hi';
 
 
 
@@ -68,7 +69,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
-export default function DepartmentTableTopic({ department, editable = false }) {
+export default function DepartmentTableTopic({ department, editable = false, downloadable = false }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading } = useGetTopicsQuery(undefined, {
@@ -103,7 +104,7 @@ export default function DepartmentTableTopic({ department, editable = false }) {
             title: 'Creator',
             dataIndex: 'User',
             key: 'User',
-            width: "15%",
+            width: "10%",
             render: (value, record) => {
                 return <>
                     {value.name}
@@ -142,7 +143,7 @@ export default function DepartmentTableTopic({ department, editable = false }) {
             title: "Action",
             dataIndex: "action",
             key: "action",
-            width: "10%",
+            width: "15%",
             render: (value, record) => {
                 return <>
                     <Tag color="blue" style={{ cursor: "pointer" }}
@@ -151,6 +152,9 @@ export default function DepartmentTableTopic({ department, editable = false }) {
                             setIsModalOpen(true)
                         }}
                     >Edit</Tag>
+                    {downloadable &&
+                        <Tag color="blue" style={{ cursor: "pointer" }} icon={<HiOutlineDownload />}>DOWNLOAD</Tag>
+                    }
                 </>
             }
         } : {}

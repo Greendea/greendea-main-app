@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
-import Announcement from '../Admin/Announcement';
-import Staff from '../Admin/Staff';
-import TopicIdea from '../Admin/TopicIdea';
+import Announcement from '../../Department/Announcement';
+import Staff from '../../Staff/Staff';
+import TopicIdea from '../../Department/TopicIdeaPannel';
 const onChange = (key) => {
     console.log(key);
 };
@@ -18,7 +18,7 @@ export default function Index({ department }) {
         {
             key: '2',
             label: `TOPICS & IDEAS`,
-            children: <TopicIdea department={department} />,
+            children: <TopicIdea department={department} role={coordinator} />,
         },
         {
             key: '3',

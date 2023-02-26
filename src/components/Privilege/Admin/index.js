@@ -1,10 +1,10 @@
 import { Tabs } from 'antd';
-import Announcement from './Announcement';
+import Announcement from '../../Department/Announcement';
 import FacultyDepartment from './FacultyDepartment';
-import Staff from './Staff';
+import Staff from '../../Staff/Staff';
 import Statistic from './Statistic';
 import TermConditon from './TermConditon';
-import TopicIdea from './TopicIdea';
+import TopicIdea from '../../Department/TopicIdeaPannel';
 const onChange = (key) => {
     console.log(key);
 };

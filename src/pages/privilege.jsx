@@ -29,7 +29,7 @@ export default function Privilege() {
                 {role ?? <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}
                 {role === "coordinator" && <Coordinatior department={department} />}
-                {["manager", "head"].includes(role) && <Manager_Head role={role} />}
+                {["manager", "head"].includes(role) && <Manager_Head role={role} department={department} />}
             </div>
         </Layout>
     )

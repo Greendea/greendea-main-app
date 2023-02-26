@@ -1,42 +1,40 @@
+import Staff from '@/components/Staff/Staff';
 import { Tabs } from 'antd';
+import Announcement from '../../Department/Announcement';
+import TopicIdea from '../../Department/TopicIdeaPannel';
 const onChange = (key) => {
     console.log(key);
 };
-const items = [
-    {
-        key: '1',
-        label: `STAFF`,
-        children: `Content of Tab Pane 1`,
-    },
-    {
-        key: '2',
-        label: `TOPICS`,
-        children: `Content of Tab Pane 3`,
-    },
-    {
-        key: '3',
-        label: `IDEAS`,
-        children: `Content of Tab Pane 3`,
-    },
-    {
-        key: '4',
-        label: `Announcements`,
-        children: `Content of Tab Pane 3`,
-    },
-    {
-        key: '5',
-        label: `TAGS`,
-        children: `Content of Tab Pane 3`,
-    },
-
-];
 
 
-export default function Index({ role }) {
+export default function Index({ role, department }) {
+    const items = [
+        {
+            key: '1',
+            label: `STAFF`,
+            children: <Staff isAdmin={false} department={department} />,
+        },
+        {
+            key: '2',
+            label: `TOPICS & IDEAS`,
+            children: <TopicIdea department={department} role={role} />,
+        },
+        {
+            key: '3',
+            label: `Announcements`,
+            children: <Announcement department={department} />,
+        },
+        {
+            key: '4',
+            label: `TAGS`,
+            children: `Content of Tab Pane 3`,
+        },
+
+    ];
     return (
         <div>
             <h1 style={{ textAlign: "center", fontSize: 36, margin: "20px 0 0 0" }}>
-                {role?.toUppercase()} Panel
+                {role && role.toUpperCase()} Panel  - {department?.name}
             </h1>
             <Tabs defaultActiveKey="1" items={items} onChange={onChange} size="large" />
         </div>
