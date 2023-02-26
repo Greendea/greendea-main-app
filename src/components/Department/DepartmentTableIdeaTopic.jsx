@@ -8,6 +8,7 @@ import { useGetTopicsQuery, useUpdateTopicMutation } from '@/redux/apiSlicers/To
 import { ParseDate } from '@/utils/dataParser';
 import { validateMessages } from '@/utils/validateMessage';
 import dayjs from 'dayjs';
+import { useGetIdeasQuery } from '@/redux/apiSlicers/Idea';
 const IconText = ({ icon, text }) => (
     <Space>
         {React.createElement(icon)}
@@ -74,6 +75,69 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
+const ExpandedIdeaRender = ({ topicId }) => {
+    const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => {
+            return {
+                isLoading,
+                data: data?.filter(i => i?.Topic.id === topicId)
+            }
+        },
+        skip: !topicId
+    })
+    const columns = [
+        {
+            title: 'Idea',
+            dataIndex: 'content',
+            key: 'content',
+            width: "40%",
+        },
+        {
+            title: 'Submittor',
+            dataIndex: 'User',
+            key: 'User',
+            width: "15%",
+            render: (value, record) => {
+                return record.isAnomyous ? "ANOMYOUS" : value?.name
+            }
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            width: "15%",
+            render: (val) => {
+                return ParseDate(val)
+            }
+        },
+        {
+            title: "Reaction",
+            dataIndex: 'reaction',
+            key: 'reaction',
+            width: "20%",
+            render: () => (
+                <Space size="middle">
+                    <IconText icon={GrView} text="1000" key="list-vertical-view-o" />
+                    <IconText icon={LikeOutlined} text="150" key="list-vertical-like-o" />
+                    <IconText icon={DislikeOutlined} text="30" key="list-vertical-dislike-o" />
+                    <IconText icon={MessageOutlined} text="500" key="list-vertical-message" />
+                </Space>
+            ),
+        },
+        {
+            title: 'Action',
+            dataIndex: 'operation',
+            key: 'operation',
+            width: "10%",
+            render: () => (
+                <Space size="middle">
+                    <a>View Detail</a>
+                </Space>
+            ),
+        },
+    ];
+    return <Table columns={columns} dataSource={ideas} pagination={false} loading={isLoading} />;
+};
 
 export default function DepartmentTable({ department, editable = false }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -84,75 +148,7 @@ export default function DepartmentTable({ department, editable = false }) {
             data: department === true ? data : data?.filter(i => i.Department?.id === department.id)
         })
     })
-    const expandedRowRender = () => {
-        const columns = [
-            {
-                title: 'Idea',
-                dataIndex: 'idea',
-                key: 'idea',
-                width: "40%",
-            },
-            {
-                title: 'Submittor',
-                dataIndex: 'creator',
-                key: 'creator',
-                width: "15%"
-            },
-            {
-                title: 'Submit Date',
-                dataIndex: 'date',
-                key: 'date',
-                width: "15%"
-            },
-            {
-                title: "Reaction",
-                dataIndex: 'reaction',
-                key: 'reaction',
-                width: "20%",
-                render: () => (
-                    <Space size="middle">
-                        <IconText icon={GrView} text="1000" key="list-vertical-view-o" />
-                        <IconText icon={LikeOutlined} text="150" key="list-vertical-like-o" />
-                        <IconText icon={DislikeOutlined} text="30" key="list-vertical-dislike-o" />
-                        <IconText icon={MessageOutlined} text="500" key="list-vertical-message" />
-                    </Space>
-                ),
-            },
-            {
-                title: 'Action',
-                dataIndex: 'operation',
-                key: 'operation',
-                width: "10%",
-                render: () => (
-                    <Space size="middle">
-                        <a>View Detail</a>
 
-                        {/* <a>Stop</a> */}
-                        {/* <Dropdown
-                            menu={{
-                                items,
-                            }}
-                        >
-                            <a>
-                                More <DownOutlined />
-                            </a>
-                        </Dropdown> */}
-                    </Space>
-                ),
-            },
-        ];
-        const data = [];
-        for (let i = 0; i < 3; ++i) {
-            data.push({
-                key: i.toString(),
-                idea: "This is idea description for topic, i want to go to Thailand trip since the variety of food",
-                date: '2014-12-24 23:12:00',
-                creator: 'pcs@gmail.com',
-                upgradeNum: 'Upgraded: 56',
-            });
-        }
-        return <Table columns={columns} dataSource={data} pagination={false} />;
-    };
     const additionalColumns = department === true ? [
         {
             title: 'Department',
@@ -248,7 +244,7 @@ export default function DepartmentTable({ department, editable = false }) {
                 }}
                 columns={columns}
                 expandable={{
-                    expandedRowRender,
+                    expandedRowRender: record => <ExpandedIdeaRender topicId={record.id} />,
                     defaultExpandedRowKeys: ['0'],
                 }}
                 dataSource={data}

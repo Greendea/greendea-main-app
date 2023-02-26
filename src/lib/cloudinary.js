@@ -14,7 +14,7 @@ console.log(cloudinary.config());
 
 // Uploads an image file
 /////////////////////////
-const uploadImage = async (imagePath) => {
+export const uploadImage = async (imagePath, cfg) => {
 
     // Use the uploaded file's name as the asset's public ID and 
     // allow overwriting the asset with new versions
@@ -26,43 +26,44 @@ const uploadImage = async (imagePath) => {
 
     try {
         // Upload the media
-        const result = await cloudinary.uploader.upload(imagePath, options);
+        const result = await cloudinary.uploader.upload(imagePath, { ...options, ...cfg });
         console.log(result);
-        return result.public_id;
+        return result;
     } catch (error) {
-        console.error(error);
+        console.log(error)
+        // throw new Error("Failed")
     }
 };
 
 // Gets details of an uploaded image
 /////////////////////////////////////
-const getAssetInfo = async (publicId) => {
-    // Return colors in the response
-    const options = {
-        colors: true,
-    };
+// const getAssetInfo = async (publicId) => {
+//     // Return colors in the response
+//     const options = {
+//         colors: true,
+//     };
 
-    try {
-        // Get details about the asset
-        const result = await cloudinary.api.resource(publicId, options);
-        console.log(result);
-        return result.colors;
-    } catch (error) {
-        console.error(error);
-    }
-};
+//     try {
+//         // Get details about the asset
+//         const result = await cloudinary.api.resource(publicId, options);
+//         console.log(result);
+//         return result.colors;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
 
 
-// Main function
-(async () => {
+// // Main function
+// (async () => {
 
-    // Set the image to upload
-    const imagePath = 'https://cloudinary-devs.github.io/cld-docs-assets/assets/images/happy_people.jpg';
+//     // Set the image to upload
+//     const imagePath = 'https://cloudinary-devs.github.io/cld-docs-assets/assets/images/happy_people.jpg';
 
-    // Upload the image
-    const publicId = await uploadImage(imagePath);
+//     // Upload the image
+//     const publicId = await uploadImage(imagePath);
 
-    // Get the colors in the image
-    const colors = await getAssetInfo(publicId);
-    console.log(colors);
-})();
+//     // Get the colors in the image
+//     // const colors = await getAssetInfo(publicId);
+//     // console.log(colors);
+// })();

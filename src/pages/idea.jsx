@@ -13,30 +13,83 @@ import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '
 import Layout from "../components/Layout/Index"
 import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
 import { useState } from 'react';
-const props = {
-    name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    onChange(info) {
-        const { status } = info.file;
-        if (status !== 'uploading') {
-            console.log(info.file, info.fileList);
-        }
-        if (status === 'done') {
-            message.success(`${info.file.name} file uploaded successfully.`);
-        } else if (status === 'error') {
-            message.error(`${info.file.name} file upload failed.`);
-        }
-    },
-    onDrop(e) {
-        console.log('Dropped files', e.dataTransfer.files);
-    },
+import { useGetTopicsQuery } from '@/redux/apiSlicers/Topic';
+import { validateMessages } from '@/utils/validateMessage';
+import { allowFiles, allowFilesShow } from '@/utils/formatFiles';
+import { useAddIdeaMutation } from '@/redux/apiSlicers/Idea';
+
+const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
 };
 
 const Idea = () => {
     const { data: departments } = useGetDepartmentsQuery()
+    const [addIdea, { isLoading }] = useAddIdeaMutation()
     const [form] = Form.useForm()
+    const [department, setDepartment] = useState(null)
+    const [files, setFiles] = useState([])
+    const { data: topics } = useGetTopicsQuery(undefined, {
+        selectFromResult: ({ data }) => {
+            return {
+                data: data?.filter(i => i.Department?.id === department)
+            }
+        },
+        skip: !!!department
+    })
 
+    const props = {
+        name: 'file',
+        multiple: true,
+        action: 'api/hello',
+        beforeUpload: (file) => {
+            const { type, size } = file
+            if (!allowFiles.includes(type)) {
+                message.error("File must be in appropriate format")
+                return Upload.LIST_IGNORE;
+            }
+            if (size / 1024 / 1024 > 3) {
+                message.error("Each file must be under 3MB")
+                return Upload.LIST_IGNORE;
+            }
+            return false;
+        },
+        onChange(info) {
+            const baseFiles = []
+            for (let item of info.fileList) {
+                getBase64(item.originFileObj, (url) => {
+                    baseFiles.push({
+                        url,
+                        name: item.name
+                    })
+                });
+            }
+            setFiles(baseFiles)
+        },
+    };
+    const handleSubmit = (vals) => {
+        const dateNow = Date.now()
+        const uploadfiles = files.map(({ url, name }) => {
+            return {
+                url,
+                name: `${vals.department}/${vals.topic}/${dateNow}/${name}`,
+            }
+        })
+
+        addIdea({
+            id: dateNow,
+            ...vals,
+            files: uploadfiles
+        }).unwrap().then(res => {
+            message.success("Idea added")
+            form.resetFields()
+            setFiles([])
+        }).catch(err => {
+            console.log(err)
+            message.error("Something went wrong. Try later!")
+        })
+    }
     return (
         <Layout>
             <div style={{ maxWidth: 1080, margin: "30px auto", padding: "0 10px" }}>
@@ -46,10 +99,10 @@ const Idea = () => {
                 <Form
                     form={form}
                     labelCol={{
-                        span: 3,
+                        span: 4,
                     }}
                     wrapperCol={{
-                        span: 21,
+                        span: 20,
                     }}
                     layout="horizontal"
                     initialValues={{
@@ -59,9 +112,12 @@ const Idea = () => {
                     style={{
                         maxWidth: "100%",
                     }}
+                    validateMessages={validateMessages}
+                    onFinish={handleSubmit}
                 >
-                    <Form.Item label="Department">
+                    <Form.Item label="Department" rules={[{ required: true }]} name="department">
                         <Select
+                            onChange={val => setDepartment(val)}
                             options={departments?.map(item => {
                                 return {
                                     value: item.id,
@@ -69,26 +125,25 @@ const Idea = () => {
                                 }
                             })}
                         />
-                        {/* <Select.Option value="A">Department A</Select.Option>
-                            <Select.Option value="B">Department B</Select.Option>
-                            <Select.Option value="C">Department C</Select.Option>
-                        </Select> */}
                     </Form.Item>
-                    <Form.Item label="Topic">
-                        <Select disabled={form.getFieldValue("Department") ? false : true}>
-                            <Select.Option value="A">Topic A</Select.Option>
-                            <Select.Option value="B">Topic B</Select.Option>
-                            <Select.Option value="C">Topic C</Select.Option>
-                        </Select>
+                    <Form.Item label="Topic" rules={[{ required: true }]} name="topic">
+                        <Select disabled={!!!department}
+                            options={topics?.map(item => {
+                                return {
+                                    value: item.id,
+                                    label: item.name
+                                }
+                            })}
+                        />
                     </Form.Item>
-                    <Form.Item label="Anomyous" valuePropName="checked">
+                    <Form.Item label="Anomyous" valuePropName="checked" name="isAnomyous">
                         <Switch />
                     </Form.Item>
-                    <Form.Item label="Idea">
+                    <Form.Item label="Idea" tooltip="From 10 to 1000 letters" rules={[{ min: 10 }, { required: true }]} name="content">
                         <Input.TextArea rows={7} showCount maxLength={1000} />
                     </Form.Item>
-                    <Form.Item label="Files">
-                        <Upload.Dragger {...props}>
+                    <Form.Item label="Files" tooltip={`Allow files: ${allowFilesShow.join(", ")}`}>
+                        <Upload.Dragger {...props} >
                             <p className="ant-upload-drag-icon">
                                 <InboxOutlined />
                             </p>
@@ -100,7 +155,7 @@ const Idea = () => {
                         </Upload.Dragger>
                     </Form.Item>
                     <div style={{ textAlign: "right" }}>
-                        <Button type='primary' htmlType='submit'>Submit</Button>
+                        <Button type='primary' htmlType='submit' loading={isLoading}>Submit</Button>
                     </div>
                 </Form>
                 {/* <div>

@@ -133,9 +133,10 @@ model Announcement {
 }
 
 model Idea {
-  id         String    @id @default(cuid())
+  id         String    @id
   content    String
-  file       String?
+  files      File[]
+  isAnomyous Boolean   @default(true)
   createdAt  DateTime  @default(now()) @map("created_at")
   updatedAt  DateTime  @updatedAt @map("updated_at")
   categoryId String?
@@ -148,6 +149,15 @@ model Idea {
   User       User?     @relation(fields: [userId], references: [id])
 
   @@map("views")
+}
+
+model File {
+  id     String  @id @default(cuid())
+  url    String
+  Idea   Idea?   @relation(fields: [ideaId], references: [id])
+  ideaId String?
+
+  @@map("files")
 }
 
 model View {
