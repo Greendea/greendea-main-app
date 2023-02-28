@@ -139,7 +139,10 @@ const Idea = () => {
                     >
                         <Form.Item label="Department" rules={[{ required: true }]} name="department">
                             <Select
-                                onChange={val => setDepartment(val)}
+                                onChange={val => {
+                                    setDepartment(val)
+                                    form.setFieldValue("topic", undefined)
+                                }}
                                 options={departments?.map(item => {
                                     return {
                                         value: item.id,

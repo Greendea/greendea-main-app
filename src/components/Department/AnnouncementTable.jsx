@@ -23,7 +23,7 @@ const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             })
             setContent(dataView?.content)
         }
-    }, [dataView])
+    }, [dataView?.id])
 
     return <Modal title="VIEW ANNOUCEMENT" open={isModalOpen} width={1080} closable={false}
         footer={[
