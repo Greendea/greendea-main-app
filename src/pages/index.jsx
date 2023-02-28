@@ -2,19 +2,12 @@ import { Inter } from '@next/font/google'
 import Layout from "../components/Layout/Index"
 import SearchForm from '@/components/GenericUsage/SearchForm'
 import ListTopic from '@/components/Home/ListTopic'
-
-import primas from "../lib/prisma"
-import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import { useGetUsersQuery } from '@/redux/apiSlicers/User'
 import Head from 'next/head'
 
 
 
 export default function Home() {
 
-  // const { data, isLoading } = useGetUsersQuery()
-  // console.log(data, isLoading)
 
   return (
     <>

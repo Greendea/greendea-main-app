@@ -16,7 +16,15 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
     const [updateUser, { isLoading }] = useUpdateUserMutation()
     const [form] = Form.useForm()
     const handleSubmit = (values) => {
-        console.log(values)
+        const userRole = roles?.find(i => i.id === values.role)?.name
+        if (userRole === "admin" && values?.department) {
+            form.setFieldValue("department", undefined)
+            return message.error("Admin should not belong to any department")
+        }
+
+        if (!values.department && values?.role && userRole !== "admin") {
+            return message.error("Selected role should belong to a department")
+        }
         updateUser({
             ...values,
             id: dataView.id
@@ -31,19 +39,21 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
     };
     useEffect(() => {
         console.log(dataView)
+        console.log(form.getFieldValue("department"))
         form.setFieldsValue({
             ...dataView,
             department: dataView?.Department?.id,
             role: dataView?.Role?.id,
             status: dataView?.status
         })
-    }, [dataView?.id])
+    }, [dataView.id])
 
     return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} width={400}
         footer={[
             <Button key="Close" onClick={() => {
                 form.resetFields()
                 setIsModalOpen(false)
+                setDataView(null)
             }}>Close</Button>,
             <Button key="Save" type='primary' onClick={() => form.submit()} loading={isLoading}>Save Changes</Button>,
         ]}
@@ -212,7 +222,7 @@ export default function Staff({ isAdmin, department }) {
                         columns={Columns(setDataView, setIsModalOpen, data, isAdmin)} bordered
                         pagination={{ pageSize: 5 }}
                         title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
-                    <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />
+                    {dataView && <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />}
                 </>
             }
 

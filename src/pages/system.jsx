@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
+import { useGetUsersQuery } from '@/redux/apiSlicers/User';
 import OrgChart from '@balkangraph/orgchart.js';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -27,62 +27,62 @@ const data = [
     { id: 10, stpid: "facC", name: 'Fran Parsons 2', title: 'Lecturer', img: 'https://cdn.balkan.app/shared/11.jpg' },
 ]
 
-
-
-export default function system() {
+function SystemChart() {
     const [rootItem, setRootItem] = useState(null)
+    function Orgchart({ nodes, nodeBinding }) {
+        if (typeof window === 'object') {
+            const chart = new OrgChart(rootItem, {
+                nodeBinding: nodeBinding,
+                nodes: nodes,
+                tags: {
+                    "group": {
+                        template: "group",
+                    },
+                    "departA-group": {
+                        subTreeConfig: {
+                            columns: 2
+                        }
+                    },
+                    "departB-group": {
+                        subTreeConfig: {
+                            columns: 2
+                        }
+                    },
+                    "facC-group": {
+                        // min: true,
+                        subTreeConfig: {
+                            columns: 2
+                        }
+                    },
+                }
 
-    function Orgchart(props) {
-        // if (typeof window === 'object') {
-        const chart = new OrgChart(rootItem, {
-            nodeBinding: props.nodeBinding,
-            nodes: props.nodes,
-            tags: {
-                "group": {
-                    template: "group",
-                },
-                "departA-group": {
-                    subTreeConfig: {
-                        columns: 2
-                    }
-                },
-                "departB-group": {
-                    subTreeConfig: {
-                        columns: 2
-                    }
-                },
-                "facC-group": {
-                    // min: true,
-                    subTreeConfig: {
-                        columns: 1
-                    }
-                },
-            }
-
-        });
-        // }
+            });
+        }
         return (null)
     }
     useEffect(() => {
-
         if (document.getElementById("tree")) {
             setRootItem(document.getElementById("tree"))
         }
-        // Orgchart()
     }, [])
+    return <div style={{ height: '100%' }}>
+        <div id="tree"></div>
+        {
+            rootItem && <Orgchart nodes={data}
+                nodeBinding={nodeBinding} />
+        }
+    </div>
+}
+
+export default function System() {
+    const { data, isLoading } = useGetUsersQuery()
 
     return (
         <Layout>
             <Head>
                 <title>GreenDea - System</title>
             </Head>
-            <div style={{ height: '100%' }}>
-                <div id="tree"></div>
-                {
-                    rootItem && <Orgchart nodes={data}
-                        nodeBinding={nodeBinding} />
-                }
-            </div>
+            <SystemChart />
         </Layout>
     )
 }
