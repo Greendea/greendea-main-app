@@ -7,7 +7,9 @@ import {
     message,
     Button,
     Steps,
-    Spin
+    Spin,
+    Checkbox,
+    Modal
 } from 'antd';
 import { CheckSquareOutlined, CloseSquareOutlined, EyeOutlined, InboxOutlined, SendOutlined } from '@ant-design/icons';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
@@ -18,6 +20,8 @@ import { useGetTopicsQuery } from '@/redux/apiSlicers/Topic';
 import { validateMessages } from '@/utils/validateMessage';
 import { allowFiles, allowFilesShow } from '@/utils/formatFiles';
 import { useAddIdeaMutation } from '@/redux/apiSlicers/Idea';
+import { useGetTermAndConditionQuery } from '@/redux/apiSlicers/Term';
+import parse from 'html-react-parser';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -28,9 +32,19 @@ const getBase64 = (img, callback) => {
 const Idea = () => {
     const { data: departments } = useGetDepartmentsQuery()
     const [addIdea, { isLoading }] = useAddIdeaMutation()
+    const { data: terms, isLoading: isLoadingTerm } = useGetTermAndConditionQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => {
+            return {
+                isLoading,
+                data: data?.description
+            }
+        }
+    })
     const [form] = Form.useForm()
     const [department, setDepartment] = useState(null)
     const [files, setFiles] = useState([])
+    const [agree, setAgree] = useState(false)
+    const [modalTerm, setModalTerm] = useState(false)
     const { data: topics } = useGetTopicsQuery(undefined, {
         selectFromResult: ({ data }) => {
             return {
@@ -158,13 +172,26 @@ const Idea = () => {
                                 </p>
                             </Upload.Dragger>
                         </Form.Item>
+                        <div style={{ textAlign: "right", marginBottom: 20 }}>
+                            <Checkbox checked={agree} onChange={(e) => {
+                                setAgree(e.target.checked)
+                                setModalTerm(e.target.checked)
+                            }}>
+                                I accept the <a>Terms & Conditions</a>
+                            </Checkbox>
+                            <Modal
+                                width={1580} style={{ top: 20 }}
+                                closable={false} open={modalTerm} footer={<Button type="primary" onClick={() => setModalTerm(false)}>Accept</Button>}>
+                                {!terms ? <Spin spinning={!terms} /> : parse(terms)}
+                            </Modal>
+                        </div>
                         <div style={{ textAlign: "right" }}>
-                            <Button type='primary' htmlType='submit' loading={isLoading}>Submit</Button>
+                            <Button type='primary' htmlType='submit' loading={isLoading} disabled={!agree}>Submit</Button>
                         </div>
                     </Form>
-                </Spin>
-            </div>
-        </Layout>
+                </Spin >
+            </div >
+        </Layout >
 
     );
 };
