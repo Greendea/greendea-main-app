@@ -33,7 +33,7 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
         console.log(dataView)
         form.setFieldsValue({
             ...dataView,
-            deparment: dataView?.Department?.id,
+            department: dataView?.Department?.id,
             role: dataView?.Role?.id,
             status: dataView?.status
         })

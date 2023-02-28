@@ -8,7 +8,7 @@ const onChange = (key) => {
 
 
 
-export default function Index({ department }) {
+export default function Index({ department, role }) {
     const items = [
         {
             key: '1',
@@ -18,7 +18,7 @@ export default function Index({ department }) {
         {
             key: '2',
             label: `TOPICS & IDEAS`,
-            children: <TopicIdea department={department} role={coordinator} />,
+            children: <TopicIdea department={department} role={role} />,
         },
         {
             key: '3',
