@@ -1,11 +1,11 @@
 import { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation } from "@/redux/apiSlicers/Term";
-import { Button, message } from "antd";
+import { Button, message, Spin } from "antd";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 export default function TermConditon() {
     const Editor = dynamic(() => import("../../../utils/editor"), { ssr: false });
-    const { data, isSuccess } = useGetTermAndConditionQuery()
+    const { data, isSuccess, isLoading: isLoadingGet, isFetching: isFetchingGet } = useGetTermAndConditionQuery()
     const [updateTerm, { isLoading }] = useUpdateTermAndConditionMutation()
     const valueRef = useRef()
     const handleSumit = () => {
@@ -17,7 +17,6 @@ export default function TermConditon() {
         })
     }
     useEffect(() => {
-        console.log("tet")
         if (isSuccess) {
             valueRef.current = data
         }
@@ -27,13 +26,17 @@ export default function TermConditon() {
             <div style={{ textAlign: "right", padding: "10px 5px", marginBottom: 10 }}>
                 <Button type="primary" loading={isLoading} onClick={handleSumit}>SAVE CHANGES</Button>
             </div>
-            {data && <Editor
-                value={data.description}
-                onChange={(v) => {
-                    console.log(v)
-                    valueRef.current = v
-                }}
-            />}
+            <div style={{ textAlign: "center", marginTop: (isLoadingGet || isFetchingGet) ? 100 : 0 }}>
+                <Spin spinning={isLoadingGet || isFetchingGet}>
+                    {data && <Editor
+                        value={data.description}
+                        onChange={(v) => {
+                            console.log(v)
+                            valueRef.current = v
+                        }}
+                    />}
+                </Spin>
+            </div>
 
         </div>
     )
