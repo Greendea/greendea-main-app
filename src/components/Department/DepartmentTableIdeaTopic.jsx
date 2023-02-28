@@ -43,7 +43,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             date: [dayjs(dataView?.openDate, 'YYYY-MM-DD'), dayjs(dataView?.closureDateIdea, 'YYYY-MM-DD')],
             closureDateTopic: dayjs(dataView?.closureDateTopic, 'YYYY-MM-DD')
         })
-    }, [dataView])
+    }, [dataView.id])
 
     return <Modal title="EDIT TOPIC" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={600}
         footer={[

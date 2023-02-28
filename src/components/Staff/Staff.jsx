@@ -37,7 +37,7 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
             role: dataView?.Role?.id,
             status: dataView?.status
         })
-    }, [JSON.stringify(dataView)])
+    }, [dataView?.id])
 
     return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} width={400}
         footer={[

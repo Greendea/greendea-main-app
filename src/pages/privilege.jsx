@@ -30,7 +30,7 @@ export default function Privilege() {
                 <title>GreenDea - Privilege - {role}</title>
             </Head>
             <div className='privilegeWrapper'>
-                {role ?? <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
+                {!role && <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}
                 {role === "coordinator" && <Coordinatior department={department} role={role} />}
                 {["manager", "head"].includes(role) && <Manager_Head role={role} department={department} />}
