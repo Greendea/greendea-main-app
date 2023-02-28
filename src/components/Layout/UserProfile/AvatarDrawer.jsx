@@ -66,8 +66,14 @@ export default function AvatarDrawer() {
                     <Space>
                         <Button onClick={onClose} type="default">Cancel</Button>
                         <Button onClick={() => {
-                            signOut()
-                            onClose()
+                            signOut().then(res => {
+                                console.log(res)
+                                onClose()
+                                localStorage.clear()
+                            }).catch(err => {
+                                console.log(err)
+                            })
+
                         }} danger>Logout</Button>
                         {/* <Button onClick={onClose} type="primary">
                             Save Changes
