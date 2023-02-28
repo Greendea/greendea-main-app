@@ -1,6 +1,7 @@
 import AnnouncementTable from "@/components/Department/AnnouncementTable";
 import DepartmentTableIdeaTopic from "@/components/Department/DepartmentTableIdeaTopic";
 import { useGetDepartmentByIdQuery } from "@/redux/apiSlicers/Department";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react"
 import Layout from "../../components/Layout/Index"
@@ -15,6 +16,9 @@ export default function Department() {
 
     return (
         <Layout>
+            <Head>
+                <title>GreenDea - {data?.name}</title>
+            </Head>
             <div className="departmentWrapper">
                 <h1 style={{
                     textAlign: "center",

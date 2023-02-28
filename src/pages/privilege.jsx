@@ -1,6 +1,7 @@
 import { useGetUserByEmailQuery } from '@/redux/apiSlicers/User'
 import { Empty, Skeleton, Spin } from 'antd'
 import { useSession } from 'next-auth/react'
+import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import Layout from "../components/Layout/Index"
 import Admin from "../components/Privilege/Admin"
@@ -25,6 +26,9 @@ export default function Privilege() {
 
     return (
         <Layout>
+            <Head>
+                <title>GreenDea - Privilege - {role}</title>
+            </Head>
             <div className='privilegeWrapper'>
                 {role ?? <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}

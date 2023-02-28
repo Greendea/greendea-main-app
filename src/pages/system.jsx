@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import OrgChart from '@balkangraph/orgchart.js';
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import Layout from "../components/Layout/Index"
 
@@ -72,6 +73,9 @@ export default function system() {
 
     return (
         <Layout>
+            <Head>
+                <title>GreenDea - System</title>
+            </Head>
             <div style={{ height: '100%' }}>
                 <div id="tree"></div>
                 {

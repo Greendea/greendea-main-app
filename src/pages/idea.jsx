@@ -22,6 +22,7 @@ import { allowFiles, allowFilesShow } from '@/utils/formatFiles';
 import { useAddIdeaMutation } from '@/redux/apiSlicers/Idea';
 import { useGetTermAndConditionQuery } from '@/redux/apiSlicers/Term';
 import parse from 'html-react-parser';
+import Head from 'next/head';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -109,6 +110,9 @@ const Idea = () => {
     }
     return (
         <Layout>
+            <Head>
+                <title>GreenDea - Idea Submission</title>
+            </Head>
             <div style={{ maxWidth: 1080, margin: "30px auto", padding: "0 10px" }}>
                 <h1 style={{ textAlign: "center", marginBottom: 20 }}>
                     IDEA SUBMISSION

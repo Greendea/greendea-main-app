@@ -1,6 +1,7 @@
 import { useGetPersonalIdeasQuery } from "@/redux/apiSlicers/Idea";
 import { ParseDate } from "@/utils/dataParser";
 import { Divider, Table, Tag } from "antd";
+import Head from "next/head";
 import Layout from "../components/Layout/Index"
 
 
@@ -69,6 +70,9 @@ const Past = () => {
     console.log(data)
     return (
         <Layout>
+            <Head>
+                <title>GreenDea - Your Ideas</title>
+            </Head>
             <div style={{ maxWidth: 1580, margin: "50px auto" }}>
                 <Divider>
                     <span style={{ fontSize: 24 }}>

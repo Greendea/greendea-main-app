@@ -7,6 +7,7 @@ import primas from "../lib/prisma"
 import { useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useGetUsersQuery } from '@/redux/apiSlicers/User'
+import Head from 'next/head'
 
 
 
@@ -18,6 +19,9 @@ export default function Home() {
   return (
     <>
       <Layout>
+        <Head>
+          <title>GreenDea - Home</title>
+        </Head>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <SearchForm />
           <ListTopic />
