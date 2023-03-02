@@ -6,10 +6,16 @@ export default function SignIn({ providers }) {
     return (
         <>
             {Object.values(providers).map((provider) => (
-                <div key={provider.name}>
-                    <button onClick={() => signIn(provider.id)}>
-                        Sign in with test {provider.name}
-                    </button>
+                <div className="wrapperLogin" key={provider.name}>
+                    <div className="login">
+                        <form>
+                            <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771930/logo_im5hov.png" />
+                            <a href="">
+                                <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771929/google_guijhs.avif" />
+                                <div onClick={() => signIn(provider.id)}>Log in with Google</div>
+                            </a>
+                        </form>
+                    </div>
                 </div>
             ))}
         </>
