@@ -14,10 +14,13 @@ export const authOptions = {
                     access_type: "offline",
                     response_type: "code"
                 }
-            }
+            },
         }),
     ],
     secret: process.env.NEXT_PUBLIC_SECRET,
+    // pages: {
+    //     signIn: '/auth/signin',
+    // }
 }
 
 export default NextAuth(authOptions)

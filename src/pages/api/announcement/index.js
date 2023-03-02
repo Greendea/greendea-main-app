@@ -12,13 +12,13 @@ export default async function handler(req, res) {
 
         const session = await getServerSession(req, res, authOptions)
         if (!session) {
-            return res.status(404).json({
+            return res.status(401).json({
                 message: "You are not authenticated"
             })
         }
         const userSession = await findUserByEmail(session.user.email)
         if (!userSession.Role) {
-            return res.status(404).json({
+            return res.status(401).json({
                 message: "You are not authorized"
             })
         }

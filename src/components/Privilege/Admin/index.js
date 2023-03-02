@@ -5,6 +5,7 @@ import Staff from '../../Staff/Staff';
 import Statistic from './Statistic';
 import TermConditon from './TermConditon';
 import TopicIdea from '../../Department/TopicIdeaPannel';
+import { Categories } from './Categories';
 const onChange = (key) => {
     console.log(key);
 };
@@ -23,6 +24,11 @@ const items = [
         key: '3',
         label: `TOPICS`,
         children: <TopicIdea department={true} />,
+    },
+    {
+        key: '6',
+        label: `CATEGORIES`,
+        children: <Categories />,
     },
     {
         key: '4',

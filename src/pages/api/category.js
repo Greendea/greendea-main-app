@@ -1,15 +1,11 @@
-import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "@/lib/Service/DepartmentService";
-import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../auth/[...nextauth]"
-const allowedMethods = ['GET', 'PUT', 'DELETE'];
+import { authOptions } from "../../pages/api/auth/[...nextauth]"
+import { findUserByEmail } from "@/lib/Service/UserService"
+import { AddCategory, DeleteCategory, EditCategory, GetAllCategories } from "@/lib/Service/CategoryService"
+
 
 export default async function handler(req, res) {
     try {
-        if (!allowedMethods.includes(req.method)) {
-            return res.status(405).send({ message: 'Method not allowed.' });
-        }
-
         const session = await getServerSession(req, res, authOptions)
         if (!session) {
             return res.status(401).json({
@@ -25,18 +21,17 @@ export default async function handler(req, res) {
 
         switch (req.method) {
             case 'GET':
-                return GetDepartmentByID(req, res, userSession)
+                return GetAllCategories(req, res, userSession)
+            case 'POST':
+                return AddCategory(req, res, userSession)
             case 'PUT':
-                return UpdateDepartmentByID(req, res, userSession)
+                return EditCategory(req, res, userSession)
             case 'DELETE':
-                return DeleteDepartmentByID(req, res, userSession)
+                return DeleteCategory(req, res, userSession)
         }
 
     } catch (error) {
         console.log(error)
         res.status(500).send({ message: 'Server error!' });
     }
-    return res.status(200).json({ name: 'John Doe' })
 }
-
-

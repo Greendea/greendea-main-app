@@ -209,7 +209,7 @@ export default function Staff({ isAdmin, department }) {
     return (
         <div>
             <Table loading={isLoading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")}
-                columns={Columns(setDataView, setIsModalOpen, data, isAdmin)} bordered
+                columns={Columns(setDataView, setIsModalOpen, data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin"), isAdmin)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF ASSIGNED STAFF</h2></Divider>} />
             <br />
@@ -219,7 +219,7 @@ export default function Staff({ isAdmin, department }) {
                 isAdmin &&
                 <>
                     <Table loading={isLoading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
-                        columns={Columns(setDataView, setIsModalOpen, data, isAdmin)} bordered
+                        columns={Columns(setDataView, setIsModalOpen, data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin"), isAdmin)} bordered
                         pagination={{ pageSize: 5 }}
                         title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
                     {dataView && <ModalEditUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} dataView={dataView} setDataView={setDataView} />}
