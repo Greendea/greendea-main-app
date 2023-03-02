@@ -90,7 +90,8 @@
   width: 100%;
 }
 
-.wrapperLogin a {
+.wrapperLogin .button_wrapper {
+  cursor: pointer;
   padding: 10px;
   width: 100%;
   display: flex;
@@ -104,11 +105,11 @@
   margin: 10px 0;
 }
 
-.wrapperLogin a img {
+.wrapperLogin .button_wrapper img {
   width: 10%;
 }
 
-.wrapperLogin a>div {
+.wrapperLogin .button_wrapper>div {
   width: 70%;
   color: #FFF;
   font-size: 20px;

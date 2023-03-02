@@ -10,10 +10,10 @@ export default function SignIn({ providers }) {
                     <div className="login">
                         <form>
                             <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771930/logo_im5hov.png" />
-                            <a href="">
+                            <div className="button_wrapper">
                                 <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771929/google_guijhs.avif" />
                                 <div onClick={() => signIn(provider.id)}>Log in with Google</div>
-                            </a>
+                            </div>
                         </form>
                     </div>
                 </div>
