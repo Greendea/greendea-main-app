@@ -18,7 +18,7 @@ export default function TermConditon() {
     }
     useEffect(() => {
         if (isSuccess) {
-            valueRef.current = data
+            valueRef.current = data?.description
         }
     }, [isSuccess])
     return (
