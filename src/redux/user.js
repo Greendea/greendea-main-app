@@ -16,12 +16,14 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addMatcher(endpoints.getUserByEmail.matchFulfilled, (state, { payload }) => {
-            state.id = payload.id
-            state.name = payload.name
-            state.status = payload.status
-            state.image = payload.image
-            state.role = payload.Role
-            state.department = payload.Department
+            if (payload) {
+                state.id = payload.id
+                state.name = payload.name
+                state.status = payload.status
+                state.image = payload.image
+                state.role = payload.Role
+                state.department = payload.Department
+            }
         })
     }
 })
