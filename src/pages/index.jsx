@@ -26,11 +26,11 @@ export default function Home({ topics }) {
   )
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const res = () => fetch(`${process.env.BE_URL || "http://localhost:3000"}/api/home`).then(res => res.json())
 
   return {
     props: { topics: await res() },
-    // revalidate: 15,
+    revalidate: 15,
   };
 };
