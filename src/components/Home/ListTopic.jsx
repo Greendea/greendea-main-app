@@ -8,6 +8,7 @@ import { FcInfo } from "react-icons/fc"
 import React from 'react';
 import moment from 'moment';
 import { ParseDate } from '@/utils/dataParser';
+import { useRouter } from 'next/router';
 
 
 const IconText = ({ icon, text }) => (
@@ -17,6 +18,7 @@ const IconText = ({ icon, text }) => (
     </Space>
 );
 export default function ListTopic({ topics }) {
+    const router = useRouter()
     return (
         <div>
             <List
@@ -35,8 +37,10 @@ export default function ListTopic({ topics }) {
                         ]}
                         extra={
                             <div style={{ width: 50, display: "flex", justifyContent: "center", flexDirection: "column" }}>
-                                <Tooltip placement="leftTop" title={"Submit Idea To Topic"}>
-                                    <HiPencilAlt size={36} style={{ cursor: "pointer" }} />
+                                <Tooltip placement="leftTop" title={"Submit Idea To Topic"} >
+                                    <HiPencilAlt size={36} style={{ cursor: "pointer" }}
+                                        onClick={() => router.push(`/idea?departmentId=${item.Department.id}&topicId=${item.id}`)}
+                                    />
                                 </Tooltip>
                                 <Tooltip placement="leftTop" title="View Ideas Of Topic">
                                     <MdList size={36} style={{ cursor: "pointer" }} />

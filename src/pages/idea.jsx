@@ -15,7 +15,7 @@ import { CheckSquareOutlined, CloseSquareOutlined, EyeOutlined, InboxOutlined, S
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import Layout from "../components/Layout/Index"
 import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetTopicsQuery } from '@/redux/apiSlicers/Topic';
 import { validateMessages } from '@/utils/validateMessage';
 import { allowFiles, allowFilesShow } from '@/utils/formatFiles';
@@ -24,6 +24,7 @@ import { useGetTermAndConditionQuery } from '@/redux/apiSlicers/Term';
 import parse from 'html-react-parser';
 import Head from 'next/head';
 import { useGetCategoriesQuery } from '@/redux/apiSlicers/Category';
+import { useRouter } from 'next/router';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -32,6 +33,8 @@ const getBase64 = (img, callback) => {
 };
 
 const Idea = () => {
+    const router = useRouter()
+    const { departmentId, topicId } = router.query
     const { data: departments } = useGetDepartmentsQuery()
     const [addIdea, { isLoading }] = useAddIdeaMutation()
     const { data: terms, isLoading: isLoadingTerm } = useGetTermAndConditionQuery(undefined, {
@@ -104,6 +107,7 @@ const Idea = () => {
             files: uploadfiles
         }).unwrap().then(res => {
             message.success("Idea Submitted")
+            setAgree(false)
             form.resetFields()
             setFiles([])
         }).catch(err => {
@@ -111,6 +115,18 @@ const Idea = () => {
             message.error("Something went wrong. Try later!")
         })
     }
+
+
+    useEffect(() => {
+        if (departmentId) {
+            form.setFieldValue("department", departmentId)
+            setDepartment(departmentId)
+        }
+        if (topicId) {
+            form.setFieldValue("topic", topicId)
+        }
+
+    }, [departmentId, topicId])
     return (
         <Layout>
             <Head>
