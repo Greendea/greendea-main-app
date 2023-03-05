@@ -12,7 +12,7 @@ const Past = () => {
             title: 'Department',
             dataIndex: 'Topic',
             key: 'Topic',
-            width: "15%",
+            width: "10%",
             render: (val) => {
                 return val?.Department.name
             }
@@ -21,7 +21,16 @@ const Past = () => {
             title: 'Topic',
             dataIndex: 'Topic',
             key: 'Topic',
-            width: "25%",
+            width: "15%",
+            render: (val) => {
+                return val?.name
+            }
+        },
+        {
+            title: 'Category',
+            dataIndex: 'Category',
+            key: 'Category',
+            width: "10%",
             render: (val) => {
                 return val?.name
             }
@@ -30,7 +39,7 @@ const Past = () => {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
-            width: "25%",
+            width: "45%",
         },
         {
             title: 'Anomyous',
@@ -45,16 +54,16 @@ const Past = () => {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            width: "15%",
+            width: "10%",
             render: (val) => {
                 return ParseDate(val)
             }
         },
         {
-            title: 'Action',
+            title: 'Status',
             dataIndex: 'operation',
             key: 'operation',
-            width: "20%",
+            width: "5%",
             render: (value, record) => (
                 <>
                     {/* <Tag color="cyan" style={{ cursor: "pointer" }} onClick={() => {
@@ -73,7 +82,7 @@ const Past = () => {
             <Head>
                 <title>GreenDea - Your Ideas</title>
             </Head>
-            <div style={{ maxWidth: 1580, margin: "50px auto" }}>
+            <div className="past">
                 <Divider>
                     <span style={{ fontSize: 24 }}>
                         YOUR IDEAS

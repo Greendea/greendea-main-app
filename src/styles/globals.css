@@ -24,7 +24,8 @@
   .ant-layout-header,
   .departmentWrapper,
   .privilegeWrapper,
-  .stucture {
+  .stucture,
+  .past {
     width: 1520px !important;
     margin: 0 auto;
     padding-inline: 0px !important;
@@ -43,7 +44,8 @@
   .layout-header,
   .ant-layout-header,
   .privilegeWrapper,
-  .stucture {
+  .stucture,
+  .past {
     padding-inline: 10px !important;
   }
 
