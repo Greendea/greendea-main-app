@@ -1,8 +1,14 @@
+import Head from 'next/head'
 import React from 'react'
 
 function Waiting() {
     return (
         <div className='waiting-wrapper'>
+            <Head>
+                <title>
+                    GreenDea - WAITING
+                </title>
+            </Head>
             <div class="waiting">
                 <form>
                     <div class="title">
