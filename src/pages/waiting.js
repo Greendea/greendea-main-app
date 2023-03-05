@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux'
 
 function Waiting() {
     const router = useRouter()
-    const { id } = useSelector(state => state.user)
-    // useEffect(() => {
-    //     id && router.push("/")
-    // }, [id])
+    const { role } = useSelector(state => state.user)
+    useEffect(() => {
+        role && router.push("/")
+    }, [role])
     return (
         <div className='waiting-wrapper'>
             <Head>
