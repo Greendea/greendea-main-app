@@ -1,17 +1,21 @@
 import { getProviders, signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]";
+import Head from "next/head";
 
 export default function SignIn({ providers }) {
     return (
         <>
+            <Head>
+                <title>GreenDea - SIGNIN</title>
+            </Head>
             {Object.values(providers).map((provider) => (
                 <div className="wrapperLogin" key={provider.name}>
                     <div className="login">
                         <form>
-                            <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771930/logo_im5hov.png" />
+                            <img src="/logo.png" />
                             <div className="button_wrapper">
-                                <img src="https://res.cloudinary.com/dyajk5rfe/image/upload/v1677771929/google_guijhs.avif" />
+                                <img src="/google.avif" />
                                 <div onClick={() => signIn(provider.id)}>Log in with Google</div>
                             </div>
                         </form>

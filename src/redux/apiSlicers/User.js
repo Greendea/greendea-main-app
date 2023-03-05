@@ -29,4 +29,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetUsersQuery, useGetUserByEmailQuery, useUpdateUserMutation } = extendedApi;
+export const { useGetUsersQuery, useGetUserByEmailQuery, useUpdateUserMutation, endpoints } = extendedApi;

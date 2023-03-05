@@ -60,12 +60,22 @@ export default function WaitingIdea({ department }) {
             }
         }
     })
+    console.log(data)
     const columns = [
         {
             title: 'Topic',
             dataIndex: 'Topic',
             key: 'Topic',
-            width: "20%",
+            width: "15%",
+            render: (val) => {
+                return val?.name
+            }
+        },
+        {
+            title: 'Category',
+            dataIndex: 'Category',
+            key: 'category',
+            width: "10%",
             render: (val) => {
                 return val?.name
             }
@@ -74,7 +84,7 @@ export default function WaitingIdea({ department }) {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
-            width: "40%",
+            width: "35%",
         },
         {
             title: 'Submittor',

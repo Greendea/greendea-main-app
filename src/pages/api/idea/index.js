@@ -1,4 +1,4 @@
-import { uploadImage } from "@/lib/cloudinary";
+import cloudinary, { uploadImage } from "@/lib/cloudinary";
 import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "@/lib/Service/DepartmentService";
 import { AddIdea, GetAllIdeas, GetPersonalIdea } from "@/lib/Service/IdeaService";
 import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
@@ -9,7 +9,7 @@ const allowedMethods = ['POST', "GET"];
 export const config = {
     api: {
         bodyParser: {
-            sizeLimit: '15mb',
+            sizeLimit: '50mb',
         },
     },
 }
@@ -34,15 +34,33 @@ export default async function handler(req, res) {
         }
         if (req.method === "POST") {
             const files = req.body.files
-            const uploadedFiles = []
-            if (files.length > 0) {
-                for (let item of files) {
-                    let { secure_url } = await uploadImage(item.url, {
-                        public_id: item.name
-                    })
-                    uploadedFiles.push(secure_url)
-                }
-            }
+            console.log(files.length)
+            const uploadedFiles = await Promise.all(files.map(async (item) => {
+                let { secure_url } = await cloudinary.uploader.upload(item.url, {
+                    use_filename: true,
+                    unique_filename: false,
+                    overwrite: true,
+                    public_id: item.name
+                })
+                console.log(secure_url)
+                return secure_url
+            }))
+
+            console.log(uploadedFiles)
+            // if (files.length > 0) {
+            //     for (let item of files) {
+            //         // let { secure_url } = await uploadImage(item.url, {
+            //         //     public_id: item.name
+            //         // })
+            //         let { secure_url } = await cloudinary.uploader.upload(item.url, {
+            //             use_filename: true,
+            //             unique_filename: false,
+            //             overwrite: true,
+            //             public_id: item.name
+            //         })
+            //         uploadedFiles.push(secure_url)
+            //     }
+            // }
             req.files = uploadedFiles
             return AddIdea(req, res, userSession)
         }

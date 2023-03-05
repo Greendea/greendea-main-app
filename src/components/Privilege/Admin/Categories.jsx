@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import { ParseDate } from '@/utils/dataParser'
-import { loading } from '@/utils/orgchart'
 import { validateMessages } from '@/utils/validateMessage'
 import { Button, Divider, Form, Input, Modal, Select, Table, Tag, message, Descriptions } from 'antd'
 import React, { useEffect, useState } from 'react'

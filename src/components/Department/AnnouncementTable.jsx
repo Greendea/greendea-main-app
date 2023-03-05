@@ -116,8 +116,6 @@ export default function AnnouncementTable({ department, editable = false }) {
             data: data?.filter(i => i.Department?.id === department.id)
         })
     })
-    console.log(department)
-    console.log(data)
     const columns = [
         {
             title: 'Title',

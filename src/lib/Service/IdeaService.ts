@@ -17,8 +17,11 @@ export const GetPersonalIdea = async (req, res, userSession) => {
 }
 
 
+
+
+
+
 export const getPersonalIdea = async (id) => {
-    console.log(id)
     return await prisma.idea.findMany({
         where: {
             userId: id
@@ -40,10 +43,32 @@ export const getPersonalIdea = async (id) => {
                     }
                 }
             },
+            Category: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
             files: {
                 select: {
                     id: true,
                     url: true
+                }
+            },
+            views: {
+                select: {
+                    userId: true,
+                }
+            },
+            reacts: {
+                select: {
+                    userId: true,
+                    status: true,
+                }
+            },
+            comments: {
+                select: {
+                    id: true
                 }
             },
             createdAt: true,
@@ -57,13 +82,18 @@ export const getPersonalIdea = async (id) => {
     })
 }
 
-export const addIdea = async ({ id, content, topic, isAnomyous }, files, userId) => {
+export const addIdea = async ({ id, content, topic, category, isAnomyous }, files, userId) => {
     return await prisma.idea.create({
         data: {
             id: id.toString(), content, isAnomyous,
             Topic: {
                 connect: {
                     id: topic
+                }
+            },
+            Category: {
+                connect: {
+                    id: category
                 }
             },
             files: files.length > 0 ? {
@@ -106,10 +136,32 @@ export const getAllIdeas = async () => {
                     }
                 }
             },
+            Category: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
+            comments: {
+                select: {
+                    id: true
+                }
+            },
             files: {
                 select: {
                     id: true,
                     url: true
+                }
+            },
+            views: {
+                select: {
+                    userId: true,
+                }
+            },
+            reacts: {
+                select: {
+                    userId: true,
+                    status: true,
                 }
             },
             createdAt: true,
@@ -133,3 +185,5 @@ export const updateIdeaStatusById = async (id, status) => {
         }
     })
 }
+
+

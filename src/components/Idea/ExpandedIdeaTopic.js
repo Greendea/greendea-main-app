@@ -32,13 +32,23 @@ export const ExpandedIdeaRender = ({ topic }) => {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
-            width: "40%",
+            width: "35%",
+        },
+        {
+            title: 'Category',
+            dataIndex: 'Category',
+            key: 'Category',
+            width: "11%",
+            render: (val) => {
+                return val?.name
+            }
+
         },
         {
             title: 'Submittor',
             dataIndex: 'User',
             key: 'User',
-            width: "15%",
+            width: "12%",
             render: (value, record) => {
                 return record.isAnomyous ? "ANOMYOUS" : value?.name
             }
@@ -47,7 +57,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            width: "15%",
+            width: "12%",
             render: (val) => {
                 return ParseDate(val)
             }
@@ -57,12 +67,12 @@ export const ExpandedIdeaRender = ({ topic }) => {
             dataIndex: 'reaction',
             key: 'reaction',
             width: "20%",
-            render: () => (
+            render: (value, record) => (
                 <Space size="middle">
-                    <IconText icon={GrView} text="1000" key="list-vertical-view-o" />
-                    <IconText icon={LikeOutlined} text="150" key="list-vertical-like-o" />
-                    <IconText icon={DislikeOutlined} text="30" key="list-vertical-dislike-o" />
-                    <IconText icon={MessageOutlined} text="500" key="list-vertical-message" />
+                    <IconText icon={GrView} text={record.views.length} key="list-vertical-view-o" />
+                    <IconText icon={LikeOutlined} text={record?.reacts.filter(i => i?.status === 1).length} key="list-vertical-like-o" />
+                    <IconText icon={DislikeOutlined} text={record?.reacts.filter(i => i?.status === -1).length} key="list-vertical-dislike-o" />
+                    <IconText icon={MessageOutlined} text={record?.comments.length} key="list-vertical-message" />
                 </Space>
             ),
         },
@@ -74,7 +84,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
             render: (value, record) => (
                 <Space size="middle">
                     <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
-                        setDataIdea(record)
+                        setDataIdea(record.id)
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
                 </Space>
@@ -85,7 +95,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
         <Table columns={columns} dataSource={ideas} pagination={false} loading={isLoading} />
         {
             dataIdea &&
-            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={dataIdea} setDataIdea={setDataIdea} topic={topic} />
+            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={topic} loading={isLoading} />
         }
     </>
 };

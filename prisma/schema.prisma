@@ -81,6 +81,7 @@ model User {
   Role          Role?       @relation(fields: [roleId], references: [id])
   ideas         Idea[]
   Topic         Topic[]
+  Comment       Comment[]
 
   @@map("users")
 }
@@ -145,11 +146,26 @@ model Idea {
   userId     String?
   reacts     React[]
   views      View[]
+  comments   Comment[]
   Category   Category? @relation(fields: [categoryId], references: [id])
   Topic      Topic?    @relation(fields: [topicId], references: [id])
   User       User?     @relation(fields: [userId], references: [id])
 
-  @@map("views")
+  @@map("ideas")
+}
+
+model Comment {
+  id         String   @id @default(cuid())
+  userId     String?
+  ideaId     String?
+  content    String
+  User       User?    @relation(fields: [userId], references: [id])
+  Idea       Idea?    @relation(fields: [ideaId], references: [id])
+  isAnomyous Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("comments")
 }
 
 model File {
@@ -169,14 +185,21 @@ model View {
   updatedAt DateTime @updatedAt @map("updated_at")
   Idea      Idea?    @relation(fields: [ideaId], references: [id])
   User      User?    @relation(fields: [userId], references: [id])
+
+  @@unique([ideaId, userId])
+  @@map("views")
 }
 
 model React {
   id        String   @id @default(cuid())
   ideaId    String?
   userId    String?
+  status    Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
   Idea      Idea?    @relation(fields: [ideaId], references: [id])
   User      User?    @relation(fields: [userId], references: [id])
+
+  @@unique([ideaId, userId])
+  @@map("reacts")
 }

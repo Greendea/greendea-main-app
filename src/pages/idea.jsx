@@ -23,6 +23,7 @@ import { useAddIdeaMutation } from '@/redux/apiSlicers/Idea';
 import { useGetTermAndConditionQuery } from '@/redux/apiSlicers/Term';
 import parse from 'html-react-parser';
 import Head from 'next/head';
+import { useGetCategoriesQuery } from '@/redux/apiSlicers/Category';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -54,6 +55,7 @@ const Idea = () => {
         },
         skip: !!!department
     })
+    const { data: categories } = useGetCategoriesQuery()
 
     const props = {
         name: 'file',
@@ -65,8 +67,8 @@ const Idea = () => {
                 message.error("File must be in appropriate format")
                 return Upload.LIST_IGNORE;
             }
-            if (size / 1024 / 1024 > 3) {
-                message.error("Each file must be under 3MB")
+            if (size / 1024 / 1024 > 2) {
+                message.error("Each file must be under 2MB")
                 return Upload.LIST_IGNORE;
             }
             return false;
@@ -98,6 +100,7 @@ const Idea = () => {
         addIdea({
             id: dateNow,
             ...vals,
+            "isAnomyous": !!vals.isAnomyous,
             files: uploadfiles
         }).unwrap().then(res => {
             message.success("Idea Submitted")
@@ -161,14 +164,24 @@ const Idea = () => {
                                 })}
                             />
                         </Form.Item>
-                        <Form.Item label="Anomyous" valuePropName="checked" name="isAnomyous">
+                        <Form.Item label="Category" rules={[{ required: true }]} name="category">
+                            <Select
+                                options={categories?.map(item => {
+                                    return {
+                                        value: item.id,
+                                        label: item.name
+                                    }
+                                })}
+                            />
+                        </Form.Item>
+                        <Form.Item label="Anomyous" valuePropName="checked" name="isAnomyous" >
                             <Switch />
                         </Form.Item>
                         <Form.Item label="Idea" tooltip="From 10 to 1000 letters" rules={[{ min: 10 }, { required: true }]} name="content">
                             <Input.TextArea rows={7} showCount maxLength={1000} />
                         </Form.Item>
-                        <Form.Item label="Files" tooltip={`Allow files: ${allowFilesShow.join(", ")}`}>
-                            <Upload.Dragger {...props} >
+                        <Form.Item label="Files" tooltip={`Allow files: ${allowFilesShow.join(", ")}`} name="files">
+                            <Upload.Dragger {...props} maxCount={5}>
                                 <p className="ant-upload-drag-icon">
                                     <InboxOutlined />
                                 </p>
@@ -180,7 +193,7 @@ const Idea = () => {
                             </Upload.Dragger>
                         </Form.Item>
                         <div style={{ textAlign: "right", marginBottom: 20 }}>
-                            <Checkbox checked={agree} onChange={(e) => {
+                            <Checkbox checked={agree} name="term" onChange={(e) => {
                                 setAgree(e.target.checked)
                                 setModalTerm(e.target.checked)
                             }}>

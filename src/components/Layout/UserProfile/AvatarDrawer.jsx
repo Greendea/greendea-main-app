@@ -1,18 +1,24 @@
 import { useGetUserByEmailQuery } from '@/redux/apiSlicers/User';
 import { Avatar, Button, Divider, Drawer, Form, Input, List, Space, Typography, Upload } from 'antd'
 import { signOut, useSession } from 'next-auth/react';
+import Error from 'next/error';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 
 export default function AvatarDrawer() {
     const { data: session, status } = useSession()
-    const { data: User, isLoading, isSuccess } = useGetUserByEmailQuery(session.user.email, {
+    const { data: User, isSuccess } = useGetUserByEmailQuery(session.user.email, {
         skip: session.user.email ? false : true
     })//.unwrap().then(res => console.log(res)).catch(err => console.log(err))
     const [form] = Form.useForm()
+    const router = useRouter()
 
 
     useEffect(() => {
         if (isSuccess) {
+            if (!User.Role) {
+                router.push("waiting")
+            }
             console.log(User)
             form.setFieldsValue({
                 email: User?.email,
@@ -20,6 +26,7 @@ export default function AvatarDrawer() {
                 department: User?.Department?.name,
                 role: User?.Role?.name,
             })
+
         }
     }, [isSuccess])
 
