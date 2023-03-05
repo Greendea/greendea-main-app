@@ -6,7 +6,8 @@ import Head from 'next/head'
 
 
 
-export default function Home() {
+export default function Home({ topics }) {
+  console.log("TOPICSSSSSSss", topics)
 
 
   return (
@@ -17,24 +18,21 @@ export default function Home() {
         </Head>
         <div style={{ maxWidth: 900, margin: "0 auto" }}>
           <SearchForm />
-          <ListTopic />
+          {
+            topics &&
+            <ListTopic topics={topics} />
+          }
         </div>
       </Layout>
     </>
   )
 }
 
-// export const getStaticProps = async () => {
-//   const feed = await prisma.post.findMany({
-//     where: { published: true },
-//     include: {
-//       author: {
-//         select: { name: true },
-//       },
-//     },
-//   });
-//   return {
-//     props: { feed },
-//     revalidate: 10,
-//   };
-// };
+export const getStaticProps = async () => {
+  const res = () => fetch("http://localhost:3000/api/home").then(res => res.json())
+
+  return {
+    props: { topics: await res() },
+    revalidate: 15,
+  };
+};

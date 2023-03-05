@@ -1,8 +1,7 @@
-import prisma from "../../lib/prisma"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../pages/api/auth/[...nextauth]"
+import { authOptions } from "../auth/[...nextauth]"
 import { findUserByEmail } from "@/lib/Service/UserService"
-import { UpsertReact } from "@/lib/Service/ReactService"
+import { AddView } from "@/lib/Service/ViewService"
 
 
 export default async function handler(req, res) {
@@ -26,6 +25,6 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-        return UpsertReact(req, res, userSession)
+        return AddView(req, res, userSession)
     }
 }

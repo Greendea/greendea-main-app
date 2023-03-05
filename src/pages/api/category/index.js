@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "../../pages/api/auth/[...nextauth]"
+import { authOptions } from "../auth/[...nextauth]"
 import { findUserByEmail } from "@/lib/Service/UserService"
 import { AddCategory, DeleteCategory, EditCategory, GetAllCategories } from "@/lib/Service/CategoryService"
 
