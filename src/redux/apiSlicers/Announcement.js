@@ -37,4 +37,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetAnnouncementsQuery, useAddAnnouncementMutation, useUpdateAnnouncementByIdMutation, useDeleteAnnouncementByIdMutation } = extendedApi;
+export const { useGetAnnouncementsQuery, useAddAnnouncementMutation, useUpdateAnnouncementByIdMutation, useDeleteAnnouncementByIdMutation, endpoints } = extendedApi;

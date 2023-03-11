@@ -13,4 +13,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetRolesQuery } = extendedApi;
+export const { useGetRolesQuery, endpoints } = extendedApi;

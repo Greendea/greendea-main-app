@@ -35,6 +35,11 @@ export default async function handler(req, res) {
                                     id: true
                                 }
                             }
+                        },
+                        where: {
+                            status: {
+                                equals: 1
+                            }
                         }
                     },
                     User: {

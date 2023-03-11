@@ -38,4 +38,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetCategoriesQuery, useAddCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation } = extendedApi;
+export const { useGetCategoriesQuery, useAddCategoryMutation, useUpdateCategoryMutation, useDeleteCategoryMutation, endpoints } = extendedApi;

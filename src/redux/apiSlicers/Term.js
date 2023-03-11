@@ -22,4 +22,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation } = extendedApi;
+export const { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation, endpoints } = extendedApi;

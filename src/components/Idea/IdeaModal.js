@@ -1,5 +1,5 @@
 import { useAddCommentMutation, useGetCommentByIdeaQuery } from '@/redux/apiSlicers/Comment';
-import { useUpsertReactMutation } from '@/redux/apiSlicers/Reaction';
+import { useUpsertReactMutation } from '@/redux/apiSlicers/Idea';
 import { useAddViewMutation } from '@/redux/apiSlicers/View';
 import { ParseDate } from '@/utils/dataParser';
 import { validateMessages } from '@/utils/validateMessage';
@@ -13,13 +13,16 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
 export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, topic, loading }) => {
+    console.log(dataIdea)
+    const { id } = useSelector(state => state.user)
     const [upsertReact, { isLoading: loadingHandleReaction }] = useUpsertReactMutation()
     const [addView] = useAddViewMutation()
     const { id: userId } = useSelector(state => state.user)
     const handleLike = (state) => {
         upsertReact({
             idea: dataIdea.id,
-            status: state ? 0 : 1
+            status: state ? 0 : 1,
+            userId: id
         }).then(res => {
             !state && message.open({
                 content: <>You liked the Idea</>,
@@ -33,7 +36,8 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
     const handleDislike = (state) => {
         upsertReact({
             idea: dataIdea.id,
-            status: state ? 0 : -1
+            status: state ? 0 : -1,
+            userId: id
         }).then(res => {
             !state && message.open({
                 content: "You disliked the Idea",

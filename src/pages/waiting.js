@@ -1,14 +1,18 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { signOut, useSession } from 'next-auth/react';
+
 
 function Waiting() {
     const router = useRouter()
-    const { role } = useSelector(state => state.user)
+    const { data: session } = useSession()
+    console.log(session)
     useEffect(() => {
-        role && router.push("/")
-    }, [role])
+        if (session === null) {
+            router.push("/")
+        }
+    }, [])
     return (
         <div className='waiting-wrapper'>
             <Head>
@@ -22,6 +26,15 @@ function Waiting() {
                         <img src="/logowaiting.png" />
                         <h1>Please wait for the admin to set your role and department.</h1>
                         <h1>Come back later!</h1>
+                        <button onClick={() => {
+                            signOut().then(res => {
+                                console.log(res)
+                                localStorage.clear()
+                            }).catch(err => {
+                                console.log(err)
+                            })
+
+                        }}>Logout current account</button>
                     </div>
                     <div class="dot-typing"></div>
                 </form>

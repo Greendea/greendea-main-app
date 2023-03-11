@@ -31,4 +31,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useAddTopicMutation, useGetTopicsQuery, useUpdateTopicMutation } = extendedApi;
+export const { useAddTopicMutation, useGetTopicsQuery, useUpdateTopicMutation, endpoints } = extendedApi;
