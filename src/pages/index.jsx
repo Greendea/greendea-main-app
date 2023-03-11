@@ -27,7 +27,7 @@ export default function Home({ topics }) {
 }
 
 export const getStaticProps = async () => {
-  const res = () => fetch(`${process.env.BE_URL || "http://localhost:3000/"}api/home`).then(res => res.json())
+  const res = () => fetch(`${process.env.BE_URL}api/home`).then(res => res.json())
 
   return {
     props: { topics: await res() },
