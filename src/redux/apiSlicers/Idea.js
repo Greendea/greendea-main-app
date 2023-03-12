@@ -38,40 +38,47 @@ const extendedApi = apiSlice.injectEndpoints({
                 body: item
             }),
             invalidatesTags: ["Idea"],
-            // async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-            //     console.log("argargargargargargarg", arg)
-            //     const patchResult = dispatch(
-            //         extendedApi.util.updateQueryData("getIdeas", arg, (draft) => {
-            //             console.log("CHANGING")
-            //             draft = draft.map(i => {
-            //                 if (i.id === arg.idea) {
-            //                     console.log("***********************************")
-            //                     return {
-            //                         ...i,
-            //                         "reacts": arg.status === 0 ? i.reacts.filter(item => item.userId != arg.userId) : i.reacts.map(item => {
-            //                             if (item.userId === arg.userId) {
-            //                                 return {
-            //                                     userId: item.userId,
-            //                                     status: arg.status
-            //                                 }
-            //                             }
-            //                             return item
-            //                         })
-            //                     }
-            //                 }
-            //                 return i
-            //             })
-            //             console.log("update", draft)
-            //         })
-            //     )
-            //     try {
-            //         await queryFulfilled
-            //     } catch {
-            //         console.log("failed")
-            //         patchResult.undo()
-            //     }
-
-            // },
+            async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+                console.log("argargargargargargarg", arg)
+                const patchResult = dispatch(
+                    extendedApi.util.updateQueryData("getIdeas", undefined, (draft) => {
+                        return draft.map(i => {
+                            if (i.id === arg.idea) {
+                                return {
+                                    ...i,
+                                    "reacts": arg.status === 0 ?
+                                        i.reacts.filter(item => item.userId != arg.userId)
+                                        :
+                                        (
+                                            i.reacts.find(item => item.userId === arg.userId)
+                                                ?
+                                                i.reacts.map(item => {
+                                                    if (item.userId === arg.userId) {
+                                                        return {
+                                                            userId: item.userId,
+                                                            status: arg.status
+                                                        }
+                                                    }
+                                                    return item
+                                                })
+                                                :
+                                                [{
+                                                    userId: arg.userId,
+                                                    status: arg.status
+                                                }, ...i.reacts]
+                                        )
+                                }
+                            }
+                            return i
+                        })
+                    })
+                )
+                try {
+                    await queryFulfilled
+                } catch {
+                    patchResult.undo()
+                }
+            },
         }),
     }),
     overrideExisting: false,

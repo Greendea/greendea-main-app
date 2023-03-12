@@ -10,7 +10,7 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: item
             }),
-            invalidatesTags: ["Idea", "Comment"]
+            invalidatesTags: ["Idea", "Comment"],
         }),
         getCommentByIdea: builder.query({
             query: (ideaId) => ({
