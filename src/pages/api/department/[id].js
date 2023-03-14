@@ -9,6 +9,9 @@ export default async function handler(req, res) {
         if (!allowedMethods.includes(req.method)) {
             return res.status(405).send({ message: 'Method not allowed.' });
         }
+        if (req.method === 'GET') {
+            return GetDepartmentByID(req, res, null)
+        }
 
         const session = await getServerSession(req, res, authOptions)
         if (!session) {
@@ -24,8 +27,7 @@ export default async function handler(req, res) {
         }
 
         switch (req.method) {
-            case 'GET':
-                return GetDepartmentByID(req, res, userSession)
+
             case 'PUT':
                 return UpdateDepartmentByID(req, res, userSession)
             case 'DELETE':

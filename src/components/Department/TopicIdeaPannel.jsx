@@ -2,12 +2,13 @@ import DepartmentTableTopic from "@/components/Department/DepartmentTableIdeaTop
 import TopicForm from "@/components/Department/TopicForm";
 
 export default function TopicIdea({ department, role }) {
+    console.log("rolerolerolerolerole", role)
     return (
         <>
             {department && <>
                 {/* {!department === true && <TopicForm department={department} />} */}
                 {
-                    ["manager", "admin", "head"].includes(role) && <TopicForm department={department} />
+                    ["manager", "head"].includes(role) && <TopicForm department={department} />
                 }
 
                 <DepartmentTableTopic department={department} editable={true} downloadable={["manager", "admin", "head"].includes(role)} />

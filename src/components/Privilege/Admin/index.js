@@ -9,6 +9,7 @@ import { Categories } from './Categories';
 const onChange = (key) => {
     console.log(key);
 };
+
 const items = [
     {
         key: '1',
@@ -23,7 +24,7 @@ const items = [
     {
         key: '3',
         label: `TOPICS`,
-        children: <TopicIdea department={true} />,
+        children: <TopicIdea department={true} role="admin" />,
     },
     {
         key: '6',
@@ -41,7 +42,6 @@ const items = [
         children: <Statistic />,
     },
 ];
-
 export default function Index() {
     return (
         <div>

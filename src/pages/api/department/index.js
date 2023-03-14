@@ -9,6 +9,9 @@ export default async function handler(req, res) {
         if (!allowedMethods.includes(req.method)) {
             return res.status(405).send({ message: 'Method not allowed.' });
         }
+        if (req.method === "GET") {
+            return GetAllDepartment(req, res, null)
+        }
 
         const session = await getServerSession(req, res, authOptions)
         if (!session) {
@@ -17,11 +20,7 @@ export default async function handler(req, res) {
             })
         }
         const userSession = await findUserByEmail(session.user.email)
-        if (req.method === "GET") {
-            return GetAllDepartment(req, res, userSession)
-        } else {
-            return AddDepartment(req, res, userSession)
-        }
+        return AddDepartment(req, res, userSession)
 
     } catch (error) {
         console.log(error)

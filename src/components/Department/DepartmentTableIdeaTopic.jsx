@@ -9,6 +9,11 @@ import dayjs from 'dayjs';
 import { ExpandedIdeaRender } from '../Idea/ExpandedIdeaTopic';
 import { HiOutlineDownload } from 'react-icons/hi';
 import WaitingIdea from './WaitingIdea';
+import { useGetIdeasQuery } from '@/redux/apiSlicers/Idea';
+import * as XLSX from "xlsx";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import moment from 'moment';
 
 
 
@@ -71,6 +76,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
 }
 
 export default function DepartmentTableTopic({ department, editable = false, downloadable = false }) {
+    console.log("downloadable", downloadable)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading } = useGetTopicsQuery(undefined, {
@@ -79,6 +85,36 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             data: department === true ? data : data?.filter(i => i.Department?.id === department.id)
         })
     })
+    const { data: ideas } = useGetIdeasQuery()
+    const handleDownload = (record) => {
+        let zip = new JSZip();
+        //CREATE XLSX FILE
+        const jsonData = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
+            return {
+                id, content, isAnomyous,
+                user: User.name,
+                category: Category.name,
+                comments: comments.length,
+                files: files.length,
+                reacts: reacts.length,
+                createdAt: ParseDate(createdAt)
+            }
+        })
+        const workBook = XLSX.utils.book_new();
+        const workSheet = XLSX.utils.json_to_sheet(jsonData);
+        XLSX.utils.book_append_sheet(workBook, workSheet, `TOPIC-${record.name}`);
+        const workBookBuffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'array' });
+        const fileDataExcel = new Blob([workBookBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+
+        //Create media folder
+
+
+        //
+        zip.file(`${record.name.split(" ").join("_")}.xlsx`, fileDataExcel);
+        zip.generateAsync({ type: "blob" }).then(function (blob) {
+            saveAs(blob, `${record.name.split(" ").join("_")}.zip`);
+        });
+    }
 
     const additionalColumns = department === true ? [
         {
@@ -154,7 +190,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                         }}
                     >Edit</Tag>
                     {downloadable &&
-                        <Tag color="blue" style={{ cursor: "pointer" }} icon={<HiOutlineDownload />}>DOWNLOAD</Tag>
+                        <Tag color="blue" style={{ cursor: "pointer" }} icon={<HiOutlineDownload />} onClick={() => handleDownload(record)}>DOWNLOAD</Tag>
                     }
                 </>
             }
