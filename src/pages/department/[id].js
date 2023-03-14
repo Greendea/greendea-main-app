@@ -3,21 +3,24 @@ import DepartmentTableIdeaTopic from "../../components/Department/DepartmentTabl
 import { useGetDepartmentByIdQuery } from "../../redux/apiSlicers/Department";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react"
+import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
 
 export default function Department({ department, dep_id }) {
     // const router = useRouter()
     // const { id } = router.query
-    const { data, isLoading, isSuccess } = useGetDepartmentByIdQuery(dep_id, {
+    const { data, isLoading, isSuccess, refetch } = useGetDepartmentByIdQuery(dep_id, {
         skip: !dep_id
     })
     console.log(data)
+    useEffect(() => {
+        refetch()
+    }, [dep_id])
 
     return (
         <Layout>
             <Head>
-                <title>GreenDea - {data?.name}</title>
+                <title>GreenDea - {department?.name}</title>
             </Head>
             <div className="departmentWrapper">
                 <h1 style={{
