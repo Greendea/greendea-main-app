@@ -10,7 +10,7 @@ export default function Department() {
     const router = useRouter()
     const { id } = router.query
     const { data, isLoading, isSuccess } = useGetDepartmentByIdQuery(id, {
-        skip: !dep_id
+        skip: !id
     })
     console.log(id)
 
