@@ -5,6 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
+import { Spin } from "antd";
 
 export default function Department({ department, dep_id }) {
     // const router = useRouter()
@@ -30,14 +31,15 @@ export default function Department({ department, dep_id }) {
                 }}>
                     {data?.name}
                 </h1>
-                {
-                    isSuccess &&
-                    <>
-                        <AnnouncementTable department={{ id: data.id, name: data.name }} />
-                        <DepartmentTableIdeaTopic department={{ id: data.id, name: data.name }} editable={false} />
-                    </>
-
-                }
+                <Spin spinning={isLoading}>
+                    {
+                        isSuccess &&
+                        <>
+                            <AnnouncementTable department={{ id: data.id, name: data.name }} />
+                            <DepartmentTableIdeaTopic department={{ id: data.id, name: data.name }} editable={false} />
+                        </>
+                    }
+                </Spin>
 
             </div>
         </Layout>
