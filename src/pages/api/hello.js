@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-import { uploadImage } from "@/lib/cloudinary"
+import { uploadImage } from "../../lib/cloudinary"
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
