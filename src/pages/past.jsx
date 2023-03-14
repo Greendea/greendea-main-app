@@ -5,7 +5,7 @@ import Head from "next/head";
 import Layout from "../components/Layout/Index"
 
 
-const Past = () => {
+export default function Past() {
     const { data, isLoading } = useGetPersonalIdeasQuery()
     const columns = [
         {
@@ -98,4 +98,3 @@ const Past = () => {
         </Layout>
     );
 };
-export default Past;

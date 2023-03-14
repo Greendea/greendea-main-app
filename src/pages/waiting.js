@@ -4,7 +4,8 @@ import React, { useEffect } from 'react'
 import { signOut, useSession } from 'next-auth/react';
 
 
-function Waiting() {
+
+export default function Waiting() {
     const router = useRouter()
     const { data: session } = useSession()
     console.log(session)
@@ -42,5 +43,3 @@ function Waiting() {
         </div>
     )
 }
-
-export default Waiting

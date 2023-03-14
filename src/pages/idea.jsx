@@ -32,7 +32,7 @@ const getBase64 = (img, callback) => {
     reader.readAsDataURL(img);
 };
 
-const Idea = () => {
+export default function Idea() {
     const router = useRouter()
     const { departmentId, topicId } = router.query
     const { data: departments } = useGetDepartmentsQuery()
@@ -231,4 +231,3 @@ const Idea = () => {
 
     );
 };
-export default Idea;
