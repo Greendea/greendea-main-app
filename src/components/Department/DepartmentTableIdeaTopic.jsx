@@ -2,18 +2,17 @@ import React, { useState, useEffect } from 'react'
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
 import { Button, DatePicker, Descriptions, Divider, Dropdown, Form, Input, message, Modal, Select, Space, Table, Tag, Tooltip } from 'antd';
-import { useGetTopicsQuery, useUpdateTopicMutation } from '@/redux/apiSlicers/Topic';
-import { ParseDate } from '@/utils/dataParser';
-import { validateMessages } from '@/utils/validateMessage';
+import { useGetTopicsQuery, useUpdateTopicMutation } from '../../redux/apiSlicers/Topic';
+import { ParseDate } from '../../utils/dataParser';
+import { validateMessages } from '../../utils/validateMessage';
 import dayjs from 'dayjs';
 import { ExpandedIdeaRender } from '../Idea/ExpandedIdeaTopic';
 import { HiOutlineDownload } from 'react-icons/hi';
 import WaitingIdea from './WaitingIdea';
-import { useGetIdeasQuery } from '@/redux/apiSlicers/Idea';
+import { useGetIdeasQuery } from '../../redux/apiSlicers/Idea';
 import * as XLSX from "xlsx";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import moment from 'moment';
 
 
 

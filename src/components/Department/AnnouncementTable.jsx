@@ -1,5 +1,5 @@
-import { useGetAnnouncementsQuery, useUpdateAnnouncementByIdMutation } from '@/redux/apiSlicers/Announcement';
-import { ParseDate } from '@/utils/dataParser';
+import { useGetAnnouncementsQuery, useUpdateAnnouncementByIdMutation } from '../../redux/apiSlicers/Announcement';
+import { ParseDate } from '../..//utils/dataParser';
 import { Button, DatePicker, Divider, Form, Input, message, Modal, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import locale from "antd/lib/date-picker/locale/vi_VN";
@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 const dateFormat = 'DD MMM, YYYY'
 import parse from 'html-react-parser';
 import dynamic from "next/dynamic";
-import { validateMessages } from '@/utils/validateMessage';
+import { validateMessages } from '../../utils/validateMessage';
 
 
 const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {

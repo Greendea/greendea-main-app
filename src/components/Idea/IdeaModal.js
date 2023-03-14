@@ -1,8 +1,8 @@
-import { useAddCommentMutation, useGetCommentByIdeaQuery } from '@/redux/apiSlicers/Comment';
-import { useUpsertReactMutation } from '@/redux/apiSlicers/Idea';
-import { useAddViewMutation } from '@/redux/apiSlicers/View';
-import { ParseDate } from '@/utils/dataParser';
-import { validateMessages } from '@/utils/validateMessage';
+import { useAddCommentMutation, useGetCommentByIdeaQuery } from '../../redux/apiSlicers/Comment';
+import { useUpsertReactMutation } from '../../redux/apiSlicers/Idea';
+import { useAddViewMutation } from '../../redux/apiSlicers/View';
+import { ParseDate } from '../../utils/dataParser';
+import { validateMessages } from '../../utils/validateMessage';
 import { Comment } from '@ant-design/compatible';
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import { Avatar, Button, Descriptions, Divider, Modal, Skeleton, Space, Tooltip, message, Spin, Form, Input, Empty } from 'antd';

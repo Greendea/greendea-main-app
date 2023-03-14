@@ -1,5 +1,5 @@
-import AnnouncementForm from '@/components/Department/AnnouncementForm'
-import AnnouncementTable from '@/components/Department/AnnouncementTable'
+import AnnouncementForm from '../../components/Department/AnnouncementForm'
+import AnnouncementTable from '../../components/Department/AnnouncementTable'
 import React from 'react'
 
 export default function Announcement({ department }) {

@@ -1,5 +1,5 @@
-import { GetAllRoles } from "@/lib/Service/RoleService";
-import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
+import { GetAllRoles } from "../../../lib/Service/RoleService";
+import { GetAllUser, findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['GET'];

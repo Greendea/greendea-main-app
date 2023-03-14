@@ -1,9 +1,9 @@
 import { Space, Table, Tag } from "antd";
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import { ModalIdea } from "./IdeaModal";
-import { useGetIdeasQuery } from "@/redux/apiSlicers/Idea";
+import { useGetIdeasQuery } from "../../redux/apiSlicers/Idea";
 import React, { useState } from "react";
-import { ParseDate } from "@/utils/dataParser";
+import { ParseDate } from "../../utils/dataParser";
 import { GrView } from "react-icons/gr";
 
 const IconText = ({ icon, text }) => (

@@ -1,4 +1,4 @@
-import { useGetUserByEmailQuery } from '@/redux/apiSlicers/User';
+import { useGetUserByEmailQuery } from '../../../redux/apiSlicers/User';
 import { Avatar, Button, Divider, Drawer, Form, Input, List, Space, Typography, Upload } from 'antd'
 import { signOut, useSession } from 'next-auth/react';
 import Error from 'next/error';

@@ -1,6 +1,6 @@
-import AnnouncementTable from "@/components/Department/AnnouncementTable";
-import DepartmentTableIdeaTopic from "@/components/Department/DepartmentTableIdeaTopic";
-import { useGetDepartmentByIdQuery } from "@/redux/apiSlicers/Department";
+import AnnouncementTable from "../../components/Department/AnnouncementTable";
+import DepartmentTableIdeaTopic from "../../components/Department/DepartmentTableIdeaTopic";
+import { useGetDepartmentByIdQuery } from "../../redux/apiSlicers/Department";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react"

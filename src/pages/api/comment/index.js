@@ -1,5 +1,5 @@
-import { AddComment, GetCommentsByIdea } from "@/lib/Service/CommentService";
-import { findUserByEmail } from "@/lib/Service/UserService";
+import { AddComment, GetCommentsByIdea } from "../../../lib/Service/CommentService";
+import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['POST'];

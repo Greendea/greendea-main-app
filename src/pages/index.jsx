@@ -1,7 +1,7 @@
 import { Inter } from '@next/font/google'
 import Layout from "../components/Layout/Index"
-import SearchForm from '@/components/GenericUsage/SearchForm'
-import ListTopic from '@/components/Home/ListTopic'
+import SearchForm from '../components/GenericUsage/SearchForm'
+import ListTopic from '../components/Home/ListTopic'
 import Head from 'next/head'
 
 

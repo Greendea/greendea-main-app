@@ -1,5 +1,5 @@
-import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
-import { useGetUsersQuery } from '@/redux/apiSlicers/User';
+import { useGetDepartmentsQuery } from '../redux/apiSlicers/Department';
+import { useGetUsersQuery } from '../redux/apiSlicers/User';
 import OrgChart from '@balkangraph/orgchart.js';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';

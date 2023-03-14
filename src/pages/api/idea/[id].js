@@ -1,5 +1,5 @@
-import { UpdateIdeaStatusById } from "@/lib/Service/IdeaService";
-import { findUserByEmail } from "@/lib/Service/UserService";
+import { UpdateIdeaStatusById } from "../../../lib/Service/IdeaService";
+import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['PUT'];

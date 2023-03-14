@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import { useAddDepartmentMutation, useDeleteDepartmentByIdMutation, useGetDepartmentsQuery, useUpdateDepartmentByIdMutation } from '@/redux/apiSlicers/Department'
-import { ParseDate } from '@/utils/dataParser'
-import { loading } from '@/utils/orgchart'
-import { validateMessages } from '@/utils/validateMessage'
+import { useAddDepartmentMutation, useDeleteDepartmentByIdMutation, useGetDepartmentsQuery, useUpdateDepartmentByIdMutation } from '../../../redux/apiSlicers/Department'
+import { ParseDate } from '../../../utils/dataParser'
+import { loading } from '../../../utils/orgchart'
+import { validateMessages } from '../../../utils/validateMessage'
 import { Button, Divider, Form, Input, Modal, Select, Table, Tag, message, Descriptions } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { searchColumn } from '@/utils/tableFilters'
+import { searchColumn } from '../../../utils/tableFilters'
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     const [updateDeparment, { isLoading }] = useUpdateDepartmentByIdMutation()

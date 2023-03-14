@@ -1,5 +1,5 @@
-import { useGetPersonalIdeasQuery } from "@/redux/apiSlicers/Idea";
-import { ParseDate } from "@/utils/dataParser";
+import { useGetPersonalIdeasQuery } from "../redux/apiSlicers/Idea";
+import { ParseDate } from "../utils/dataParser";
 import { Divider, Table, Tag } from "antd";
 import Head from "next/head";
 import Layout from "../components/Layout/Index"

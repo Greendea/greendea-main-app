@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { findUserByEmail } from "@/lib/Service/UserService"
-import { AddView } from "@/lib/Service/ViewService"
+import { findUserByEmail } from "../../../lib/Service/UserService"
+import { AddView } from "../../../lib/Service/ViewService"
 
 
 export default async function handler(req, res) {

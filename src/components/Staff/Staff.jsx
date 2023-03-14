@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
-import { useGetRolesQuery } from '@/redux/apiSlicers/Role';
-import { useGetUsersQuery, useUpdateUserMutation } from '@/redux/apiSlicers/User';
-import { exposeFilters } from '@/utils/exposeFilter';
-import { SelectStatus } from '@/utils/selectEnable';
-import { searchColumn } from '@/utils/tableFilters';
-import { validateMessages } from '@/utils/validateMessage';
+import { useGetDepartmentsQuery } from '../../redux/apiSlicers/Department';
+import { useGetRolesQuery } from '../../redux/apiSlicers/Role';
+import { useGetUsersQuery, useUpdateUserMutation } from '../../redux/apiSlicers/User';
+import { exposeFilters } from '../../utils/exposeFilter';
+import { SelectStatus } from '../../utils/selectEnable';
+import { searchColumn } from '../../utils/tableFilters';
+import { validateMessages } from '../../utils/validateMessage';
 import { Button, Divider, Form, Input, message, Modal, Select, Table, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 

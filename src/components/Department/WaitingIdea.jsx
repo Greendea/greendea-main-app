@@ -1,5 +1,5 @@
-import { useGetIdeasQuery, useUpdateIdeaStatusMutation } from '@/redux/apiSlicers/Idea';
-import { ParseDate } from '@/utils/dataParser';
+import { useGetIdeasQuery, useUpdateIdeaStatusMutation } from '../../redux/apiSlicers/Idea';
+import { ParseDate } from '../../utils/dataParser';
 import { Button, Descriptions, Divider, message, Modal, Popconfirm, Space, Table, Tag } from 'antd'
 import React, { useState } from 'react'
 import { AiOutlineCheck, AiOutlineClose } from 'react-icons/ai';

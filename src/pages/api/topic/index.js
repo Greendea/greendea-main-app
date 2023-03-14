@@ -1,5 +1,5 @@
-import { AddTopic, EditTopic, GetAllTopics } from "@/lib/Service/TopicService";
-import { findUserByEmail } from "@/lib/Service/UserService";
+import { AddTopic, EditTopic, GetAllTopics } from "../../../lib/Service/TopicService";
+import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['POST', 'GET', "PUT"];

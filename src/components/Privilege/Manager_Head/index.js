@@ -1,4 +1,4 @@
-import Staff from '@/components/Staff/Staff';
+import Staff from '../../../components/Staff/Staff';
 import { Tabs } from 'antd';
 import Announcement from '../../Department/Announcement';
 import TopicIdea from '../../Department/TopicIdeaPannel';

@@ -1,5 +1,5 @@
-import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "@/lib/Service/DepartmentService";
-import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
+import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "../../../lib/Service/DepartmentService";
+import { GetAllUser, findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['GET', 'PUT', 'DELETE'];

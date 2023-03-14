@@ -11,7 +11,7 @@ import Link from 'next/link';
 import AvatarDrawer from './UserProfile/AvatarDrawer';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
+import { useGetDepartmentsQuery } from '../../redux/apiSlicers/Department';
 
 const { Header } = Layout;
 

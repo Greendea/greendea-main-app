@@ -14,16 +14,16 @@ import {
 import { CheckSquareOutlined, CloseSquareOutlined, EyeOutlined, InboxOutlined, SendOutlined } from '@ant-design/icons';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import Layout from "../components/Layout/Index"
-import { useGetDepartmentsQuery } from '@/redux/apiSlicers/Department';
+import { useGetDepartmentsQuery } from '../redux/apiSlicers/Department';
 import { useEffect, useState } from 'react';
-import { useGetTopicsQuery } from '@/redux/apiSlicers/Topic';
-import { validateMessages } from '@/utils/validateMessage';
-import { allowFiles, allowFilesShow } from '@/utils/formatFiles';
-import { useAddIdeaMutation } from '@/redux/apiSlicers/Idea';
-import { useGetTermAndConditionQuery } from '@/redux/apiSlicers/Term';
+import { useGetTopicsQuery } from '../redux/apiSlicers/Topic';
+import { validateMessages } from '../utils/validateMessage';
+import { allowFiles, allowFilesShow } from '../utils/formatFiles';
+import { useAddIdeaMutation } from '../redux/apiSlicers/Idea';
+import { useGetTermAndConditionQuery } from '../redux/apiSlicers/Term';
 import parse from 'html-react-parser';
 import Head from 'next/head';
-import { useGetCategoriesQuery } from '@/redux/apiSlicers/Category';
+import { useGetCategoriesQuery } from '../redux/apiSlicers/Category';
 import { useRouter } from 'next/router';
 
 const getBase64 = (img, callback) => {

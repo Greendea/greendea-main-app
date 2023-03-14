@@ -1,4 +1,4 @@
-import { useGetUserByEmailQuery } from '@/redux/apiSlicers/User'
+import { useGetUserByEmailQuery } from '../redux/apiSlicers/User'
 import { Empty, Skeleton, Spin } from 'antd'
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'

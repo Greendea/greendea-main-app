@@ -1,4 +1,4 @@
-import { findUserByEmail, GetUserByEmail } from "@/lib/Service/UserService";
+import { findUserByEmail, GetUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['GET'];

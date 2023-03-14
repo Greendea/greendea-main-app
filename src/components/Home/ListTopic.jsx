@@ -7,7 +7,7 @@ import { MdList } from "react-icons/md";
 import { FcInfo } from "react-icons/fc"
 import React from 'react';
 import moment from 'moment';
-import { ParseDate } from '@/utils/dataParser';
+import { ParseDate } from '../../utils/dataParser';
 import { useRouter } from 'next/router';
 
 

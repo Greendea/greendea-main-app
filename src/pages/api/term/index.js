@@ -1,7 +1,7 @@
 import prisma from "../../../lib/prisma"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { findUserByEmail } from "@/lib/Service/UserService"
+import { findUserByEmail } from "../../../lib/Service/UserService"
 
 
 export default async function handler(req, res) {

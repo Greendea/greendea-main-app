@@ -1,5 +1,5 @@
-import { AddDepartment, GetAllDepartment } from "@/lib/Service/DepartmentService";
-import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
+import { AddDepartment, GetAllDepartment } from "../../../lib/Service/DepartmentService";
+import { GetAllUser, findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['GET', 'POST'];

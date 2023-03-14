@@ -1,7 +1,6 @@
-import cloudinary, { uploadImage } from "@/lib/cloudinary";
-import { DeleteDepartmentByID, GetAllDepartment, GetDepartmentByID, UpdateDepartmentByID } from "@/lib/Service/DepartmentService";
-import { AddIdea, GetAllIdeas, GetPersonalIdea } from "@/lib/Service/IdeaService";
-import { GetAllUser, findUserByEmail } from "@/lib/Service/UserService";
+import cloudinary, { uploadImage } from "../../../lib/cloudinary";
+import { AddIdea, GetAllIdeas, GetPersonalIdea } from "../../../lib/Service/IdeaService";
+import { GetAllUser, findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['POST', "GET"];

@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
-import { ParseDate } from '@/utils/dataParser'
-import { validateMessages } from '@/utils/validateMessage'
+import { ParseDate } from '../../../utils/dataParser'
+import { validateMessages } from '../../../utils/validateMessage'
 import { Button, Divider, Form, Input, Modal, Select, Table, Tag, message, Descriptions } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { searchColumn } from '@/utils/tableFilters'
-import { useAddCategoryMutation, useDeleteCategoryMutation, useGetCategoriesQuery, useUpdateCategoryMutation } from '@/redux/apiSlicers/Category'
+import { searchColumn } from '../../../utils/tableFilters'
+import { useAddCategoryMutation, useDeleteCategoryMutation, useGetCategoriesQuery, useUpdateCategoryMutation } from '../../../redux/apiSlicers/Category'
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView, categories }) => {
     const [updateCategory, { isLoading }] = useUpdateCategoryMutation()

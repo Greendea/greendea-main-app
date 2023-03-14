@@ -1,4 +1,4 @@
-import { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation } from "@/redux/apiSlicers/Term";
+import { useGetTermAndConditionQuery, useUpdateTermAndConditionMutation } from "../../../redux/apiSlicers/Term";
 import { Button, message, Spin } from "antd";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";

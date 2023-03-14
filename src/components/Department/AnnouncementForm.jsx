@@ -1,5 +1,5 @@
-import { useAddAnnouncementMutation } from "@/redux/apiSlicers/Announcement";
-import { validateMessages } from "@/utils/validateMessage";
+import { useAddAnnouncementMutation } from "../../redux/apiSlicers/Announcement";
+import { validateMessages } from "../../utils/validateMessage";
 import { Button, Divider, Form, Input, message } from "antd";
 import dynamic from "next/dynamic";
 import { useRef } from "react";

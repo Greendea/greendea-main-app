@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-import { findUserByEmail } from "@/lib/Service/UserService"
-import { AddCategory, DeleteCategory, EditCategory, GetAllCategories } from "@/lib/Service/CategoryService"
+import { findUserByEmail } from "../../../lib/Service/UserService"
+import { AddCategory, DeleteCategory, EditCategory, GetAllCategories } from "../../../lib/Service/CategoryService"
 
 
 export default async function handler(req, res) {

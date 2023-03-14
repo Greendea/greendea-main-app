@@ -1,7 +1,7 @@
-import { validateMessages } from "@/utils/validateMessage";
+import { validateMessages } from "../../utils/validateMessage";
 import { Button, DatePicker, Divider, Form, Input, message } from "antd";
 import { useEffect } from "react";
-import { useAddTopicMutation } from "@/redux/apiSlicers/Topic";
+import { useAddTopicMutation } from "../../redux/apiSlicers/Topic";
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
 
