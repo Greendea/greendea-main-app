@@ -7,12 +7,12 @@ import React from "react"
 import Layout from "../../components/Layout/Index"
 
 export default function Department() {
-    // const router = useRouter()
-    // const { id } = router.query
-    const { data, isLoading, isSuccess } = useGetDepartmentByIdQuery(dep_id, {
+    const router = useRouter()
+    const { id } = router.query
+    const { data, isLoading, isSuccess } = useGetDepartmentByIdQuery(id, {
         skip: !dep_id
     })
-    console.log(data)
+    console.log(id)
 
     return (
         <Layout>
