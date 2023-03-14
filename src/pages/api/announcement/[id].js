@@ -1,5 +1,5 @@
-import { AddAnnouncement, DeleteAnnouncementByID, GetAllAnnouncement, UpdateAnnouncementByID } from "@/lib/Service/AnnouncementService";
-import { findUserByEmail } from "@/lib/Service/UserService";
+import { AddAnnouncement, DeleteAnnouncementByID, GetAllAnnouncement, UpdateAnnouncementByID } from "../../lib/Service/AnnouncementService";
+import { findUserByEmail } from "../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
 const allowedMethods = ['PUT', 'DELETE'];
