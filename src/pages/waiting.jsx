@@ -27,15 +27,16 @@ export default function Waiting() {
                         <img src="/logowaiting.png" />
                         <h1>Please wait for the admin to set your role and department.</h1>
                         <h1>Come back later!</h1>
-                        <button onClick={() => {
-                            signOut().then(res => {
-                                console.log(res)
-                                localStorage.clear()
-                            }).catch(err => {
-                                console.log(err)
-                            })
+                        <button type='button'
+                            onClick={() => {
+                                signOut().then(res => {
+                                    console.log(res)
+                                    localStorage.clear()
+                                }).catch(err => {
+                                    console.log(err)
+                                })
 
-                        }}>Logout current account</button>
+                            }}>Logout current account</button>
                     </div>
                     <div class="dot-typing"></div>
                 </form>

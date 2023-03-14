@@ -86,18 +86,9 @@ export default function DepartmentTableTopic({ department, editable = false, dow
     })
     const { data: ideas } = useGetIdeasQuery()
     const handleDownload = async (record) => {
-        console.log(record.id)
-        const data = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
-            return {
-                files: files.length,
-                reacts: reacts.length,
-                createdAt: ParseDate(createdAt)
-            }
-        })
-        return;
         let zip = new JSZip();
         // //CREATE XLSX FILE
-        const jsonData = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
+        let jsonData = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
             return {
                 id, content, isAnomyous,
                 user: User.name,
@@ -108,15 +99,15 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                 createdAt: ParseDate(createdAt)
             }
         })
-        const workBook = XLSX.utils.book_new();
-        const workSheet = XLSX.utils.json_to_sheet(jsonData);
+        let workBook = XLSX.utils.book_new();
+        let workSheet = XLSX.utils.json_to_sheet(jsonData);
         XLSX.utils.book_append_sheet(workBook, workSheet, `TOPIC-${record.name}`);
-        const workBookBuffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'array' });
-        const fileDataExcel = new Blob([workBookBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        let workBookBuffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'array' });
+        let fileDataExcel = new Blob([workBookBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
         zip.file(`${record.name.split(" ").join("_")}.xlsx`, fileDataExcel);
 
         // //Create media folder
-        const folders = ideas.map(idea => {
+        let folders = ideas.filter(i => i.Topic.id === record.id).map(idea => {
             return {
                 name: idea.id,
                 files: idea.files.map(i => i.url)
