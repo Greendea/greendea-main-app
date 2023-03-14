@@ -85,9 +85,18 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         })
     })
     const { data: ideas } = useGetIdeasQuery()
-    const handleDownload = (record) => {
+    const handleDownload = async (record) => {
+        console.log(record.id)
+        const data = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
+            return {
+                files: files.length,
+                reacts: reacts.length,
+                createdAt: ParseDate(createdAt)
+            }
+        })
+        return;
         let zip = new JSZip();
-        //CREATE XLSX FILE
+        // //CREATE XLSX FILE
         const jsonData = ideas.filter(i => i.Topic.id === record.id).map(({ id, content, isAnomyous, User, Category, comments, files, reacts, createdAt }) => {
             return {
                 id, content, isAnomyous,
@@ -104,12 +113,25 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         XLSX.utils.book_append_sheet(workBook, workSheet, `TOPIC-${record.name}`);
         const workBookBuffer = XLSX.write(workBook, { bookType: 'xlsx', type: 'array' });
         const fileDataExcel = new Blob([workBookBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
-
-        //Create media folder
-
-
-        //
         zip.file(`${record.name.split(" ").join("_")}.xlsx`, fileDataExcel);
+
+        // //Create media folder
+        const folders = ideas.map(idea => {
+            return {
+                name: idea.id,
+                files: idea.files.map(i => i.url)
+            }
+        })
+        for (let folder of folders) {
+            let folderZip = zip.folder(folder.name)
+            for (let url of folder.files) {
+                let response = await fetch(url);
+                let fileBlob = await response.blob()
+                folderZip.file(url.split("/")[7], fileBlob)
+            }
+        }
+
+        //SAVE FILEs
         zip.generateAsync({ type: "blob" }).then(function (blob) {
             saveAs(blob, `${record.name.split(" ").join("_")}.zip`);
         });
