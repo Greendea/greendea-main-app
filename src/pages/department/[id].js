@@ -10,13 +10,12 @@ import { Spin } from "antd";
 export default function Department({ department, dep_id }) {
     // const router = useRouter()
     // const { id } = router.query
-    const { data, isLoading, isSuccess, refetch } = useGetDepartmentByIdQuery(dep_id, {
-        skip: !dep_id
-    })
-    console.log(data)
-    useEffect(() => {
-        refetch()
-    }, [dep_id])
+    // const { data, isLoading, isSuccess, refetch } = useGetDepartmentByIdQuery(dep_id, {
+    //     skip: !dep_id
+    // })
+    // useEffect(() => {
+    //     refetch()
+    // }, [dep_id])
 
     return (
         <Layout>
@@ -29,17 +28,17 @@ export default function Department({ department, dep_id }) {
                     fontSize: 32,
                     margin: "15px 0"
                 }}>
-                    {data?.name}
+                    {department?.name}
                 </h1>
-                <Spin spinning={isLoading}>
+                {/* <Spin spinning={isLoading}>
                     {
                         isSuccess &&
-                        <>
-                            <AnnouncementTable department={{ id: data.id, name: data.name }} />
-                            <DepartmentTableIdeaTopic department={{ id: data.id, name: data.name }} editable={false} />
-                        </>
+                        <> */}
+                <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
+                <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} />
+                {/* </>
                     }
-                </Spin>
+                </Spin> */}
 
             </div>
         </Layout>
