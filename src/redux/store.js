@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import { apiSlice } from './apiSlicers/_index'
 import { userSlice } from './user'
+import { createWrapper } from "next-redux-wrapper";
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,5 @@ export const store = configureStore({
         getDefaultMiddleware().concat(apiSlice.middleware),
 })
 
-
+export const wrapper = createWrapper(store);
 setupListeners(store.dispatch)

@@ -13,6 +13,7 @@ import { useGetIdeasQuery } from '../../redux/apiSlicers/Idea';
 import * as XLSX from "xlsx";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { useRouter } from 'next/router';
 
 
 
@@ -76,6 +77,8 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
 
 export default function DepartmentTableTopic({ department, editable = false, downloadable = false }) {
     console.log("downloadable", downloadable)
+    const router = useRouter()
+    console.log(router.isFallback)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading, refetch } = useGetTopicsQuery(undefined, {

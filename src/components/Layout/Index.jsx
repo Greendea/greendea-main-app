@@ -15,8 +15,7 @@ import { useGetDepartmentsQuery } from '../../redux/apiSlicers/Department';
 
 const { Header } = Layout;
 
-const MenuLink = (departments) => {
-    const router = useRouter()
+const menu = (departments) => {
     return [
         {
             key: "Cat1",
@@ -30,17 +29,7 @@ const MenuLink = (departments) => {
             children: departments?.map(department => {
                 return {
                     key: `Sub-${department.id}`,
-                    // label: <Link href={`/department/${department.id}`} replace={true} >{department.name}</Link>,
-                    label: <span
-                        onClick={() => {
-                            router.push({
-                                pathname: `/department/${department.id}`
-                                // query: {
-                                //     "id": department.id
-                                // },
-                            })
-                        }}
-                    >{department.name}</span>
+                    label: <Link href={`/department/${department.id}`} replace={true}>{department.name}</Link>,
                 }
             })
 
@@ -110,7 +99,7 @@ export default function Index({ children }) {
                             theme="light"
                             mode="horizontal"
                             defaultSelectedKeys={['2']}
-                            items={MenuLink(departments)}
+                            items={menu(departments)}
                             style={{ marginRight: 50 }}
                         />
                         <AvatarDrawer />

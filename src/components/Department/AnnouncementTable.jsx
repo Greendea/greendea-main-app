@@ -110,6 +110,7 @@ export default function AnnouncementTable({ department, editable = false }) {
     const [isModalOpenView, setIsModalOpenView] = useState(false);
     const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
     const [dataView, setDataView] = useState(null)
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     const { data, isLoading, refetch } = useGetAnnouncementsQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,

@@ -9,7 +9,7 @@ export const apiSlice = createApi({
     tagTypes: ["User", "Department", "Term", "Role", "Topic", "Announcement", "Idea", "Category", "Comment"],
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) {
-            return action.payload[reducerPath];
+            return action.payload[reducerPath]
         }
     },
     endpoints: () => ({}),
