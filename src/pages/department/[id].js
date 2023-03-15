@@ -2,20 +2,9 @@ import AnnouncementTable from "../../components/Department/AnnouncementTable";
 import DepartmentTableIdeaTopic from "../../components/Department/DepartmentTableIdeaTopic";
 import { useGetDepartmentByIdQuery } from "../../redux/apiSlicers/Department";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
-import { Spin } from "antd";
-
 export default function Department({ department, dep_id }) {
-    // const router = useRouter()
-    // const { id } = router.query
-    // const { data, isLoading, isSuccess, refetch } = useGetDepartmentByIdQuery(dep_id, {
-    //     skip: !dep_id
-    // })
-    // useEffect(() => {
-    //     refetch()
-    // }, [dep_id])
 
     return (
         <Layout>
@@ -30,15 +19,13 @@ export default function Department({ department, dep_id }) {
                 }}>
                     {department?.name}
                 </h1>
-                {/* <Spin spinning={isLoading}>
-                    {
-                        isSuccess &&
-                        <> */}
-                {/* <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
-                <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} /> */}
-                {/* </>
-                    }
-                </Spin> */}
+                {
+                    department &&
+                    <>
+                        <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
+                        <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} />
+                    </>
+                }
 
             </div>
         </Layout>

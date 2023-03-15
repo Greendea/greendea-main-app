@@ -78,7 +78,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
     console.log("downloadable", downloadable)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
-    const { data, isLoading } = useGetTopicsQuery(undefined, {
+    const { data, isLoading, refetch } = useGetTopicsQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,
             data: department === true ? data : data?.filter(i => i.Department?.id === department.id)
@@ -209,7 +209,9 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         } : {}
 
     ];
-    console.log(data)
+    useEffect(() => {
+        refetch()
+    }, [department])
 
     return (
         <>

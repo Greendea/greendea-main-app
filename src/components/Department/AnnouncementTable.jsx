@@ -110,12 +110,15 @@ export default function AnnouncementTable({ department, editable = false }) {
     const [isModalOpenView, setIsModalOpenView] = useState(false);
     const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
     const [dataView, setDataView] = useState(null)
-    const { data, isLoading } = useGetAnnouncementsQuery(undefined, {
+    const { data, isLoading, refetch } = useGetAnnouncementsQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,
             data: data?.filter(i => i.Department?.id === department.id)
         })
     })
+    useEffect(() => {
+        refetch()
+    }, [department.id])
     const columns = [
         {
             title: 'Title',
