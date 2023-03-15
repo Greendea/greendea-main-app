@@ -37,7 +37,7 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: item
             }),
-            invalidatesTags: ["Idea"],
+            // invalidatesTags: ["Idea"],
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 console.log("argargargargargargarg", arg)
                 const patchResult = dispatch(

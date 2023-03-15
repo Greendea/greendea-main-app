@@ -8,12 +8,11 @@ import { signOut, useSession } from 'next-auth/react';
 export default function Waiting() {
     const router = useRouter()
     const { data: session } = useSession()
-    console.log(session)
     useEffect(() => {
         if (session === null) {
             router.push("/")
         }
-    }, [])
+    }, [session])
     return (
         <div className='waiting-wrapper'>
             <Head>

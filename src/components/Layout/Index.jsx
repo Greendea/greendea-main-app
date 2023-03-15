@@ -29,7 +29,7 @@ const menu = (departments) => {
             children: departments?.map(department => {
                 return {
                     key: `Sub-${department.id}`,
-                    label: <Link href={`/department/${department.id}`} shallow={true}>{department.name}</Link>,
+                    label: <Link href={`/department/${department.id}`} replace={true}>{department.name}</Link>,
                 }
             })
 
