@@ -34,8 +34,8 @@ export default function Department({ department, dep_id }) {
                     {
                         isSuccess &&
                         <> */}
-                <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
-                <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} />
+                {/* <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
+                <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} /> */}
                 {/* </>
                     }
                 </Spin> */}

@@ -19,7 +19,7 @@ const menu = (departments) => {
     return [
         {
             key: "Cat1",
-            label: <Link href="/">Home</Link>,
+            label: <Link href="/" >Home</Link>,
             icon: <HomeOutlined />
         },
         {
