@@ -211,7 +211,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
     ];
     useEffect(() => {
         refetch()
-    }, [department])
+    }, [department.id])
 
     return (
         <>

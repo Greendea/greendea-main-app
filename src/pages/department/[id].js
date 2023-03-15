@@ -4,8 +4,7 @@ import { useGetDepartmentByIdQuery } from "../../redux/apiSlicers/Department";
 import Head from "next/head";
 import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
-export default function Department({ department, dep_id }) {
-
+export default function Department({ department }) {
     return (
         <Layout>
             <Head>
@@ -22,8 +21,8 @@ export default function Department({ department, dep_id }) {
                 {
                     department &&
                     <>
-                        <AnnouncementTable department={{ id: department?.id, name: department?.name }} />
-                        <DepartmentTableIdeaTopic department={{ id: department?.id, name: department?.name }} editable={false} />
+                        <AnnouncementTable department={department} />
+                        <DepartmentTableIdeaTopic department={department} editable={false} />
                     </>
                 }
 
@@ -58,8 +57,7 @@ export async function getStaticProps({ params }) {
     // Pass post data to the page via props
     return {
         props: {
-            department: department,
-            dep_id: params.id
+            department: department
         },
         revalidate: 10
     }
