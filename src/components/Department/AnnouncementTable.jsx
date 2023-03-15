@@ -116,9 +116,6 @@ export default function AnnouncementTable({ department, editable = false }) {
             data: data?.filter(i => i.Department?.id === department.id)
         })
     })
-    useEffect(() => {
-        refetch()
-    }, [department.id])
     const columns = [
         {
             title: 'Title',

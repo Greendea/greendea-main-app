@@ -209,9 +209,9 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         } : {}
 
     ];
-    useEffect(() => {
-        refetch()
-    }, [department.id])
+    // useEffect(() => {
+    //     refetch()
+    // }, [department.id])
 
     return (
         <>
