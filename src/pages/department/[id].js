@@ -1,10 +1,13 @@
-import AnnouncementTable from "../../components/Department/AnnouncementTable";
-import DepartmentTableIdeaTopic from "../../components/Department/DepartmentTableIdeaTopic";
-import { useGetDepartmentByIdQuery } from "../../redux/apiSlicers/Department";
+// import AnnouncementTable from "../../components/Department/AnnouncementTable";
+// import DepartmentTableIdeaTopic from "../../components/Department/DepartmentTableIdeaTopic";
 import Head from "next/head";
 import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
+import dynamic from "next/dynamic";
 export default function Department({ department }) {
+    const AnnouncementTable = dynamic(() => import("../../components/Department/AnnouncementTable"), { ssr: false })
+    const DepartmentTableIdeaTopic = dynamic(() => import("../../components/Department/DepartmentTableIdeaTopic"), { ssr: false })
+
     return (
         <Layout>
             <Head>
