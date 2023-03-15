@@ -9,15 +9,18 @@ import { endpoints as IdeaEndpoints } from '../redux/apiSlicers/Idea'
 import { endpoints as TermEndpoints } from '../redux/apiSlicers/Term'
 import { endpoints as RoleEndpoints } from '../redux/apiSlicers/Role'
 import { endpoints as UserEndpoints } from '../redux/apiSlicers/User'
+import { useEffect } from 'react'
 
 function App({ Component, pageProps }) {
-  // store.dispatch(TopicEndPoints.getTopics.initiate())
-  // store.dispatch(AnnouncementEndpoints.getAnnouncements.initiate())
-  // store.dispatch(CategoryEndpoints.getCategories.initiate())
-  // store.dispatch(IdeaEndpoints.getIdeas.initiate())
-  // store.dispatch(TermEndpoints.getTermAndCondition.initiate())
-  // store.dispatch(RoleEndpoints.getRoles.initiate())
-  // store.dispatch(UserEndpoints.getUsers.initiate())
+  useEffect(() => {
+    store.dispatch(TopicEndPoints.getTopics.initiate())
+    store.dispatch(AnnouncementEndpoints.getAnnouncements.initiate())
+    store.dispatch(CategoryEndpoints.getCategories.initiate())
+    store.dispatch(IdeaEndpoints.getIdeas.initiate())
+    store.dispatch(TermEndpoints.getTermAndCondition.initiate())
+    store.dispatch(RoleEndpoints.getRoles.initiate())
+    store.dispatch(UserEndpoints.getUsers.initiate())
+  }, [])
 
   return <SessionProvider session={pageProps.session}>
     <Provider store={store}>
