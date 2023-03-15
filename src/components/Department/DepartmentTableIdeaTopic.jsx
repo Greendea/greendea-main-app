@@ -82,7 +82,8 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,
             data: department === true ? data : data?.filter(i => i.Department?.id === department.id)
-        })
+        }),
+        skip: !department
     })
     const { data: ideas } = useGetIdeasQuery()
     const handleDownload = async (record) => {

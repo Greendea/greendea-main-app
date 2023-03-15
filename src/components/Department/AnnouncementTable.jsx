@@ -114,7 +114,8 @@ export default function AnnouncementTable({ department, editable = false }) {
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,
             data: data?.filter(i => i.Department?.id === department.id)
-        })
+        }),
+        skip: !department
     })
     const columns = [
         {
