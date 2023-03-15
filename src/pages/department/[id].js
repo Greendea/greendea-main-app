@@ -5,8 +5,8 @@ import React, { useEffect } from "react"
 import Layout from "../../components/Layout/Index"
 import dynamic from "next/dynamic";
 export default function Department({ department }) {
-    const AnnouncementTable = dynamic(() => import("../../components/Department/AnnouncementTable"), { ssr: true })
-    const DepartmentTableIdeaTopic = dynamic(() => import("../../components/Department/DepartmentTableIdeaTopic"), { ssr: true })
+    const AnnouncementTable = dynamic(() => import("../../components/Department/AnnouncementTable"), { ssr: false })
+    const DepartmentTableIdeaTopic = dynamic(() => import("../../components/Department/DepartmentTableIdeaTopic"), { ssr: false })
 
     return (
         <Layout>
@@ -21,13 +21,9 @@ export default function Department({ department }) {
                 }}>
                     {department?.name}
                 </h1>
-                {
-                    department &&
-                    <>
-                        <AnnouncementTable department={department} />
-                        <DepartmentTableIdeaTopic department={department} editable={false} />
-                    </>
-                }
+
+                <AnnouncementTable department={department} />
+                <DepartmentTableIdeaTopic department={department} editable={false} />
 
             </div>
         </Layout>
