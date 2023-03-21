@@ -24,12 +24,6 @@ export default function Index({ role, department }) {
             label: `ANNOUNCEMENTS`,
             children: <Announcement department={department} />,
         },
-        {
-            key: '4',
-            label: `TAGS`,
-            children: `Content of Tab Pane 3`,
-        },
-
     ];
     return (
         <div>

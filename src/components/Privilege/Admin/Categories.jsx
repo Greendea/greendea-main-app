@@ -39,7 +39,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView, categor
     >
         <Form labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} form={form} onFinish={handleSubmit} validateMessages={validateMessages}>
             <Form.Item label="Name" name="name" colon={false} rules={[{ required: true }]}>
-                <Input type="text" />
+                <Input type="text" onChange={(e) => form.setFieldValue("name", e.target.value.toUpperCase())} />
             </Form.Item>
         </Form>
     </Modal >
