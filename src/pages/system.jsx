@@ -9,6 +9,7 @@ const nodeBinding = {
     img_0: "img",
     field_0: "name",
     field_1: "title",
+    // field_2: "department",
 }
 
 // const data = [
@@ -60,6 +61,7 @@ function SystemChart({ departments, users }) {
                 }
             }
             const chart = new OrgChart(rootItem, {
+                template: "rony",
                 nodeBinding: nodeBinding,
                 nodes: nodes,
                 tags: tags
@@ -72,8 +74,8 @@ function SystemChart({ departments, users }) {
             setRootItem(document.getElementById("tree"))
         }
     }, [])
-    return <div style={{ height: '100%' }}>
-        <div id="tree"></div>
+    return <div style={{ height: '100vh' }}>
+        <div id="tree" style={{ height: '100%' }}></div>
         {
             rootItem && <Orgchart nodes={[{ id: 1, name: 'University' }, ...departments, ...users]}
                 nodeBinding={nodeBinding} />
@@ -108,7 +110,8 @@ export default function System() {
                             stpid: user.Department?.id,
                             name: user.name,
                             title: user.Role.name.toUpperCase(),
-                            img: user.image
+                            img: user.image,
+                            department: user.Department?.name
                         }
                     }
 

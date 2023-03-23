@@ -14,3 +14,39 @@ export const apiSlice = createApi({
     },
     endpoints: () => ({}),
 })
+
+
+export const additionSlice = createApi({
+    reducerPath: 'api_support',
+    baseQuery: fetchBaseQuery({
+        baseUrl: process.env.BE_URL_EXTERNAL,
+    }),
+    extractRehydrationInfo(action, { reducerPath }) {
+        if (action.type === HYDRATE) {
+            return action.payload[reducerPath]
+        }
+    },
+    endpoints: (builder) => ({
+        sendMail: builder.mutation({
+            query: (item) => ({
+                url: "send-email",
+                method: 'POST',
+                body: item,
+            }),
+        }),
+        activeUser: builder.mutation({
+            query: () => ({
+                url: "active_email",
+                method: 'POST',
+            }),
+        }),
+        getOnlineUsers: builder.query({
+            query: () => ({
+                url: "users",
+                method: 'GET',
+            }),
+        }),
+    }),
+})
+
+export const { useActiveUserMutation, useGetOnlineUsersQuery, useSendMailMutation } = additionSlice;
