@@ -46,10 +46,8 @@ export const getAllDepartment = async () => {
                             id: true
                         },
                         where: {
-                            NOT: {
-                                status: {
-                                    equals: -1
-                                }
+                            status: {
+                                equals: 1
                             }
                         }
                     }
