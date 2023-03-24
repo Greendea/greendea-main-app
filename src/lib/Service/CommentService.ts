@@ -1,18 +1,25 @@
 import prisma from "../prisma"
 
 export const AddComment = async (req, res, userSession) => {
-    return res.status(200).json(await addComment(req.body.idea, userSession.id, req.body.content))
+    return res.status(200).json(await addComment(req.body.idea, userSession.id, req.body.content, req.body.isAnomyous))
 }
 export const GetCommentsByIdea = async (req, res, userSession) => {
-    return res.status(200).json(await getCommentsByIdea(req.query.ideaId))
+    const comments = await getCommentsByIdea(req.query.ideaId)
+    return res.status(200).json(comments.map(cm => {
+        return {
+            ...cm,
+            User: cm.isAnomyous ? null : cm.User
+        }
+    }))
 }
 
-export const addComment = async (idea, user, content) => {
+export const addComment = async (idea, user, content, isAnomyous) => {
     return await prisma.comment.create({
         data: {
             ideaId: idea,
             userId: user,
-            content: content
+            content,
+            isAnomyous
         }
     })
 }

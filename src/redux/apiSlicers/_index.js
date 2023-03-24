@@ -35,8 +35,8 @@ export const additionSlice = createApi({
             }),
         }),
         activeUser: builder.mutation({
-            query: () => ({
-                url: "active_email",
+            query: (email) => ({
+                url: `active_email?email=${email}`,
                 method: 'POST',
             }),
         }),
@@ -49,4 +49,4 @@ export const additionSlice = createApi({
     }),
 })
 
-export const { useActiveUserMutation, useGetOnlineUsersQuery, useSendMailMutation } = additionSlice;
+export const { useActiveUserMutation, useGetOnlineUsersQuery, useSendMailMutation, endpoints } = additionSlice;

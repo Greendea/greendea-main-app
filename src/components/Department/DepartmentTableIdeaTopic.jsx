@@ -14,6 +14,7 @@ import * as XLSX from "xlsx";
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { useRouter } from 'next/router';
+import { exposeFilters } from '../../utils/exposeFilter';
 
 
 
@@ -142,7 +143,9 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                 return <>
                     {value.name}
                 </>
-            }
+            },
+            filters: data && exposeFilters(data.map(item => item.Department.name)),
+            onFilter: (value, record) => record.Department.name === value
         },
     ] : []
 

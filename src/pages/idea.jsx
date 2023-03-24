@@ -25,6 +25,7 @@ import parse from 'html-react-parser';
 import Head from 'next/head';
 import { useGetCategoriesQuery } from '../redux/apiSlicers/Category';
 import { useRouter } from 'next/router';
+import { useGetUsersQuery } from '../redux/apiSlicers/User';
 
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
@@ -35,6 +36,13 @@ const getBase64 = (img, callback) => {
 export default function Idea() {
     const router = useRouter()
     const { departmentId, topicId } = router.query
+    const { users } = useGetUsersQuery(undefined, {
+        selectFromResult: ({ data }) => {
+            return {
+                users: data
+            }
+        }
+    })
     const { data: departments } = useGetDepartmentsQuery()
     const [addIdea, { isLoading }] = useAddIdeaMutation()
     const { data: terms, isLoading: isLoadingTerm } = useGetTermAndConditionQuery(undefined, {
@@ -104,7 +112,12 @@ export default function Idea() {
             id: dateNow,
             ...vals,
             "isAnomyous": !!vals.isAnomyous,
-            files: uploadfiles
+            files: uploadfiles,
+            email_service: {
+                topic: topics.find(tp => tp.id === vals.topic).name,
+                content: vals.content,
+                recipients: users.filter(user => user.Department?.id === vals.department && user.Role?.name === "coordinator").map(u => u.email)
+            }
         }).unwrap().then(res => {
             message.success("Idea Submitted")
             setAgree(false)

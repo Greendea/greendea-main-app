@@ -9,9 +9,12 @@ import { endpoints as IdeaEndpoints } from '../redux/apiSlicers/Idea'
 import { endpoints as TermEndpoints } from '../redux/apiSlicers/Term'
 import { endpoints as RoleEndpoints } from '../redux/apiSlicers/Role'
 import { endpoints as UserEndpoints } from '../redux/apiSlicers/User'
+import { endpoints as ExternalEnpoint } from '../redux/apiSlicers/_index'
+import { useSession } from "next-auth/react"
+
 import { useEffect } from 'react'
 
-function App({ Component, pageProps }) {
+function Wrapper({ children }) {
   useEffect(() => {
     store.dispatch(TopicEndPoints.getTopics.initiate())
     store.dispatch(AnnouncementEndpoints.getAnnouncements.initiate())
@@ -22,9 +25,32 @@ function App({ Component, pageProps }) {
     store.dispatch(UserEndpoints.getUsers.initiate())
   }, [])
 
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    let triggerOnline
+    if (session?.user?.email) {
+      triggerOnline = setInterval(() => {
+        store.dispatch(ExternalEnpoint.activeUser.initiate(session.user.email))
+      }, 10000);
+    }
+    return () => {
+      clearInterval(triggerOnline);
+    };
+  }, [session])
+
+
+  return <>
+    {children}
+  </>
+}
+
+function App({ Component, pageProps }) {
   return <SessionProvider session={pageProps.session}>
     <Provider store={store}>
-      <Component {...pageProps} />
+      <Wrapper>
+        <Component {...pageProps} />
+      </Wrapper>
     </Provider>
   </SessionProvider>
 

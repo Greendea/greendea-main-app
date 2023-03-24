@@ -12,6 +12,7 @@ const nextConfig = {
   },
   env: {
     BE_URL: process.env.BE_URL,
+    BE_URL_EXTERNAL: process.env.BE_URL_EXTERNAL
   },
 
 }

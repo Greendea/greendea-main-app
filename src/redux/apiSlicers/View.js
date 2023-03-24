@@ -13,7 +13,7 @@ const extendedApi = apiSlice.injectEndpoints({
             invalidatesTags: ["Idea"]
         }),
     }),
-    overrideExisting: false,
+    overrideExisting: true,
 })
 
 export const { useAddViewMutation } = extendedApi;

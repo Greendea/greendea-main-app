@@ -128,8 +128,14 @@ const Columns = (setDataView, setIsModalOpen, data, isAdmin) => {
                     {value?.name}
                 </>
             },
-            filters: data && exposeFilters(data.map(item => item.Department?.name)),
-            onFilter: (value, record) => record.Department?.name.includes(value.toString())
+            filters: data && exposeFilters(data.map(item => item.Department ? item.Department.name : "")),
+            onFilter: (value, record) => {
+                if (value !== '') {
+                    return record.Department?.name.includes(value.toString())
+                } else {
+                    return !record.Department
+                }
+            }
         },
         {
             title: 'Role',
@@ -141,8 +147,14 @@ const Columns = (setDataView, setIsModalOpen, data, isAdmin) => {
                     {value?.name}
                 </>
             },
-            filters: data && exposeFilters(data.map(item => item.Role?.name)),
-            onFilter: (value, record) => record.Role?.name.includes(value.toString())
+            filters: data && exposeFilters(data.map(item => item.Role ? item.Role.name : "")),
+            onFilter: (value, record) => {
+                if (value !== '') {
+                    return record.Role?.name.includes(value.toString())
+                } else {
+                    return !record.Role
+                }
+            }
         },
         {
             title: "Avatar",

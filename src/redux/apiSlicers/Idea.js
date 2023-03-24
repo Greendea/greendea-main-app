@@ -1,4 +1,6 @@
+import { getMailMessage } from "../../utils/emailMessage";
 import { apiSlice } from "./_index";
+import { endpoints as externalService } from "./_index";
 
 const TypeName = "Idea"
 const TypeAPI = "idea"
@@ -19,7 +21,20 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: item
             }),
-            invalidatesTags: [TypeName]
+            invalidatesTags: [TypeName],
+            async onQueryStarted({ email_service }, { dispatch, queryFulfilled }) {
+                console.log(email_service)
+                try {
+                    await queryFulfilled
+                    if (email_service.recipients.length > 0) {
+                        await dispatch(externalService.sendMail.initiate({
+                            recipients: email_service.recipients,
+                            message_html: getMailMessage(email_service),
+                            subject: "New Idea Arrived"
+                        }))
+                    }
+                } catch { }
+            }
         }),
         updateIdeaStatus: builder.mutation({
             query: (item) => ({

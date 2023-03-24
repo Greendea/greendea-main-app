@@ -32,6 +32,35 @@ export const DeleteDepartmentByID = async (req, res, userSession) => {
 
 export const getAllDepartment = async () => {
     return await prisma.department.findMany({
+        select: {
+            id: true,
+            name: true,
+            created_at: true,
+            updated_at: true,
+            status: true,
+            topics: {
+                select: {
+                    id: true,
+                    ideas: {
+                        select: {
+                            id: true
+                        },
+                        where: {
+                            NOT: {
+                                status: {
+                                    equals: -1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            users: {
+                select: {
+                    id: true
+                }
+            }
+        },
         orderBy: [
             {
                 updated_at: 'desc',

@@ -21,7 +21,7 @@ const extendedApi = apiSlice.injectEndpoints({
         }),
 
     }),
-    overrideExisting: false,
+    overrideExisting: true,
 })
 
 export const { useAddCommentMutation, useGetCommentByIdeaQuery } = extendedApi;

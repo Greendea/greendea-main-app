@@ -5,7 +5,7 @@ import { ParseDate } from '../../utils/dataParser';
 import { validateMessages } from '../../utils/validateMessage';
 import { Comment } from '@ant-design/compatible';
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
-import { Avatar, Button, Descriptions, Divider, Modal, Skeleton, Space, Tooltip, message, Spin, Form, Input, Empty } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Modal, Skeleton, Space, Tooltip, message, Spin, Form, Input, Empty, Checkbox } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { GrView } from 'react-icons/gr';
@@ -13,10 +13,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
 export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, topic, loading }) => {
-    console.log(dataIdea)
-    const { id } = useSelector(state => state.user)
     const [upsertReact, { isLoading: loadingHandleReaction }] = useUpsertReactMutation()
     const [addView] = useAddViewMutation()
+    const [commentAnomyous, setCommentAnomyous] = useState(false)
     const { id: userId } = useSelector(state => state.user)
     const handleLike = (state) => {
         upsertReact({
@@ -37,7 +36,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
         upsertReact({
             idea: dataIdea.id,
             status: state ? 0 : -1,
-            userId: id
+            userId: userId
         }).then(res => {
             !state && message.open({
                 content: "You disliked the Idea",
@@ -69,13 +68,20 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
             open={isShowIdea}
             closable={false}
             onCancel={() => { setDataIdea(null); setIsShowIdea(false) }}
-            footer={[
-                <Button key="comment" type='primary' loading={loadingAddComment}
-                    onClick={() => {
-                        form.submit()
-                    }}>Send Comment</Button>,
-                <Button key="close" onClick={() => { setDataIdea(null); setIsShowIdea(false) }}>Close</Button>
-            ]}
+            footer={
+                <>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Checkbox onChange={({ target }) => { setCommentAnomyous(target.checked) }} checked={commentAnomyous}>Comment anomyous</Checkbox>
+                        <div>
+                            <Button key="comment" type='primary' loading={loadingAddComment}
+                                onClick={() => {
+                                    form.submit()
+                                }}>Send Comment</Button>
+                            <Button key="close" onClick={() => { setDataIdea(null); setIsShowIdea(false) }}>Close</Button>
+                        </div>
+                    </div>
+                </>
+            }
         >
             <Spin spinning={loading || loadingHandleReaction}>
                 <Descriptions title="IDEA DESCRIPTION" bordered column={3}
@@ -114,7 +120,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                     <Descriptions.Item label="Content" span={3}>{dataIdea.content}</Descriptions.Item>
                 </Descriptions>
                 {dataIdea.id && <CommentList idea={dataIdea.id} />}
-                {dataIdea.id && <CommentForm form={form} idea={dataIdea.id} addComment={addComment} />}
+                {dataIdea.id && <CommentForm form={form} idea={dataIdea.id} addComment={addComment} commentAnomyous={commentAnomyous} />}
 
             </Spin>
         </Modal >
@@ -123,7 +129,6 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
 
 function CommentList({ idea }) {
     const { data, isLoading } = useGetCommentByIdeaQuery(idea)
-    console.log("DDDDDDDDDDDDdd", data)
     return <div
         id="scrollableDiv"
         style={{
@@ -149,8 +154,8 @@ function CommentList({ idea }) {
                 {data?.map(item => {
                     return <CommentIdeas key={item.id}
                         content={item.content}
-                        avatar={item.User.image}
-                        author={item.User.name}
+                        avatar={item.User?.image}
+                        author={item.User?.name}
                         dateCreated={item.createdAt}
                         isAnomyous={item.isAnomyous}
                     />
@@ -162,10 +167,13 @@ function CommentList({ idea }) {
 
 
 
-function CommentForm({ form, idea, addComment }) {
+function CommentForm({ form, idea, addComment, commentAnomyous }) {
+    const { image } = useSelector(state => state.user)
     const handleFinish = (values) => {
+        console.log(commentAnomyous)
         addComment({
             ...values,
+            isAnomyous: commentAnomyous,
             idea
         }).unwrap().then(res => {
             message.success("Message sent!")
@@ -177,7 +185,7 @@ function CommentForm({ form, idea, addComment }) {
     }
     return < div >
         <Comment
-            avatar={<Avatar src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" />}
+            avatar={<Avatar src={image} alt="Avatar" />}
             content={
                 <>
                     <Form form={form} onFinish={handleFinish} validateMessages={validateMessages} style={{ marginBottom: -30 }}>
