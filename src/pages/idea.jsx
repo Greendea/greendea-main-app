@@ -46,7 +46,7 @@ export default function Idea() {
     const { data: departments } = useGetDepartmentsQuery(undefined, {
         selectFromResult: ({ data }) => {
             return {
-                data: data.filter(dep => dep.status === true)
+                data: data?.filter(dep => dep.status === true)
             }
         }
     })
