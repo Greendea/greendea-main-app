@@ -24,9 +24,19 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [TypeName]
         }),
+        updateAvatar: builder.mutation({
+            query: (avatar) => ({
+                url: 'profile',
+                method: 'PUT',
+                body: {
+                    avatar
+                },
+            }),
+            invalidatesTags: [TypeName]
+        }),
 
     }),
     overrideExisting: false,
 })
 
-export const { useGetUsersQuery, useGetUserByEmailQuery, useUpdateUserMutation, endpoints } = extendedApi;
+export const { useGetUsersQuery, useGetUserByEmailQuery, useUpdateUserMutation, useUpdateAvatarMutation, endpoints } = extendedApi;

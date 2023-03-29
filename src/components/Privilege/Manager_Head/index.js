@@ -2,6 +2,7 @@ import Staff from '../../../components/Staff/Staff';
 import { Tabs } from 'antd';
 import Announcement from '../../Department/Announcement';
 import TopicIdea from '../../Department/TopicIdeaPannel';
+import Statistic from './Statistic';
 const onChange = (key) => {
     console.log(key);
 };
@@ -23,6 +24,11 @@ export default function Index({ role, department }) {
             key: '3',
             label: `ANNOUNCEMENTS`,
             children: <Announcement department={department} />,
+        },
+        {
+            key: '4',
+            label: `STATISTICS`,
+            children: <Statistic department={department} />,
         },
     ];
     return (
