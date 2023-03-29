@@ -26,7 +26,7 @@ import Head from 'next/head';
 import { useGetCategoriesQuery } from '../redux/apiSlicers/Category';
 import { useRouter } from 'next/router';
 import { useGetUsersQuery } from '../redux/apiSlicers/User';
-
+import moment from "moment"
 const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
@@ -43,7 +43,13 @@ export default function Idea() {
             }
         }
     })
-    const { data: departments } = useGetDepartmentsQuery()
+    const { data: departments } = useGetDepartmentsQuery(undefined, {
+        selectFromResult: ({ data }) => {
+            return {
+                data: data.filter(dep => dep.status === true)
+            }
+        }
+    })
     const [addIdea, { isLoading }] = useAddIdeaMutation()
     const { data: terms, isLoading: isLoadingTerm } = useGetTermAndConditionQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
@@ -61,11 +67,12 @@ export default function Idea() {
     const { data: topics } = useGetTopicsQuery(undefined, {
         selectFromResult: ({ data }) => {
             return {
-                data: data?.filter(i => i.Department?.id === department)
+                data: data?.filter(i => i.Department?.id === department && moment(i.closureDateIdea).diff(moment(), "seconds") > 0)
             }
         },
         skip: !!!department
     })
+    console.log(topics)
     const { data: categories } = useGetCategoriesQuery()
 
     const props = {

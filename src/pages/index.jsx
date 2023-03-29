@@ -31,6 +31,6 @@ export const getStaticProps = async () => {
 
   return {
     props: { topics: await res() },
-    revalidate: 15,
+    revalidate: 5,
   };
 };

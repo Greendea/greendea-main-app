@@ -4,19 +4,36 @@ import { useEffect } from "react";
 import { useAddTopicMutation } from "../../redux/apiSlicers/Topic";
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
+import moment from "moment";
 
 export default function TopicForm({ department }) {
     const [form] = Form.useForm()
     const [addTopic, { isLoading }] = useAddTopicMutation()
     const handleFinish = (values) => {
+        let openDateInput = values.date[0].$d
+        let closureDateInput = values.date[1].$d
+        let closureDateTopic = values.closureDateTopic.$d
+
+        if (moment(openDateInput).diff(moment(), "hours") < 0) {
+            return message.error("Open date must be from today")
+        }
+
+        if (moment(closureDateInput).diff(moment(openDateInput), "hours") < 0 || moment(closureDateTopic).diff(moment(openDateInput), "hours") < 0) {
+            return message.error("Closure date for topic and idea must be higher than open date")
+        }
+
+
+        if (moment(closureDateTopic).diff(moment(closureDateInput), "hours") < 0) {
+            return message.error("Topic close date must be higher than idea close date")
+        }
+
         const submitData = {
             department: department.id,
             name: values.name,
-            openDate: values.date[0].$d,
-            closureDateIdea: values.date[1].$d,
-            closureDateTopic: values.closureDateTopic.$d
+            openDate: openDateInput,
+            closureDateIdea: closureDateInput,
+            closureDateTopic: closureDateTopic
         }
-        console.log(submitData)
         addTopic(submitData).unwrap().then(res => {
             form.resetFields()
             form.setFieldValue("department", department?.name)

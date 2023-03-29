@@ -15,6 +15,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { useRouter } from 'next/router';
 import { exposeFilters } from '../../utils/exposeFilter';
+import moment from 'moment';
 
 
 
@@ -174,8 +175,10 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             key: 'openDate',
             width: "15%",
             render: (value, record) => {
-                return <>{ParseDate(value)}</>
+                return ParseDate(value)
             }
+
+            // moment(i.closureDateIdea).diff(moment(), "seconds") > 0
         },
         {
             title: 'Close Date Idea',
@@ -183,7 +186,11 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             key: 'closureDateIdea',
             width: "15%",
             render: (value, record) => {
-                return <>{ParseDate(value)}</>
+                return <Tooltip title={moment(value).format("DD/MM/YY hh:mm:ss")}>
+                    <Tag color={moment(value).diff(moment(), "seconds") > 0 ? "green" : ""}>
+                        {moment(value).fromNow()}
+                    </Tag>
+                </Tooltip>
             }
         },
         {
@@ -192,7 +199,11 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             key: 'closureDateTopic',
             width: "15%",
             render: (value, record) => {
-                return <>{ParseDate(value)}</>
+                return <Tooltip title={moment(value).format("DD/MM/YY hh:mm:ss")}>
+                    <Tag color={moment(value).diff(moment(), "seconds") > 0 ? "green" : ""}>
+                        {moment(value).fromNow()}
+                    </Tag>
+                </Tooltip>
             }
         },
         editable ? {
