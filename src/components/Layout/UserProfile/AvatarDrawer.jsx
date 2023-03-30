@@ -234,7 +234,7 @@ function Activities() {
             )}
         />
         {
-            activities.length > (5 + loadMore * 5) &&
+            activities?.length > (5 + loadMore * 5) &&
             <div style={{ textAlign: "center", cursor: "pointer" }}>
                 <Tag style={{ padding: "5px 15px" }} onClick={() => setLoadMore(prev => prev + 1)}>More</Tag>
             </div>
