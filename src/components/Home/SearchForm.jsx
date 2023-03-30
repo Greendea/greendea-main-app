@@ -1,9 +1,10 @@
 import { Input } from 'antd';
 import React from 'react'
 
-const onSearch = (value) => console.log(value);
 
-export default function SearchForm() {
+export default function SearchForm({ setFilterSearch }) {
+    const onSearch = (value) => setFilterSearch(value);
+
     return (
         <div style={{
             textAlign: "center",
