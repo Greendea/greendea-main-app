@@ -21,7 +21,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
         upsertReact({
             idea: dataIdea.id,
             status: state ? 0 : 1,
-            userId: id
+            userId: userId
         }).then(res => {
             !state && message.open({
                 content: <>You liked the Idea</>,
