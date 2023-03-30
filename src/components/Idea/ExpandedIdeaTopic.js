@@ -5,8 +5,10 @@ import { useGetIdeasQuery } from "../../redux/apiSlicers/Idea";
 import React, { useState } from "react";
 import { ParseDate } from "../../utils/dataParser";
 import { GrView } from "react-icons/gr";
+import { searchColumn } from "../../utils/tableFilters";
+import { exposeFilters } from "../../utils/exposeFilter";
 
-const IconText = ({ icon, text }) => (
+export const IconText = ({ icon, text }) => (
     <Space>
         {React.createElement(icon)}
         {text}
@@ -24,15 +26,24 @@ export const ExpandedIdeaRender = ({ topic }) => {
         },
         skip: !topic.id
     })
-    console.log(ideas)
     const [isShowIdea, setIsShowIdea] = useState(false)
     const [dataIdea, setDataIdea] = useState(null)
+    const [searchText, setSearchText] = useState('');
+    const [searchedColumn, setSearchedColumn] = useState('');
+    const [searchInput, setSearchInput] = useState('');
+    const searchFeature = (dataIndex) => {
+        return searchColumn({ dataIndex, searchedColumn, setSearchedColumn, searchText, setSearchText, searchInput, setSearchInput })
+    }
     const columns = [
         {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
             width: "35%",
+            render: (val) => {
+                return val.length > 200 ? val.slice(0, 200) + " ..." : val
+            },
+            ...searchFeature("content")
         },
         {
             title: 'Category',
@@ -41,6 +52,14 @@ export const ExpandedIdeaRender = ({ topic }) => {
             width: "11%",
             render: (val) => {
                 return val?.name
+            },
+            filters: ideas && exposeFilters(ideas.map(item => item.Category ? item.Category.name : "")),
+            onFilter: (value, record) => {
+                if (value !== '') {
+                    return record.Category?.name.includes(value.toString())
+                } else {
+                    return !record.Category
+                }
             }
 
         },

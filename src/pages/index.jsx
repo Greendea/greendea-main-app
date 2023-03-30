@@ -8,10 +8,6 @@ import { useState } from "react"
 
 export default function Home({ topics }) {
   const [filterSearch, setFilterSearch] = useState(null)
-  console.log(topics.map(i => i.name))
-  console.log(filterSearch)
-  // console.log(topics.filter(tp => tp.name.includes(filterSearch?.toLowerCase())))
-
   return (
     <>
       <Layout>
