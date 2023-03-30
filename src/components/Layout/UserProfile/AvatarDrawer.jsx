@@ -7,6 +7,9 @@ import Error from 'next/error';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useGetIdeasQuery, useGetPersonalIdeasQuery } from '../../../redux/apiSlicers/Idea';
+import { ModalIdea } from '../../Idea/IdeaModal';
+import { useGetTopicsQuery } from '../../../redux/apiSlicers/Topic';
 
 const imageURL = (id) => {
     return `https://api.multiavatar.com/${id}.png?apikey=iAvlWIY5UqsyrP`
@@ -98,23 +101,6 @@ export default function ProfileDrawer() {
         setOpen(false);
     };
 
-    const data = [
-        'You liked the comment lorem is pul...',
-        'You disliked the comment lorem is pul...',
-        'You commented on idea "dsaddsasddd"',
-        'Man commented on comment "dsa gdgfd"',
-        'Los Angeles battles huge wildfires.',
-        'You liked the comment lorem is pul...',
-        'You disliked the comment lorem is pul...',
-        'You commented on idea "dsaddsasddd"',
-        'Man commented on comment "dsa gdgfd as"',
-        'Los Angeles battles huge wildfires.',
-        'You disliked the comment lorem is pul...',
-        'You commented on idea "dsaddsasddd"',
-        'Man commented on comment "dsa gdgfd as"',
-        'Los Angeles battles huge wildfires.',
-    ];
-
     return (
         <>
             {
@@ -129,7 +115,7 @@ export default function ProfileDrawer() {
                         cursor: "pointer"
                     }} />
             }
-            <Drawer placement="right" onClose={onClose} open={open} width={360}
+            <Drawer placement="right" onClose={onClose} open={open} width={380}
                 extra={
                     <Space>
                         <Button onClick={onClose} type="default">Cancel</Button>
@@ -168,20 +154,97 @@ export default function ProfileDrawer() {
                 <Divider>
                     Activities
                 </Divider>
-                <List
-                    dataSource={data}
-                    renderItem={item => (
-                        <List.Item>
-                            <a>
-                                {item}
-                            </a>
-                        </List.Item>
-                    )}
-                />
+                <Activities />
             </Drawer>
 
 
 
         </>
     )
+}
+
+function Activities() {
+    const anomyousAvatar = "https://api-private.atlassian.com/users/3ed7bde5a8c78e8d0d38eca297f62495/avatar"
+    const { data: session } = useSession()
+    const { data: activities, isLoading: isLoadingGetPersonal } = useGetPersonalIdeasQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => {
+            return {
+                data: data?.map(({ id, Topic, reacts, comments }) => {
+                    let temp = []
+                    reacts.forEach(({ User, status, createdAt, updatedAt }) => {
+                        temp.push({
+                            user: User,
+                            isAnomyous: false,
+                            type: status,
+                            createdAt,
+                            updatedAt,
+                            ideaId: id,
+                            topicId: Topic.id
+                        })
+                    })
+
+                    comments.forEach(({ User, isAnomyous, createdAt, updatedAt }) => {
+                        temp.push({
+                            user: User,
+                            isAnomyous,
+                            type: "comment",
+                            createdAt,
+                            updatedAt,
+                            ideaId: id,
+                            topicId: Topic.id
+                        })
+                    })
+
+                    return temp
+                }).flat().filter(({ user }) => user.email !== session.user.email),
+                isLoading
+            }
+        },
+        skip: session?.user?.email ? false : true
+    })
+
+    const action = {
+        1: "liked",
+        "-1": "disliked",
+        "comment": "commented on"
+    }
+    return <List
+        dataSource={activities}
+        renderItem={atv => (
+            <List.Item>
+                <List.Item.Meta
+                    avatar={<Avatar src={atv.isAnomyous ? anomyousAvatar : atv.user.image} />}
+                    description={<>
+                        {
+                            <div style={{ fontSize: 12 }}>
+                                <b>
+                                    {atv.isAnomyous ? "Someone " : `${atv.user.name} `}
+                                </b>
+                                <span>
+                                    {`${action[atv.type]} your `}
+                                </span>
+                                <ShowIdea ideaId={atv.ideaId} topicId={atv.topicId} />
+                            </div>
+                        }
+                    </>}
+                />
+            </List.Item>
+        )}
+    />
+}
+
+function ShowIdea({ ideaId, topicId }) {
+    const { data: ideas, isLoading } = useGetIdeasQuery()
+    const { data: topics } = useGetTopicsQuery()
+
+    const [isShowIdea, setIsShowIdea] = useState(false)
+    const [dataIdea, setDataIdea] = useState(null)
+    return <>
+        <b style={{ cursor: "pointer" }} onClick={() => { setDataIdea(ideaId); setIsShowIdea(true) }}>idea</b>
+        {
+            dataIdea &&
+            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea}
+                topic={topics.find(i => i.id === topicId)} loading={isLoading} />
+        }
+    </>
 }

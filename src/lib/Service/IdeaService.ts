@@ -64,11 +64,30 @@ export const getPersonalIdea = async (id) => {
                 select: {
                     userId: true,
                     status: true,
+                    User: {
+                        select: {
+                            email: true,
+                            name: true,
+                            image: true
+                        }
+                    },
+                    createdAt: true,
+                    updatedAt: true
                 }
             },
             comments: {
                 select: {
-                    id: true
+                    id: true,
+                    isAnomyous: true,
+                    User: {
+                        select: {
+                            email: true,
+                            name: true,
+                            image: true
+                        }
+                    },
+                    createdAt: true,
+                    updatedAt: true
                 }
             },
             createdAt: true,
