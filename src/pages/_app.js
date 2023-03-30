@@ -30,6 +30,7 @@ function Wrapper({ children }) {
   useEffect(() => {
     let triggerOnline
     if (session?.user?.email) {
+      store.dispatch(IdeaEndpoints.getPersonalIdeas.initiate())
       triggerOnline = setInterval(() => {
         store.dispatch(ExternalEnpoint.activeUser.initiate(session.user.email))
       }, 10000);
