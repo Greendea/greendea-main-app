@@ -124,11 +124,6 @@ export default function AnnouncementTable({ department, editable = false }) {
             dataIndex: 'title',
             key: 'title',
             width: "50%",
-            render: (value) => {
-                return <span style={{ fontSize: 18 }}>
-                    {value}
-                </span>
-            }
         },
         {
             title: 'Create Date',

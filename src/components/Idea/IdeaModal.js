@@ -74,6 +74,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                         <Checkbox onChange={({ target }) => { setCommentAnomyous(target.checked) }} checked={commentAnomyous}>Comment anomyous</Checkbox>
                         <div>
                             <Button key="comment" type='primary' loading={loadingAddComment}
+                                disabled={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
                                 onClick={() => {
                                     form.submit()
                                 }}>Send Comment</Button>
@@ -120,7 +121,9 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                     <Descriptions.Item label="Content" span={3}>{dataIdea.content}</Descriptions.Item>
                 </Descriptions>
                 {dataIdea.id && <CommentList idea={dataIdea.id} />}
-                {dataIdea.id && <CommentForm form={form} idea={dataIdea.id} addComment={addComment} commentAnomyous={commentAnomyous} />}
+                {dataIdea.id && <CommentForm
+                    disableComment={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
+                    form={form} idea={dataIdea.id} addComment={addComment} commentAnomyous={commentAnomyous} />}
 
             </Spin>
         </Modal >
@@ -167,7 +170,7 @@ function CommentList({ idea }) {
 
 
 
-function CommentForm({ form, idea, addComment, commentAnomyous }) {
+function CommentForm({ form, idea, addComment, commentAnomyous, disableComment }) {
     const { image } = useSelector(state => state.user)
     const handleFinish = (values) => {
         console.log(commentAnomyous)
@@ -190,7 +193,7 @@ function CommentForm({ form, idea, addComment, commentAnomyous }) {
                 <>
                     <Form form={form} onFinish={handleFinish} validateMessages={validateMessages} style={{ marginBottom: -30 }}>
                         <Form.Item name="content" rules={[{ required: true, min: 10 }]}>
-                            <Input.TextArea rows={3} />
+                            <Input.TextArea rows={3} disabled={disableComment} />
                         </Form.Item>
                     </Form>
                 </>

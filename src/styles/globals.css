@@ -285,3 +285,13 @@
   -o-animation: rotating 3s linear infinite;
   animation: rotating 3s linear infinite;
 }
+
+.bg-black {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.border-item {
+  margin-bottom: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.05) !important;
+
+}
