@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/alt-text */
 import { useGetUserByEmailQuery, useUpdateAvatarMutation } from '../../../redux/apiSlicers/User';
-import { Avatar, Button, Divider, Drawer, Form, Input, List, Space, Modal, Tooltip, message } from 'antd'
+import { Avatar, Button, Divider, Drawer, Form, Input, List, Space, Modal, Tooltip, message, Tag } from 'antd'
 import { signOut, useSession } from 'next-auth/react';
 import Error from 'next/error';
 import { useRouter } from 'next/router';
@@ -166,6 +166,7 @@ export default function ProfileDrawer() {
 function Activities() {
     const anomyousAvatar = "https://api-private.atlassian.com/users/3ed7bde5a8c78e8d0d38eca297f62495/avatar"
     const { data: session } = useSession()
+    const [loadMore, setLoadMore] = useState(0)
     const { data: activities, isLoading: isLoadingGetPersonal } = useGetPersonalIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
@@ -208,29 +209,37 @@ function Activities() {
         "-1": "disliked",
         "comment": "commented on"
     }
-    return <List
-        dataSource={activities}
-        renderItem={atv => (
-            <List.Item>
-                <List.Item.Meta
-                    avatar={<Avatar src={atv.isAnomyous ? anomyousAvatar : atv.user.image} />}
-                    description={<>
-                        {
-                            <div style={{ fontSize: 12 }}>
-                                <b>
-                                    {atv.isAnomyous ? "Someone " : `${atv.user.name} `}
-                                </b>
-                                <span>
-                                    {`${action[atv.type]} your `}
-                                </span>
-                                <ShowIdea ideaId={atv.ideaId} topicId={atv.topicId} />
-                            </div>
-                        }
-                    </>}
-                />
-            </List.Item>
-        )}
-    />
+    return <>
+        <List
+            dataSource={activities?.slice(0, 5 + loadMore * 5)}
+            renderItem={atv => (
+                <List.Item>
+                    <List.Item.Meta
+                        avatar={<Avatar src={atv.isAnomyous ? anomyousAvatar : atv.user.image} />}
+                        description={<>
+                            {
+                                <div style={{ fontSize: 12 }}>
+                                    <b>
+                                        {atv.isAnomyous ? "Someone " : `${atv.user.name} `}
+                                    </b>
+                                    <span>
+                                        {`${action[atv.type]} your `}
+                                    </span>
+                                    <ShowIdea ideaId={atv.ideaId} topicId={atv.topicId} />
+                                </div>
+                            }
+                        </>}
+                    />
+                </List.Item>
+            )}
+        />
+        {
+            activities.length > (5 + loadMore * 5) &&
+            <div style={{ textAlign: "center", cursor: "pointer" }}>
+                <Tag style={{ padding: "5px 15px" }} onClick={() => setLoadMore(prev => prev + 1)}>More</Tag>
+            </div>
+        }
+    </>
 }
 
 function ShowIdea({ ideaId, topicId }) {
