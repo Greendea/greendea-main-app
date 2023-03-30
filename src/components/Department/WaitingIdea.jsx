@@ -138,6 +138,7 @@ export default function WaitingIdea({ department }) {
                 placement="topRight"
             >
                 <Table
+                    scroll={{ x: 1300 }}
                     pagination={{ pageSize: 5 }}
                     loading={isLoading}
                     style={{

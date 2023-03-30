@@ -89,6 +89,7 @@ export default function Past() {
                     </span>
                 </Divider>
                 <Table
+                    scroll={{ x: 1300 }}
                     columns={columns}
                     dataSource={data}
                     pagination={{ pageSize: 10 }}

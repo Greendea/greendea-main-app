@@ -233,13 +233,14 @@ export default function DepartmentTableTopic({ department, editable = false, dow
 
     return (
         <>
-            <Divider>
-                <span style={{ fontSize: 24 }}>
+            <Divider style={{ display: "block", whiteSpace: "break-spaces" }}>
+                <div style={{ fontSize: 24 }}>
                     Table Of Available Topics And Ideas
-                </span>
+                </div>
             </Divider>
             <Table
                 pagination={{ pageSize: 5 }}
+                scroll={{ x: 1300 }}
                 loading={isLoading}
                 style={{
                     width: "100%"

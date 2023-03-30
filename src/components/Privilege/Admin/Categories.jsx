@@ -162,6 +162,7 @@ export const Categories = () => {
         <div>
             <AddModal categories={data} />
             <Table loading={isloading} dataSource={data || []} columns={Columns(setDataView, setIsModalOpen)} bordered
+                scroll={{ x: 1300 }}
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF CATEGORIES</h2></Divider>} />
 

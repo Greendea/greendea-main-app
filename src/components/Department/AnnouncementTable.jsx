@@ -171,7 +171,9 @@ export default function AnnouncementTable({ department, editable = false }) {
                     Annoucements
                 </span>
             </Divider>
-            <Table columns={columns} dataSource={data} pagination={{ pageSize: 3 }} loading={isLoading} />
+            <Table columns={columns} dataSource={data} pagination={{ pageSize: 3 }} loading={isLoading}
+                scroll={{ x: 1300 }}
+            />
             <ModalView isModalOpen={isModalOpenView} setIsModalOpen={setIsModalOpenView} dataView={dataView} setDataView={setDataView} />
             <ModalEdit isModalOpen={isModalOpenEdit} setIsModalOpen={setIsModalOpenEdit} dataView={dataView} setDataView={setDataView} />
         </>

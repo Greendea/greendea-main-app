@@ -198,6 +198,7 @@ export default function FacultyDepartment() {
         <div>
             <AddModal />
             <Table loading={isloading} dataSource={data || []} columns={Columns(setDataView, setIsModalOpen)} bordered
+                scroll={{ x: 1300 }}
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF FACULTIES AND DEPARTMENTS</h2></Divider>} />
 

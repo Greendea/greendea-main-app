@@ -43,7 +43,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
             render: (val) => {
                 return val.length > 200 ? val.slice(0, 200) + " ..." : val
             },
-            ...searchFeature("content")
+            // ...searchFeature("content")
         },
         {
             title: 'Category',

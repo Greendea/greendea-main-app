@@ -43,7 +43,7 @@ function IdeasTopic({ topic }) {
             render: (val) => {
                 return val.length > 150 ? val.slice(0, 150) + " ..." : val
             },
-            ...searchFeature("content")
+            // ...searchFeature("content")
         },
         {
             title: 'Category',
@@ -115,7 +115,10 @@ function IdeasTopic({ topic }) {
             <MdList size={22} style={{ cursor: "pointer" }} onClick={() => setOpen(true)} />
         </Tooltip>
         <Modal footer={null} open={open} onCancel={() => setOpen(false)} width={1420}>
-            <Table columns={columns} dataSource={ideas} pagination={{ pageSize: 5 }} loading={isLoading} />
+            <br />
+            <Table columns={columns} dataSource={ideas} pagination={{ pageSize: 5 }} loading={isLoading}
+                scroll={{ x: 1300 }}
+            />
         </Modal>
         {
             dataIdea &&

@@ -71,7 +71,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
             footer={
                 <>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <Checkbox onChange={({ target }) => { setCommentAnomyous(target.checked) }} checked={commentAnomyous}>Comment anomyous</Checkbox>
+                        <Checkbox onChange={({ target }) => { setCommentAnomyous(target.checked) }} checked={commentAnomyous}>Anomyously</Checkbox>
                         <div>
                             <Button key="comment" type='primary' loading={loadingAddComment}
                                 disabled={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
@@ -85,8 +85,8 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
             }
         >
             <Spin spinning={loading || loadingHandleReaction}>
-                <Descriptions title="IDEA DESCRIPTION" bordered column={3}
-                    // contentStyle={{ width: "80%" }}
+                <Descriptions title="IDEA DESCRIPTION" bordered column={{ xs: 1, sm: 1, xl: 3 }}
+                    layout={window?.innerWidth < 700 ? "vertical" : "horizontal"}
                     extra={
                         <Space size="large">
                             <Space key="view">

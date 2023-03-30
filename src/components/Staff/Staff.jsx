@@ -221,6 +221,8 @@ export default function Staff({ isAdmin, department }) {
     return (
         <div>
             <Table loading={isLoading} dataSource={data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin")}
+                scroll={{ x: 1300 }}
+
                 columns={Columns(setDataView, setIsModalOpen, data?.filter(i => i.Department !== null && i.Role !== null || i.Role?.name === "admin"), isAdmin)} bordered
                 pagination={{ pageSize: 5 }}
                 title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF ASSIGNED STAFF</h2></Divider>} />
@@ -231,6 +233,7 @@ export default function Staff({ isAdmin, department }) {
                 isAdmin &&
                 <>
                     <Table loading={isLoading} dataSource={data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin")}
+                        scroll={{ x: 1300 }}
                         columns={Columns(setDataView, setIsModalOpen, data?.filter(i => i.Department === null || i.Role === null).filter(i => i.Role?.name !== "admin"), isAdmin)} bordered
                         pagination={{ pageSize: 5 }}
                         title={() => <Divider><h2 style={{ textAlign: "center" }}>TABLE OF UNASSIGNED STAFF</h2></Divider>} />
