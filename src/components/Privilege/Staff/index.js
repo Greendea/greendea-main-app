@@ -29,7 +29,7 @@ export default function Index({ department, role }) {
     return (
         <div>
             <h1 style={{ textAlign: "center", fontSize: 34, margin: "20px 0 10px 0" }}>
-                Coordinator Panel - {department?.name}
+                Staff Panel - {department?.name}
             </h1>
             <Tabs defaultActiveKey="1" items={items} onChange={onChange} size="large" />
         </div>

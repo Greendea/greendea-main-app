@@ -1,0 +1,222 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table TermAndCondition {
+  id Int [pk]
+  description String [not null]
+}
+
+Table roles {
+  id String [pk]
+  name String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  users users [not null]
+}
+
+Table departments {
+  id String [pk]
+  name String [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [not null]
+  status Boolean [not null, default: true]
+  topics topics [not null]
+  users users [not null]
+  Announcement announcements [not null]
+}
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user users [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table Session {
+  id String [pk]
+  sessionToken String [unique, not null]
+  userId String [not null]
+  expires DateTime [not null]
+  user users [not null]
+}
+
+Table users {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  departmentId String
+  roleId String
+  topicId String
+  status Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  accounts Account [not null]
+  reacts reacts [not null]
+  sessions Session [not null]
+  views views [not null]
+  Department departments
+  Role roles
+  ideas ideas [not null]
+  Topic topics [not null]
+  Comment comments [not null]
+}
+
+Table VerificationToken {
+  identifier String [not null]
+  token String [unique, not null]
+  expires DateTime [not null]
+
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
+Table categories {
+  id String [pk]
+  name String [unique, not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  ideas ideas [not null]
+}
+
+Table topics {
+  id String [pk]
+  name String [not null]
+  closureDateIdea DateTime [not null]
+  closureDateTopic DateTime [not null]
+  openDate DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  departmentId String
+  Department departments
+  ideas ideas [not null]
+  User users
+  userId String
+}
+
+Table announcements {
+  id String [pk]
+  title String [not null]
+  content String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  departmentId String
+  Department departments
+}
+
+Table ideas {
+  id String [pk]
+  content String [not null]
+  files files [not null]
+  status Int [not null, default: 0]
+  isAnomyous Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  categoryId String
+  topicId String
+  userId String
+  reacts reacts [not null]
+  views views [not null]
+  comments comments [not null]
+  Category categories
+  Topic topics
+  User users
+}
+
+Table comments {
+  id String [pk]
+  userId String
+  ideaId String
+  content String [not null]
+  User users
+  Idea ideas
+  isAnomyous Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table files {
+  id String [pk]
+  url String [not null]
+  Idea ideas
+  ideaId String
+}
+
+Table views {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  ideaId String
+  userId String
+  updatedAt DateTime [not null]
+  Idea ideas
+  User users
+
+  indexes {
+    (ideaId, userId) [unique]
+  }
+}
+
+Table reacts {
+  id String [pk]
+  ideaId String
+  userId String
+  status Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  Idea ideas
+  User users
+
+  indexes {
+    (ideaId, userId) [unique]
+  }
+}
+
+Ref: Account.userId > users.id [delete: Cascade]
+
+Ref: Session.userId > users.id [delete: Cascade]
+
+Ref: users.departmentId > departments.id
+
+Ref: users.roleId > roles.id
+
+Ref: topics.departmentId > departments.id
+
+Ref: topics.userId > users.id
+
+Ref: announcements.departmentId > departments.id
+
+Ref: ideas.categoryId > categories.id
+
+Ref: ideas.topicId > topics.id
+
+Ref: ideas.userId > users.id
+
+Ref: comments.userId > users.id
+
+Ref: comments.ideaId > ideas.id
+
+Ref: files.ideaId > ideas.id
+
+Ref: views.ideaId > ideas.id
+
+Ref: views.userId > users.id
+
+Ref: reacts.ideaId > ideas.id
+
+Ref: reacts.userId > users.id

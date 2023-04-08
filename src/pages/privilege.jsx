@@ -7,6 +7,7 @@ import Layout from "../components/Layout/Index"
 import Admin from "../components/Privilege/Admin"
 import Coordinatior from "../components/Privilege/Coordinator"
 import Manager_Head from "../components/Privilege/Manager_Head"
+import Staff from '../components/Staff/Staff'
 
 
 export default function Privilege() {
@@ -33,6 +34,8 @@ export default function Privilege() {
                 {!role && <div style={{ textAlign: "center" }}><Spin tip="Loading" size="large" style={{ margin: "300px auto 0 auto" }} /></div>}
                 {role === "admin" && <Admin role={role} />}
                 {role === "coordinator" && <Coordinatior department={department} role={role} />}
+                {role === "staff" && <Staff department={department} role={role} />}
+
                 {["manager", "head"].includes(role) && <Manager_Head role={role} department={department} />}
             </div>
         </Layout>

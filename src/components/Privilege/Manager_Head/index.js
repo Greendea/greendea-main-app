@@ -23,7 +23,7 @@ export default function Index({ role, department }) {
         {
             key: '3',
             label: `ANNOUNCEMENTS`,
-            children: <Announcement department={department} />,
+            children: <Announcement department={department} role={role} />,
         },
         {
             key: '4',

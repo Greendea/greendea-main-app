@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect } from 'react'
-import { Avatar, Breadcrumb, Layout, Menu, Spin, theme } from 'antd';
+import React, { useEffect, useState } from 'react'
+import { Avatar, Breadcrumb, Layout, Menu, message, Spin, theme } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { AiOutlineDown, AiOutlinePlusSquare, AiOutlineHistory } from "react-icons/ai"
@@ -75,38 +75,108 @@ export default function Index({ children }) {
 
     return (
         <Spin size='large' spinning={status !== "authenticated"} style={{ marginTop: 300 }}>
-            {
-                status === "authenticated" &&
-                <Layout style={{
-                    backgroundColor: "#fff"
-                }}>
-                    <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
-                        <div
-                            style={{
-                                float: 'left',
-                                width: 120,
-                                height: "100%",
-                            }}
-                        >
-                            <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
+            <VoiceControl>
+                {
+                    status === "authenticated" &&
+                    <Layout style={{
+                        backgroundColor: "#fff"
+                    }}>
+                        <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
+                            <div
                                 style={{
-                                    width: "100%"
-                                    // height: "100%"
+                                    float: 'left',
+                                    width: 120,
+                                    height: "100%",
                                 }}
+                            >
+                                <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
+                                    style={{
+                                        width: "100%"
+                                        // height: "100%"
+                                    }}
+                                />
+                            </div>
+                            <Menu
+                                theme="light"
+                                mode="horizontal"
+                                defaultSelectedKeys={['2']}
+                                items={menu(departments)}
+                                style={{ marginRight: 50 }}
                             />
-                        </div>
-                        <Menu
-                            theme="light"
-                            mode="horizontal"
-                            defaultSelectedKeys={['2']}
-                            items={menu(departments)}
-                            style={{ marginRight: 50 }}
-                        />
-                        <AvatarDrawer />
-                    </Header>
-                    {children}
-                </Layout>
-            }
+                            <AvatarDrawer />
+                        </Header>
+                        {children}
+                    </Layout>
+                }
+            </VoiceControl>
         </Spin>
+    )
+}
+
+
+function VoiceControl({ children }) {
+    const [recognition, setRecognition] = useState(null)
+    const [transcript, setTranscript] = useState('');
+    const [recording, setRecording] = useState(false)
+
+    useEffect(() => {
+        const reg = new webkitSpeechRecognition();
+        reg.continuous = true;
+        reg.interimResults = true;
+        reg.onstart = function () {
+            setRecording(true)
+            console.log('Speech recognition has started');
+        }
+        reg.onerror = function (event) {
+            setRecording(false)
+            setTranscript(null)
+            console.log('Speech recognition error: ' + event.error);
+            message.warning("Micro not allowed, please enable micro")
+        }
+
+        reg.onend = function () {
+            setRecording(false)
+            setTranscript(null)
+            console.log('Speech recognition has ended');
+        }
+
+        reg.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                    console.log(finalTranscript)
+                    setTranscript(finalTranscript)
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                    console.log(interimTranscript)
+                    setTranscript(interimTranscript)
+                }
+            }
+        };
+        setRecognition(reg)
+    }, []);
+    return (
+        <>
+            {children}
+            <div style={{ position: "fixed", right: 5, bottom: 10, zIndex: 100, width: "fit-content", cursor: "pointer" }} >
+                <div style={{ overflow: "visible", width: 50 }}>
+                    {
+                        recognition &&
+                        (
+
+                            recording ?
+                                <img src={"sound_gif.gif"} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.stop()} />
+                                :
+                                <img src={'/voice_icon.svg'} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.start()} />
+                        )
+                    }
+                    <div style={{ position: "relative" }}>
+                        {transcript}
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
