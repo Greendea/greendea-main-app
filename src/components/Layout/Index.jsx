@@ -75,40 +75,40 @@ export default function Index({ children }) {
 
     return (
         <Spin size='large' spinning={status !== "authenticated"} style={{ marginTop: 300 }}>
-            <VoiceControl>
-                {
-                    status === "authenticated" &&
-                    <Layout style={{
-                        backgroundColor: "#fff"
-                    }}>
-                        <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
-                            <div
+            {/* <VoiceControl> */}
+            {
+                status === "authenticated" &&
+                <Layout style={{
+                    backgroundColor: "#fff"
+                }}>
+                    <Header style={{ position: 'sticky', top: 0, zIndex: 1, maxWidth: '1580px', position: "relative" }}>
+                        <div
+                            style={{
+                                float: 'left',
+                                width: 120,
+                                height: "100%",
+                            }}
+                        >
+                            <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
                                 style={{
-                                    float: 'left',
-                                    width: 120,
-                                    height: "100%",
+                                    width: "100%"
+                                    // height: "100%"
                                 }}
-                            >
-                                <img src="https://www.gre.ac.uk/__data/assets/image/0035/265688/logo_final_on_white.png" alt=""
-                                    style={{
-                                        width: "100%"
-                                        // height: "100%"
-                                    }}
-                                />
-                            </div>
-                            <Menu
-                                theme="light"
-                                mode="horizontal"
-                                defaultSelectedKeys={['2']}
-                                items={menu(departments)}
-                                style={{ marginRight: 50 }}
                             />
-                            <AvatarDrawer />
-                        </Header>
-                        {children}
-                    </Layout>
-                }
-            </VoiceControl>
+                        </div>
+                        <Menu
+                            theme="light"
+                            mode="horizontal"
+                            defaultSelectedKeys={['2']}
+                            items={menu(departments)}
+                            style={{ marginRight: 50 }}
+                        />
+                        <AvatarDrawer />
+                    </Header>
+                    {children}
+                </Layout>
+            }
+            {/* </VoiceControl> */}
         </Spin>
     )
 }
