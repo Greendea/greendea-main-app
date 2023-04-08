@@ -9,6 +9,7 @@ const onChange = (key) => {
 
 
 export default function Index({ department, role }) {
+    console.log(department, role)
     const items = [
         {
             key: '1',

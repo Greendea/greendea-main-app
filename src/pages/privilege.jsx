@@ -7,7 +7,7 @@ import Layout from "../components/Layout/Index"
 import Admin from "../components/Privilege/Admin"
 import Coordinatior from "../components/Privilege/Coordinator"
 import Manager_Head from "../components/Privilege/Manager_Head"
-import Staff from '../components/Staff/Staff'
+import Staff from "../components/Privilege/Staff/index"
 
 
 export default function Privilege() {
