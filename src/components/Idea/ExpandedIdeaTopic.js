@@ -103,7 +103,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
             render: (value, record) => (
                 <Space size="middle">
                     <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
-                        setDataIdea(record.id)
+                        setDataIdea(record)
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
                 </Space>
@@ -114,7 +114,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
         <Table columns={columns} dataSource={ideas} pagination={false} loading={isLoading} />
         {
             dataIdea &&
-            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={Topic} loading={isLoading} />
+            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea.id)} setDataIdea={setDataIdea} topic={dataIdea.Topic} loading={isLoading} />
         }
     </>
 };

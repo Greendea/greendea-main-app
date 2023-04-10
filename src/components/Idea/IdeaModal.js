@@ -13,6 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
 export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, topic, loading }) => {
+    console.log(dataIdea)
     const [upsertReact, { isLoading: loadingHandleReaction }] = useUpsertReactMutation()
     const [addView] = useAddViewMutation()
     const [commentAnomyous, setCommentAnomyous] = useState(false)

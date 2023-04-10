@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Divider, Row, Space, Statistic, Table, Tag, Tooltip } from 'antd';
 import { useGetIdeasQuery } from "../../../redux/apiSlicers/Idea"
@@ -30,7 +30,6 @@ export default function StatisticDepartment({ department }) {
             }
         }
     })
-    console.log(ideas)
     const { data: topics } = useGetTopicsQuery(undefined, {
         selectFromResult: ({ data }) => {
             return {
@@ -109,36 +108,160 @@ export default function StatisticDepartment({ department }) {
                 </ColWrapper>
             </Row>
             <br />
-            <p style={{ fontSize: 20, fontWeight: 500 }}>
+            <hr />
+            <p style={{ fontSize: 24, fontWeight: 500 }}>
                 Exception Report
             </p>
-            <Row gutter={16}>
-                <Col span={24}>
-                    <IdeaWithoutComment department={department} />
-                </Col>
-                <Col span={12}>
-                    <AnomyousComment />
-                </Col>
-                <Col span={12}>
-                    <AnomyousIdea />
-                </Col>
-            </Row>
+            {
+                department &&
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <IdeaWithoutComment department={department} />
+                    </Col>
+                    <Col xs={{ span: 24 }} lg={{ span: 12 }} >
+                        <AnomyousComment department={department} />
+                    </Col>
+                    <Col xs={{ span: 24 }} lg={{ span: 12 }} >
+                        <AnomyousIdea />
+                    </Col>
+                </Row>
+            }
 
         </div>
     )
 }
 
 
-function AnomyousIdea() {
+function AnomyousComment({ department }) {
+    const [comments, setComments] = useState([])
+    const [dataIdea, setDataIdea] = useState(null)
+    const [isShowIdea, setIsShowIdea] = useState(false)
+    const { data: ideas, isLoading } = useGetIdeasQuery()
+    useEffect(() => {
+        fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
+            setComments(res.data)
+        })
+    }, [])
+
+
+    const columns = [
+        {
+            title: 'Comment',
+            dataIndex: 'content',
+            key: 'content',
+            width: "50%",
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            width: "25%",
+            render: (val) => {
+                return <Tooltip title={ParseDate(val)}>
+                    {moment(val).fromNow()}
+                </Tooltip>
+            },
+        },
+        {
+            title: 'Action',
+            dataIdea: 'View Idea',
+            key: 'idea',
+            width: "25%",
+            render: (value, record) => (
+                <Space size="middle">
+                    <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
+                        setDataIdea(record.Idea)
+                        setIsShowIdea(true)
+                    }}>View Detail</Tag>
+                </Space>
+            ),
+        },
+    ]
+
     return (
         <>
+            <Table columns={columns} dataSource={comments} pagination={{ pageSize: 3 }}
+                title={() => <div >
+                    <Divider><span style={{ textAlign: "center", fontSize: 20, fontWeight: 500 }}>Anomyous Comments</span></Divider>
+                </div>}
+            />
+
+            {
+                (dataIdea) &&
+                <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas?.find(({ id }) => id === dataIdea.id)} setDataIdea={setDataIdea} topic={dataIdea?.Topic} loading={isLoading} />
+            }
         </>
     )
 }
 
-function AnomyousComment() {
+function AnomyousIdea() {
+    const [dataIdea, setDataIdea] = useState(null)
+    const [isShowIdea, setIsShowIdea] = useState(false)
+    const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
+        selectFromResult: ({ data, isLoading }) => {
+            return {
+                isLoading,
+                data: data?.filter(({ isAnomyous }) => isAnomyous).map(idea => {
+                    return {
+                        ...idea,
+                        fromNow: moment(idea.createdAt).diff(moment(), "hours"),
+                        isClosed: moment(idea.Topic.closureDateTopic).diff(moment(), "hours") < 0
+                    }
+                }).sort((a, b) => b.fromNow - a.fromNow).sort((a, b) => a.isClosed - b.isClosed)
+            }
+        }
+    })
+
+    const columns = [
+        {
+            title: 'Idea',
+            dataIndex: 'content',
+            key: 'content',
+            width: "50%",
+            render: (val) => {
+                return val.length > 50 ? val.slice(0, 50) + " ..." : val
+            },
+
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            width: "25%",
+            render: (val) => {
+                return <Tooltip title={ParseDate(val)}>
+                    {moment(val).fromNow()}
+                </Tooltip>
+            },
+        },
+        {
+            title: 'Action',
+            dataIdea: 'View Idea',
+            key: 'idea',
+            width: "25%",
+            render: (value, record) => (
+                <Space size="middle">
+                    <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
+                        setDataIdea(record)
+                        setIsShowIdea(true)
+                    }}>View Detail</Tag>
+                </Space>
+            ),
+        },
+    ]
     return (
         <>
+            <Table columns={columns} dataSource={ideas} pagination={{ pageSize: 3 }}
+                rowClassName={(record) => record.isClosed ? "bg-black border-item" : ""}
+                title={() => <div >
+                    <Divider><span style={{ textAlign: "center", fontSize: 20, fontWeight: 500 }}>Anomyous Ideas</span></Divider>
+                </div>}
+            />
+
+            {
+                (dataIdea) &&
+                <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas?.find(({ id }) => id === dataIdea.id)} setDataIdea={setDataIdea} topic={dataIdea?.Topic} loading={isLoading} />
+            }
         </>
     )
 }

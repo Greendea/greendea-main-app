@@ -50,5 +50,4 @@ export const getCommentsByIdea = async (idea) => {
         ],
 
     })
-
 }

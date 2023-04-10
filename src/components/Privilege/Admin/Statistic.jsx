@@ -72,7 +72,7 @@ function AggGroupCount() {
             })
         }
         fetchData()
-    })
+    }, [])
 
     return <Row gutter={[16, 16]}>
         <ColWrapper>
