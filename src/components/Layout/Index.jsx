@@ -24,7 +24,7 @@ const menu = (departments) => {
         },
         {
             key: "Sub2",
-            label: <><span>Top Ideas and Latest Comments</span></>,
+            label: <><span>Top and Latest Ideas</span></>,
             icon: <FcStatistics />,
             children: [
                 {
