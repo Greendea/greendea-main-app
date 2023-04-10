@@ -1,6 +1,6 @@
-import { useGetAnnouncementsQuery, useUpdateAnnouncementByIdMutation } from '../../redux/apiSlicers/Announcement';
+import { useDeleteAnnouncementByIdMutation, useGetAnnouncementsQuery, useUpdateAnnouncementByIdMutation } from '../../redux/apiSlicers/Announcement';
 import { ParseDate } from '../..//utils/dataParser';
-import { Button, DatePicker, Divider, Form, Input, message, Modal, Space, Table, Tag } from 'antd';
+import { Button, DatePicker, Divider, Form, Input, message, Modal, Popconfirm, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
@@ -106,11 +106,33 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
-export default function AnnouncementTable({ department, editable = false }) {
+function DeleteAnnouncement({ announcement }) {
+    const [deleteAnnouncementById] = useDeleteAnnouncementByIdMutation()
+    const confirm = () => {
+        deleteAnnouncementById({
+            id: announcement.id,
+            department: announcement.Department.id
+        }).unwrap().then(_ => message.success("Announcement deleted")).catch(_ => message.error("Failed to delete announcement"))
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Delete"}
+            description={"Are you sure to delete this announcement."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="red" style={{ cursor: "pointer" }} >Delete</Tag>
+
+        </Popconfirm>
+    </>
+}
+
+export default function AnnouncementTable({ department, editable = false, deletable = false }) {
     const [isModalOpenView, setIsModalOpenView] = useState(false);
     const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
     const [dataView, setDataView] = useState(null)
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     const { data, isLoading, refetch } = useGetAnnouncementsQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => ({
             isLoading,
@@ -159,6 +181,10 @@ export default function AnnouncementTable({ department, editable = false }) {
                             setDataView(record)
                             setIsModalOpenEdit(true)
                         }}>Edit</Tag>
+                    }
+                    {
+                        deletable &&
+                        <DeleteAnnouncement announcement={record} />
                     }
                 </Space>
             ),

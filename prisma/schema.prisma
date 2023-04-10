@@ -81,8 +81,8 @@ model User {
   reacts        React[]
   sessions      Session[]
   views         View[]
-  Department    Department? @relation(fields: [departmentId], references: [id])
-  Role          Role?       @relation(fields: [roleId], references: [id])
+  Department    Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  Role          Role?       @relation(fields: [roleId], references: [id], onDelete: SetNull)
   ideas         Idea[]
   Topic         Topic[]
   Comment       Comment[]
@@ -117,9 +117,9 @@ model Topic {
   createdAt        DateTime    @default(now()) @map("created_at")
   updatedAt        DateTime    @updatedAt @map("updated_at")
   departmentId     String?
-  Department       Department? @relation(fields: [departmentId], references: [id])
+  Department       Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   ideas            Idea[]
-  User             User?       @relation(fields: [userId], references: [id])
+  User             User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId           String?
 
   @@map("topics")
@@ -151,9 +151,9 @@ model Idea {
   reacts     React[]
   views      View[]
   comments   Comment[]
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  Topic      Topic?    @relation(fields: [topicId], references: [id])
-  User       User?     @relation(fields: [userId], references: [id])
+  Category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  Topic      Topic?    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  User       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("ideas")
 }
@@ -163,8 +163,8 @@ model Comment {
   userId     String?
   ideaId     String?
   content    String
-  User       User?    @relation(fields: [userId], references: [id])
-  Idea       Idea?    @relation(fields: [ideaId], references: [id])
+  User       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Idea       Idea?    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   isAnomyous Boolean  @default(false)
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -187,8 +187,8 @@ model View {
   ideaId    String?
   userId    String?
   updatedAt DateTime @updatedAt @map("updated_at")
-  Idea      Idea?    @relation(fields: [ideaId], references: [id])
-  User      User?    @relation(fields: [userId], references: [id])
+  Idea      Idea?    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([ideaId, userId])
   @@map("views")
@@ -201,8 +201,8 @@ model React {
   status    Int
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  Idea      Idea?    @relation(fields: [ideaId], references: [id])
-  User      User?    @relation(fields: [userId], references: [id])
+  Idea      Idea?    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  User      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([ideaId, userId])
   @@map("reacts")

@@ -27,8 +27,16 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [TypeName]
         }),
+        deleteTopic: builder.mutation({
+            query: (item) => ({
+                url: TypeAPI,
+                method: 'DELETE',
+                body: item,
+            }),
+            invalidatesTags: [TypeName]
+        }),
     }),
     overrideExisting: false,
 })
 
-export const { useAddTopicMutation, useGetTopicsQuery, useUpdateTopicMutation, endpoints } = extendedApi;
+export const { useAddTopicMutation, useGetTopicsQuery, useUpdateTopicMutation, useDeleteTopicMutation, endpoints } = extendedApi;

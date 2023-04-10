@@ -25,33 +25,59 @@ export const ModalIdeaWaiting = ({ isShowIdea, setIsShowIdea, dataIdea, setDataI
 }
 
 
+function AcceptIdea({ idea, handleIdea }) {
+    const confirm = () => {
+        handleIdea(idea.id, 1)
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Accept"}
+            description={"Are you sure to accept this idea."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="blue" style={{ cursor: "pointer" }} icon={<AiOutlineCheck />} >ACCEPT</Tag>
+        </Popconfirm>
+    </>
+}
+
+function RejectIdea({ idea, handleIdea }) {
+    const confirm = () => {
+        handleIdea(idea.id, -1)
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Reject"}
+            description={"Are you sure to reject this idea."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="red" style={{ cursor: "pointer" }} icon={<AiOutlineClose />} >REJECT</Tag>
+
+        </Popconfirm>
+    </>
+}
+
 export default function WaitingIdea({ department }) {
     const [updateIdeaStatus, { isLoading: loadingMutation }] = useUpdateIdeaStatusMutation()
     const [isShowIdea, setIsShowIdea] = useState(false)
     const [dataIdea, setDataIdea] = useState(null)
-    const [isShowConfirm, setIsShowConfirm] = useState(false)
-    const [messageConfirm, setMessageConfirm] = useState(0)
-    const [idIdea, setIdIdea] = useState(null)
     const handleIdea = (id, status) => {
-        setMessageConfirm(status)
-        setIsShowConfirm(true)
-        setIdIdea(id)
-    }
-    const handleOk = () => {
-        console.log(messageConfirm)
         updateIdeaStatus({
-            id: idIdea,
-            status: messageConfirm
+            id: id,
+            status: status
         }).unwrap().then(res => {
-            message.success(`Idea ${messageConfirm === -1 ? "rejected" : "accepted"}`);
-            setIsShowConfirm(false)
-            setMessageConfirm(0)
-            setIdIdea(null)
+            message.success(`Idea ${status === -1 ? "rejected" : "accepted"}`);
         }).catch(err => {
             console.log(err)
-            message.success(`Failed to ${messageConfirm === -1 ? "reject" : "accept"} Idea `);
+            message.success(`Failed to ${status === -1 ? "reject" : "accept"} Idea `);
         })
     }
+
     const { data, isLoading } = useGetIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
@@ -60,7 +86,6 @@ export default function WaitingIdea({ department }) {
             }
         }
     })
-    console.log(data)
     const columns = [
         {
             title: 'Topic',
@@ -112,8 +137,8 @@ export default function WaitingIdea({ department }) {
             render: (value, record) => (
                 <Space size="middle">
                     <Tag color="cyan" style={{ cursor: "pointer" }} onClick={() => { setDataIdea(record); setIsShowIdea(true) }}>VIEW</Tag>
-                    <Tag color="blue" style={{ cursor: "pointer" }} icon={<AiOutlineCheck />} onClick={() => handleIdea(record.id, 1)}>ACCEPT</Tag>
-                    <Tag color="red" style={{ cursor: "pointer" }} icon={<AiOutlineClose />} onClick={() => handleIdea(record.id, -1)}>REJECT</Tag>
+                    <AcceptIdea idea={record} handleIdea={handleIdea} />
+                    <RejectIdea idea={record} handleIdea={handleIdea} />
                 </Space >
             ),
         },
@@ -127,28 +152,17 @@ export default function WaitingIdea({ department }) {
                     Table Of Waiting Ideas
                 </span>
             </Divider>
-            <Popconfirm
-                title={`Confirm ${messageConfirm === -1 ? "reject" : "accept"}`}
-                description={`Are you sure to ${messageConfirm === -1 ? "reject" : "accept"} this idea ? No revert actions allowed!`}
-                open={isShowConfirm}
-                onConfirm={handleOk}
-                okButtonProps={{ loading: loadingMutation }}
-                icon={messageConfirm === -1 ? <AiOutlineClose /> : <AiOutlineCheck />}
-                onCancel={() => { setIsShowConfirm(false); setMessageConfirm(0) }}
-                placement="topRight"
-            >
-                <Table
-                    scroll={{ x: 1300 }}
-                    pagination={{ pageSize: 5 }}
-                    loading={isLoading}
-                    style={{
-                        width: "100%"
-                    }}
-                    columns={columns}
-                    dataSource={data?.filter(i => i.status === 0)}
-                    rowKey={(record) => record.id}
-                />
-            </Popconfirm>
+            <Table
+                scroll={{ x: 1300 }}
+                pagination={{ pageSize: 5 }}
+                loading={isLoading}
+                style={{
+                    width: "100%"
+                }}
+                columns={columns}
+                dataSource={data?.filter(i => i.status === 0)}
+                rowKey={(record) => record.id}
+            />
             <ModalIdeaWaiting isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={dataIdea} setDataIdea={setDataIdea} />
         </>
     )

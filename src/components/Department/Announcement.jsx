@@ -9,7 +9,7 @@ export default function Announcement({ department, role }) {
                 role !== "staff" &&
                 <AnnouncementForm department={department} />
             }
-            <AnnouncementTable department={department} editable={role !== "staff"} />
+            <AnnouncementTable department={department} editable={role !== "staff"} deletable={["admin", "head", "manager"].includes(role)} />
         </div>
     )
 }

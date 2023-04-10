@@ -191,32 +191,32 @@ Ref: Account.userId > users.id [delete: Cascade]
 
 Ref: Session.userId > users.id [delete: Cascade]
 
-Ref: users.departmentId > departments.id
+Ref: users.departmentId > departments.id [delete: Set Null]
 
-Ref: users.roleId > roles.id
+Ref: users.roleId > roles.id [delete: Set Null]
 
-Ref: topics.departmentId > departments.id
+Ref: topics.departmentId > departments.id [delete: Set Null]
 
-Ref: topics.userId > users.id
+Ref: topics.userId > users.id [delete: Set Null]
 
 Ref: announcements.departmentId > departments.id
 
-Ref: ideas.categoryId > categories.id
+Ref: ideas.categoryId > categories.id [delete: Set Null]
 
-Ref: ideas.topicId > topics.id
+Ref: ideas.topicId > topics.id [delete: Cascade]
 
-Ref: ideas.userId > users.id
+Ref: ideas.userId > users.id [delete: Cascade]
 
-Ref: comments.userId > users.id
+Ref: comments.userId > users.id [delete: Cascade]
 
-Ref: comments.ideaId > ideas.id
+Ref: comments.ideaId > ideas.id [delete: Cascade]
 
 Ref: files.ideaId > ideas.id
 
-Ref: views.ideaId > ideas.id
+Ref: views.ideaId > ideas.id [delete: Cascade]
 
-Ref: views.userId > users.id
+Ref: views.userId > users.id [delete: Cascade]
 
-Ref: reacts.ideaId > ideas.id
+Ref: reacts.ideaId > ideas.id [delete: Cascade]
 
-Ref: reacts.userId > users.id
+Ref: reacts.userId > users.id [delete: Cascade]

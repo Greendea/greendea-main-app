@@ -1,8 +1,8 @@
-import { AddTopic, EditTopic, GetAllTopics } from "../../../lib/Service/TopicService";
+import { AddTopic, DeleteTopic, EditTopic, GetAllTopics } from "../../../lib/Service/TopicService";
 import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-const allowedMethods = ['POST', 'GET', "PUT"];
+const allowedMethods = ['POST', 'GET', "PUT", "DELETE"];
 
 export default async function handler(req, res) {
     try {
@@ -25,6 +25,8 @@ export default async function handler(req, res) {
                 return AddTopic(req, res, userSession)
             case 'PUT':
                 return EditTopic(req, res, userSession)
+            case 'DELETE':
+                return DeleteTopic(req, res, userSession)
         }
 
     } catch (error) {

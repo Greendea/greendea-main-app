@@ -11,7 +11,9 @@ export default function TopicIdea({ department, role }) {
                     ["manager", "head"].includes(role) && <TopicForm department={department} />
                 }
 
-                <DepartmentTableTopic department={department} editable={role !== "staff"} downloadable={["manager", "admin", "head"].includes(role)} />
+                <DepartmentTableTopic
+                    deletable={["admin", "head", "manager"].includes(role)}
+                    department={department} editable={role !== "staff"} downloadable={["manager", "admin", "head"].includes(role)} />
             </>
             }
         </>

@@ -12,6 +12,23 @@ export const GetAllTopics = async (req, res, userSession) => {
     return res.status(200).json(await getAllTopics())
 }
 
+export const DeleteTopic = async (req, res, userSession) => {
+    if (["admin", "manager", "head"].includes(userSession.Role.name)) {
+        if (["manager", "head"].includes(userSession.Role.name)) {
+            if (userSession.Department.id !== req.body.department) {
+                return res.status(401).json({
+                    message: "You are not authorized"
+                })
+            }
+        }
+        
+        return res.status(200).json(await deleteTopic(req.body.id))
+    }
+    return res.status(401).json({
+        message: "You are not authorized"
+    })
+}
+
 
 
 export const addTopic = async ({ name, openDate, closureDateIdea, closureDateTopic, department }, user) => {
@@ -79,6 +96,14 @@ export const getAllTopics = async () => {
                     name: true
                 }
             }
+        }
+    })
+}
+
+export const deleteTopic = async (id) => {
+    return await prisma.topic.delete({
+        where: {
+            id
         }
     })
 }

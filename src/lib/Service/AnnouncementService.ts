@@ -13,7 +13,17 @@ export const UpdateAnnouncementByID = async (req, res, userSession) => {
 }
 
 export const DeleteAnnouncementByID = async (req, res, userSession) => {
-    return res.status(200).json(await deleteAnnouncementByID(req.query.id))
+    if (["manager", "head"].includes(userSession.Role.name)) {
+        if (userSession.Department.id !== req.body.department) {
+            return res.status(401).json({
+                message: "You are not authorized"
+            })
+        }
+        return res.status(200).json(await deleteAnnouncementByID(req.query.id))
+    }
+    return res.status(401).json({
+        message: "You are not authorized"
+    })
 }
 
 

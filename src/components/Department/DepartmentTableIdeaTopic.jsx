@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import locale from "antd/lib/date-picker/locale/vi_VN";
 import "dayjs/locale/vi"
-import { Button, DatePicker, Descriptions, Divider, Dropdown, Form, Input, message, Modal, Select, Space, Table, Tag, Tooltip } from 'antd';
-import { useGetTopicsQuery, useUpdateTopicMutation } from '../../redux/apiSlicers/Topic';
+import { Button, DatePicker, Descriptions, Divider, Dropdown, Form, Input, message, Modal, Select, Space, Table, Tag, Tooltip, Popconfirm } from 'antd';
+import { useDeleteTopicMutation, useGetTopicsQuery, useUpdateTopicMutation } from '../../redux/apiSlicers/Topic';
 import { ParseDate } from '../../utils/dataParser';
 import { validateMessages } from '../../utils/validateMessage';
 import dayjs from 'dayjs';
@@ -77,8 +77,30 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     </Modal >
 }
 
-export default function DepartmentTableTopic({ department, editable = false, downloadable = false }) {
-    console.log("downloadable", downloadable)
+function DeleteTopic({ topic }) {
+    const [deleteTopic] = useDeleteTopicMutation()
+    const confirm = () => {
+        deleteTopic({
+            id: topic.id,
+            department: topic.Department.id
+        }).unwrap().then(_ => message.success("Topic deleted")).catch(_ => message.error("Failed to delete topic"))
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Delete"}
+            description={"Are you sure to delete this topic and its related ideas, comments, reactions, ands views."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="red" style={{ cursor: "pointer" }} >Delete</Tag>
+
+        </Popconfirm>
+    </>
+}
+
+export default function DepartmentTableTopic({ department, editable = false, downloadable = false, deletable = false }) {
     const router = useRouter()
     console.log(router.isFallback)
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -91,6 +113,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         skip: !department
     })
     const { data: ideas } = useGetIdeasQuery()
+
     const handleDownload = async (record) => {
         let zip = new JSZip();
         // //CREATE XLSX FILE
@@ -184,7 +207,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             title: 'Close Date Idea',
             dataIndex: 'closureDateIdea',
             key: 'closureDateIdea',
-            width: "15%",
+            width: "10%",
             render: (value, record) => {
                 return <Tooltip title={moment(value).format("DD/MM/YY hh:mm:ss")}>
                     <Tag color={moment(value).diff(moment(), "seconds") > 0 ? "green" : ""}>
@@ -197,7 +220,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             title: 'Close Date Topic',
             dataIndex: 'closureDateTopic',
             key: 'closureDateTopic',
-            width: "15%",
+            width: "10%",
             render: (value, record) => {
                 return <Tooltip title={moment(value).format("DD/MM/YY hh:mm:ss")}>
                     <Tag color={moment(value).diff(moment(), "seconds") > 0 ? "green" : ""}>
@@ -210,7 +233,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             title: "Action",
             dataIndex: "action",
             key: "action",
-            width: "15%",
+            width: "20%",
             render: (value, record) => {
                 return <>
                     <Tag color="blue" style={{ cursor: "pointer" }}
@@ -219,8 +242,13 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                             setIsModalOpen(true)
                         }}
                     >Edit</Tag>
+                    {
+                        deletable &&
+                        <DeleteTopic topic={record} />
+                    }
+
                     {downloadable &&
-                        <Tag color="blue" style={{ cursor: "pointer" }} icon={<HiOutlineDownload />} onClick={() => handleDownload(record)}>DOWNLOAD</Tag>
+                        <Tag color="blue" style={{ cursor: "pointer", marginTop: 5 }} icon={<HiOutlineDownload />} onClick={() => handleDownload(record)}>DOWNLOAD</Tag>
                     }
                 </>
             }

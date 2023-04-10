@@ -26,9 +26,10 @@ const extendedApi = apiSlice.injectEndpoints({
             invalidatesTags: [TypeName]
         }),
         deleteAnnouncementById: builder.mutation({
-            query: (id) => ({
-                url: `${TypeAPI}/${id}`,
+            query: (item) => ({
+                url: `${TypeAPI}/${item.id}`,
                 method: 'DELETE',
+                body: item
             }),
             invalidatesTags: [TypeName]
         }),
