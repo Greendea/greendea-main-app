@@ -6,7 +6,7 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { AiOutlineDown, AiOutlinePlusSquare, AiOutlineHistory } from "react-icons/ai"
 import { MdAdminPanelSettings } from "react-icons/md"
 import { ImTree } from "react-icons/im"
-import { FcIdea } from "react-icons/fc"
+import { FcIdea, FcStatistics } from "react-icons/fc"
 import Link from 'next/link';
 import AvatarDrawer from './UserProfile/AvatarDrawer';
 import { useRouter } from 'next/router';
@@ -23,6 +23,25 @@ const menu = (departments) => {
             icon: <HomeOutlined />
         },
         {
+            key: "Sub2",
+            label: <><span>Top Ideas and Latest Comments</span></>,
+            icon: <FcStatistics />,
+            children: [
+                {
+                    key: "Sub2-111",
+                    label: <Link href="/ideas/popular">Popular Ideas</Link>,
+                },
+                {
+                    key: "Sub2-222",
+                    label: <Link href="/ideas/views">Most Viewed Ideas</Link>,
+                },
+                {
+                    key: "Sub2-333",
+                    label: <Link href="/ideas/latest">Latest Ideas</Link>,
+                },
+            ]
+        },
+        {
             key: "Sub1",
             label: <><span>Departments</span></>,
             icon: <HiOutlineUserGroup />,
@@ -32,9 +51,9 @@ const menu = (departments) => {
                     label: <Link href={`/department/${department.id}`} replace={true}>{department.name}</Link>,
                 }
             })
-
-        }, {
-            key: "Sub2",
+        },
+        {
+            key: "Sub3",
             label: <><span>Your Idea</span></>,
             icon: <FcIdea />,
             children: [
@@ -49,7 +68,8 @@ const menu = (departments) => {
                     icon: <Link href="/past"><AiOutlineHistory /></Link>
                 },
             ]
-        }, {
+        },
+        {
             key: "Cat2",
             label: <Link href="/system">System</Link>,
             icon: < ImTree />

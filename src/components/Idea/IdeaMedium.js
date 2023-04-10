@@ -1,73 +1,43 @@
-import { Space, Table, Tag } from "antd";
+import React, { useState } from 'react'
+import Layout from "../../components/Layout/Index"
+import Head from "next/head";
+import { Button, Divider, Space, Table, Tag } from 'antd';
+import { IconText } from '../../components/Idea/ExpandedIdeaTopic';
+import { ModalIdea } from '../../components/Idea/IdeaModal';
+import { ParseDate } from '../../utils/dataParser';
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
-import { ModalIdea } from "./IdeaModal";
-import { useGetIdeasQuery } from "../../redux/apiSlicers/Idea";
-import React, { useState } from "react";
-import { ParseDate } from "../../utils/dataParser";
 import { GrView } from "react-icons/gr";
-import { searchColumn } from "../../utils/tableFilters";
-import { exposeFilters } from "../../utils/exposeFilter";
-
-export const IconText = ({ icon, text }) => (
-    <Space>
-        {React.createElement(icon)}
-        {text}
-    </Space>
-);
 
 
-export const ExpandedIdeaRender = ({ topic }) => {
-    const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
-        selectFromResult: ({ data, isLoading }) => {
-            return {
-                isLoading,
-                data: data?.filter(i => i?.Topic.id === topic.id && i.status === 1)
-            }
-        },
-        skip: !topic.id
-    })
+export default function Ideas({ ideas, isLoading, title, header }) {
     const [isShowIdea, setIsShowIdea] = useState(false)
     const [dataIdea, setDataIdea] = useState(null)
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const [searchInput, setSearchInput] = useState('');
-    const searchFeature = (dataIndex) => {
-        return searchColumn({ dataIndex, searchedColumn, setSearchedColumn, searchText, setSearchText, searchInput, setSearchInput })
-    }
     const columns = [
         {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
-            width: "35%",
+            width: "25%",
             render: (val) => {
-                return val.length > 200 ? val.slice(0, 200) + " ..." : val
+                return <div style={{ width: 400, overflowWrap: "break-word", whiteSpace: "normal" }}>
+                    {val.length > 200 ? val.slice(0, 200) + " ..." : val}
+                </div>
             },
-            // ...searchFeature("content")
         },
         {
             title: 'Category',
             dataIndex: 'Category',
             key: 'Category',
-            width: "11%",
+            width: "15%",
             render: (val) => {
                 return val?.name
             },
-            filters: ideas && exposeFilters(ideas.map(item => item.Category ? item.Category.name : "")),
-            onFilter: (value, record) => {
-                if (value !== '') {
-                    return record.Category?.name.includes(value.toString())
-                } else {
-                    return !record.Category
-                }
-            }
-
         },
         {
             title: 'Submittor',
             dataIndex: 'User',
             key: 'User',
-            width: "12%",
+            width: "10%",
             render: (value, record) => {
                 return record.isAnomyous ? "ANOMYOUS" : value?.name
             }
@@ -76,7 +46,7 @@ export const ExpandedIdeaRender = ({ topic }) => {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            width: "12%",
+            width: "20%",
             render: (val) => {
                 return ParseDate(val)
             }
@@ -110,11 +80,41 @@ export const ExpandedIdeaRender = ({ topic }) => {
             ),
         },
     ];
-    return <>
-        <Table columns={columns} dataSource={ideas} pagination={false} loading={isLoading} />
-        {
-            dataIdea &&
-            <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={Topic} loading={isLoading} />
-        }
-    </>
-};
+
+
+    const [pageNumber, setPageNumber] = useState(1);
+    const productsPerPage = 7;
+
+    return (
+        <Layout>
+            <Head>
+                <title>{title}</title>
+            </Head>
+            <div style={{ maxWidth: 1480, margin: "0 auto" }}>
+                <Divider>
+                    <span style={{ fontSize: 24 }}>
+                        {header}
+                    </span>
+                </Divider>
+                <Table columns={columns} dataSource={ideas?.slice(0, pageNumber * productsPerPage)} pagination={false} loading={isLoading} bordered
+                    size='large'
+                    scroll={{ x: 1300 }}
+                    rowClassName={(record) => record.isClosed ? "bg-black border-item" : ""}
+                    footer={() => <>
+                        {
+                            ideas?.length > pageNumber * productsPerPage &&
+                            < div style={{ textAlign: "center" }}>
+                                <Button type='primary' onClick={() => setPageNumber(prev => prev + 1)}>Load More</Button>
+                            </div>
+                        }
+                    </>}
+
+                />
+                {
+                    dataIdea &&
+                    <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={ideas.find(({ id }) => id === dataIdea).Topic} loading={isLoading} />
+                }
+            </div>
+        </Layout>
+    )
+}

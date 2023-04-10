@@ -153,7 +153,8 @@ export const getAllIdeas = async () => {
                             id: true,
                             name: true
                         }
-                    }
+                    },
+                    closureDateTopic: true
                 }
             },
             Category: {
