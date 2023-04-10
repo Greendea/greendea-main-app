@@ -19,7 +19,7 @@ export const IconText = ({ icon, text }) => (
 
 
 export const ExpandedIdeaRender = ({ topic }) => {
-    const { role } = useSelector(state => state.user)
+    const { role, department: userDepartment } = useSelector(state => state.user)
     const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
@@ -110,7 +110,11 @@ export const ExpandedIdeaRender = ({ topic }) => {
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
                     {
-                        ["admin", "head", "manager"].includes(role?.name) &&
+                        role?.name === "admin" &&
+                        <DeleteIdea idea={record} />
+                    }
+                    {
+                        (["head", "manager"].includes(role?.name) && userDepartment?.id === topic.Department.id) &&
                         <DeleteIdea idea={record} />
                     }
                 </Space>

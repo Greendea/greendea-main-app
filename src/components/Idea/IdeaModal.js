@@ -1,11 +1,12 @@
-import { useAddCommentMutation, useGetCommentByIdeaQuery } from '../../redux/apiSlicers/Comment';
+import { useAddCommentMutation, useDeleteCommentMutation, useGetCommentByIdeaQuery } from '../../redux/apiSlicers/Comment';
 import { useUpsertReactMutation } from '../../redux/apiSlicers/Idea';
 import { useAddViewMutation } from '../../redux/apiSlicers/View';
 import { ParseDate } from '../../utils/dataParser';
+import { MdDeleteForever } from "react-icons/md"
 import { validateMessages } from '../../utils/validateMessage';
 import { Comment } from '@ant-design/compatible';
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
-import { Avatar, Button, Descriptions, Divider, Modal, Skeleton, Space, Tooltip, message, Spin, Form, Input, Empty, Checkbox } from 'antd';
+import { Avatar, Button, Descriptions, Divider, Modal, Skeleton, Space, Tooltip, message, Spin, Form, Input, Empty, Checkbox, Popconfirm } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { GrView } from 'react-icons/gr';
@@ -13,7 +14,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
 export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, topic, loading }) => {
-    console.log(dataIdea)
     const [upsertReact, { isLoading: loadingHandleReaction }] = useUpsertReactMutation()
     const [addView] = useAddViewMutation()
     const [commentAnomyous, setCommentAnomyous] = useState(false)
@@ -121,7 +121,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                     <Descriptions.Item label="Date Submit">{ParseDate(dataIdea.createdAt)}</Descriptions.Item>
                     <Descriptions.Item label="Content" span={3}>{dataIdea.content}</Descriptions.Item>
                 </Descriptions>
-                {dataIdea.id && <CommentList idea={dataIdea.id} />}
+                {dataIdea.id && <CommentList idea={dataIdea.id} department={topic.Department} />}
                 {dataIdea.id && <CommentForm
                     ideaCreator={dataIdea.User}
                     disableComment={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
@@ -132,7 +132,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
     )
 }
 
-function CommentList({ idea }) {
+function CommentList({ idea, department }) {
     const { data, isLoading } = useGetCommentByIdeaQuery(idea)
     return <div
         id="scrollableDiv"
@@ -158,6 +158,8 @@ function CommentList({ idea }) {
                 {data?.length === 0 && <div style={{ marginTop: 100 }}><Empty description={"No comment found"} /></div>}
                 {data?.map(item => {
                     return <CommentIdeas key={item.id}
+                        department={department}
+                        id={item.id}
                         content={item.content}
                         avatar={item.User?.image}
                         author={item.User?.name}
@@ -212,9 +214,35 @@ function CommentForm({ form, idea, addComment, commentAnomyous, disableComment, 
 }
 
 
+function DeleteComment({ comment, department }) {
+    const [deleteComment] = useDeleteCommentMutation()
+    const confirm = () => {
+        deleteComment({
+            id: comment,
+            department: department
+        }).unwrap().then(_ => {
+            message.success("Comment deleted")
+        }).catch(_ => message.error("Failed to delete comment"))
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Delete"}
+            description={"Are you sure to delete this ideas and its related comments, reactions, ands views."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <MdDeleteForever style={{ position: "absolute", right: 0, top: "50%", fontSize: 24, cursor: "pointer" }} />
+
+        </Popconfirm>
+    </>
+}
 
 const CommentIdeas = (
     {
+        id,
+        department,
         author = "Anomyous",
         avatar = "https://api-private.atlassian.com/users/3ed7bde5a8c78e8d0d38eca297f62495/avatar",
         content = "",
@@ -222,27 +250,22 @@ const CommentIdeas = (
         isAnomyous,
         children
     }) => {
+    const { role, department: userDepartment } = useSelector(state => state.user)
     return <Comment
-        // actions={[
-        //     <Tooltip key="comment-basic-like" title="Like">
-        //         <span>
-        //             <LikeOutlined />
-        //             <span className="comment-action" style={{ marginLeft: 6 }}>{11}</span>
-        //         </span>
-        //     </Tooltip>,
-        //     <Tooltip key="comment-basic-dislike" title="Dislike">
-        //         <span>
-        //             <DislikeOutlined />
-        //             <span className="comment-action" style={{ marginLeft: 6 }}>{1}</span>
-        //         </span>
-        //     </Tooltip>,
-        //     <span key="comment-nested-reply-to">Reply to</span>]}
-        // ac
         author={<a>{isAnomyous ? "ANOMYOUS" : author}</a>}
         avatar={<Avatar src={isAnomyous ? "/avatar.png" : avatar} alt="Avatar" />}
         content={
-            <p>
+            <p style={{ position: "relative" }}>
                 {content}
+                {
+                    role?.name === "admin" &&
+                    <DeleteComment comment={id} department={department.id} />
+                }
+
+                {
+                    (["manager", "head"].includes(role?.name) && department.id === userDepartment?.id) &&
+                    <DeleteComment comment={id} department={department.id} />
+                }
             </p>
         }
         datetime={
