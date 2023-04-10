@@ -228,7 +228,7 @@ function DeleteComment({ comment, department }) {
         <Popconfirm
             placement="topLeft"
             title={"Confirm Delete"}
-            description={"Are you sure to delete this ideas and its related comments, reactions, ands views."}
+            description={"Are you sure to delete this comment"}
             onConfirm={confirm}
             okText="Yes"
             cancelText="No"
