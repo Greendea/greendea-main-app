@@ -7,6 +7,8 @@ import { ParseDate } from "../../utils/dataParser";
 import { GrView } from "react-icons/gr";
 import { searchColumn } from "../../utils/tableFilters";
 import { exposeFilters } from "../../utils/exposeFilter";
+import { useSelector } from 'react-redux';
+import { DeleteIdea } from "../Privilege/Manager_Head/Statistic";
 
 export const IconText = ({ icon, text }) => (
     <Space>
@@ -17,6 +19,7 @@ export const IconText = ({ icon, text }) => (
 
 
 export const ExpandedIdeaRender = ({ topic }) => {
+    const { role } = useSelector(state => state.user)
     const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
@@ -106,6 +109,10 @@ export const ExpandedIdeaRender = ({ topic }) => {
                         setDataIdea(record)
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
+                    {
+                        ["admin", "head", "manager"].includes(role?.name) &&
+                        <DeleteIdea idea={record} />
+                    }
                 </Space>
             ),
         },

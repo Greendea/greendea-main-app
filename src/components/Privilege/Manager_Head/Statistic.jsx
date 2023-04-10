@@ -223,7 +223,7 @@ function AnomyousComment({ department }) {
     )
 }
 
-function DeleteIdea({ idea }) {
+export function DeleteIdea({ idea }) {
     const [deleteIdea] = useDeleteIdeaMutation()
     const confirm = () => {
         deleteIdea({
