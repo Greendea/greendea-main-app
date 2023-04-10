@@ -1,8 +1,8 @@
-import { UpdateIdeaStatusById } from "../../../lib/Service/IdeaService";
+import { DeleteIdea, UpdateIdeaStatusById } from "../../../lib/Service/IdeaService";
 import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-const allowedMethods = ['PUT'];
+const allowedMethods = ['PUT', 'DELETE'];
 
 export default async function handler(req, res) {
     try {
@@ -21,6 +21,8 @@ export default async function handler(req, res) {
         switch (req.method) {
             case 'PUT':
                 return UpdateIdeaStatusById(req, res, userSession)
+            case 'DELETE':
+                return DeleteIdea(req, res, userSession)
         }
 
     } catch (error) {

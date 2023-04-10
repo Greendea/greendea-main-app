@@ -3,6 +3,23 @@ import prisma from "../prisma"
 export const AddComment = async (req, res, userSession) => {
     return res.status(200).json(await addComment(req.body.idea, userSession.id, req.body.content, req.body.isAnomyous))
 }
+
+export const DeleteComment = async (req, res, userSession) => {
+    if (["admin", "manager", "head"].includes(userSession.Role.name)) {
+        if (["manager", "head"].includes(userSession.Role.name)) {
+            if (userSession.Department.id !== req.body.department) {
+                return res.status(401).json({
+                    message: "You are not authorized"
+                })
+            }
+        }
+        return res.status(200).json(await deleteComment(req.body.id))
+    }
+    return res.status(401).json({
+        message: "You are not authorized"
+    })
+
+}
 export const GetCommentsByIdea = async (req, res, userSession) => {
     const comments = await getCommentsByIdea(req.query.ideaId)
     return res.status(200).json(comments.map(cm => {
@@ -49,5 +66,13 @@ export const getCommentsByIdea = async (idea) => {
             },
         ],
 
+    })
+}
+
+export const deleteComment = async (id) => {
+    return await prisma.comment.delete({
+        where: {
+            id
+        }
     })
 }

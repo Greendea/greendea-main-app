@@ -17,6 +17,26 @@ export const GetPersonalIdea = async (req, res, userSession) => {
 }
 
 
+export const DeleteIdea = async (req, res, userSession) => {
+    if (["admin", "manager", "head"].includes(userSession.Role.name)) {
+        if (["manager", "head"].includes(userSession.Role.name)) {
+            if (userSession.Department.id !== req.body.department) {
+                return res.status(401).json({
+                    message: "You are not authorized"
+                })
+            }
+        }
+
+        return res.status(200).json(await deleteIdea(req.query.id))
+
+    }
+    return res.status(401).json({
+        message: "You are not authorized"
+    })
+
+}
+
+
 
 
 
@@ -203,6 +223,15 @@ export const updateIdeaStatusById = async (id, status) => {
         },
         data: {
             status: status
+        }
+    })
+}
+
+
+export const deleteIdea = async (id) => {
+    return await prisma.idea.delete({
+        where: {
+            id
         }
     })
 }

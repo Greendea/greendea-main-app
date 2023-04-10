@@ -12,7 +12,7 @@ const extendedApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: item
             }),
-            invalidatesTags: ["Idea", "Comment"],
+            invalidatesTags: ["Idea"],
             async onQueryStarted({ email_service }, { dispatch, queryFulfilled }) {
                 console.log(email_service)
                 try {
@@ -34,11 +34,18 @@ const extendedApi = apiSlice.injectEndpoints({
                 url: `${TypeAPI}/${ideaId}`,
                 method: "GET",
             }),
-            providesTags: ["Comment"]
+        }),
+        deleteComment: builder.mutation({
+            query: (item) => ({
+                url: TypeAPI,
+                method: "DELETE",
+                body: item
+            }),
+            invalidatesTags: ["Idea"],
         }),
 
     }),
     overrideExisting: true,
 })
 
-export const { useAddCommentMutation, useGetCommentByIdeaQuery } = extendedApi;
+export const { useAddCommentMutation, useGetCommentByIdeaQuery, useDeleteCommentMutation } = extendedApi;

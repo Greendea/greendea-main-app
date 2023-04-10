@@ -1,8 +1,8 @@
-import { AddComment, GetCommentsByIdea } from "../../../lib/Service/CommentService";
+import { AddComment, DeleteComment, GetCommentsByIdea } from "../../../lib/Service/CommentService";
 import { findUserByEmail } from "../../../lib/Service/UserService";
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../auth/[...nextauth]"
-const allowedMethods = ['POST'];
+const allowedMethods = ['POST', 'DELETE'];
 
 export default async function handler(req, res) {
     try {
@@ -21,6 +21,8 @@ export default async function handler(req, res) {
         switch (req.method) {
             case 'POST':
                 return AddComment(req, res, userSession)
+            case 'DELETE':
+                return DeleteComment(req, res, userSession)
         }
 
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Divider, Row, Space, Statistic, Table, Tag, Tooltip } from 'antd';
-import { useGetIdeasQuery } from "../../../redux/apiSlicers/Idea"
+import { Button, Card, Col, Divider, Popconfirm, Row, Space, Statistic, Table, Tag, Tooltip, message } from 'antd';
+import { useDeleteIdeaMutation, useGetIdeasQuery } from "../../../redux/apiSlicers/Idea"
 import moment from 'moment';
 import { useGetTopicsQuery } from '../../../redux/apiSlicers/Topic';
 import { IconText } from '../../Idea/ExpandedIdeaTopic';
@@ -9,6 +9,7 @@ import { ModalIdea } from '../../Idea/IdeaModal';
 import { ParseDate } from '../../../utils/dataParser';
 import { GrView } from "react-icons/gr";
 import { DislikeOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons';
+import { useDeleteCommentMutation } from '../../../redux/apiSlicers/Comment';
 
 
 function ColWrapper({ children }) {
@@ -118,11 +119,11 @@ export default function StatisticDepartment({ department }) {
                     <Col span={24}>
                         <IdeaWithoutComment department={department} />
                     </Col>
-                    <Col xs={{ span: 24 }} lg={{ span: 12 }} >
+                    <Col xs={{ span: 24 }} xl={{ span: 12 }} >
                         <AnomyousComment department={department} />
                     </Col>
-                    <Col xs={{ span: 24 }} lg={{ span: 12 }} >
-                        <AnomyousIdea />
+                    <Col xs={{ span: 24 }} xl={{ span: 12 }} >
+                        <AnomyousIdea department={department} />
                     </Col>
                 </Row>
             }
@@ -132,16 +133,43 @@ export default function StatisticDepartment({ department }) {
 }
 
 
+function DeleteComment({ comment, department, setRefetch }) {
+    const [deleteComment] = useDeleteCommentMutation()
+    const confirm = () => {
+        deleteComment({
+            id: comment.id,
+            department: department
+        }).unwrap().then(_ => {
+            message.success("Comment deleted")
+            setRefetch(prev => !prev)
+        }).catch(_ => message.error("Failed to delete comment"))
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Delete"}
+            description={"Are you sure to delete this ideas and its related comments, reactions, ands views."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="red" style={{ cursor: "pointer" }} >Delete</Tag>
+
+        </Popconfirm>
+    </>
+}
+
 function AnomyousComment({ department }) {
     const [comments, setComments] = useState([])
     const [dataIdea, setDataIdea] = useState(null)
     const [isShowIdea, setIsShowIdea] = useState(false)
     const { data: ideas, isLoading } = useGetIdeasQuery()
+    const [refetch, setRefetch] = useState(false)
     useEffect(() => {
         fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
             setComments(res.data)
         })
-    }, [])
+    }, [refetch])
 
 
     const columns = [
@@ -149,13 +177,13 @@ function AnomyousComment({ department }) {
             title: 'Comment',
             dataIndex: 'content',
             key: 'content',
-            width: "50%",
+            width: "45%",
         },
         {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            width: "25%",
+            width: "20%",
             render: (val) => {
                 return <Tooltip title={ParseDate(val)}>
                     {moment(val).fromNow()}
@@ -166,13 +194,14 @@ function AnomyousComment({ department }) {
             title: 'Action',
             dataIdea: 'View Idea',
             key: 'idea',
-            width: "25%",
+            width: "35%",
             render: (value, record) => (
                 <Space size="middle">
                     <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
                         setDataIdea(record.Idea)
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
+                    <DeleteComment comment={record} department={department.id} setRefetch={setRefetch} />
                 </Space>
             ),
         },
@@ -194,14 +223,37 @@ function AnomyousComment({ department }) {
     )
 }
 
-function AnomyousIdea() {
+function DeleteIdea({ idea }) {
+    const [deleteIdea] = useDeleteIdeaMutation()
+    const confirm = () => {
+        deleteIdea({
+            id: idea.id,
+            department: idea.Topic.Department.id
+        }).unwrap().then(_ => message.success("Idea deleted")).catch(_ => message.error("Failed to delete idea"))
+    };
+    return <>
+        <Popconfirm
+            placement="topLeft"
+            title={"Confirm Delete"}
+            description={"Are you sure to delete this ideas and its related comments, reactions, ands views."}
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+        >
+            <Tag color="red" style={{ cursor: "pointer" }} >Delete</Tag>
+
+        </Popconfirm>
+    </>
+}
+
+function AnomyousIdea({ department }) {
     const [dataIdea, setDataIdea] = useState(null)
     const [isShowIdea, setIsShowIdea] = useState(false)
     const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
                 isLoading,
-                data: data?.filter(({ isAnomyous }) => isAnomyous).map(idea => {
+                data: data?.filter(({ isAnomyous, Topic, status }) => isAnomyous && Topic.Department.id === department.id && status === 1).map(idea => {
                     return {
                         ...idea,
                         fromNow: moment(idea.createdAt).diff(moment(), "hours"),
@@ -217,7 +269,7 @@ function AnomyousIdea() {
             title: 'Idea',
             dataIndex: 'content',
             key: 'content',
-            width: "50%",
+            width: "45%",
             render: (val) => {
                 return val.length > 50 ? val.slice(0, 50) + " ..." : val
             },
@@ -227,7 +279,7 @@ function AnomyousIdea() {
             title: 'Created At',
             dataIndex: 'createdAt',
             key: 'createdAt',
-            width: "25%",
+            width: "20%",
             render: (val) => {
                 return <Tooltip title={ParseDate(val)}>
                     {moment(val).fromNow()}
@@ -238,13 +290,14 @@ function AnomyousIdea() {
             title: 'Action',
             dataIdea: 'View Idea',
             key: 'idea',
-            width: "25%",
+            width: "35%",
             render: (value, record) => (
                 <Space size="middle">
                     <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
                         setDataIdea(record)
                         setIsShowIdea(true)
                     }}>View Detail</Tag>
+                    <DeleteIdea idea={record} />
                 </Space>
             ),
         },
@@ -270,7 +323,7 @@ function IdeaWithoutComment({ department }) {
     const { data: ideas, isLoading } = useGetIdeasQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
-                data: data.filter(({ comments }) => comments.length === 0).filter(({ Topic, status }) => Topic.Department.id === department.id && status === 1),
+                data: data?.filter(({ comments }) => comments.length === 0).filter(({ Topic, status }) => Topic.Department.id === department.id && status === 1),
                 isLoading
             }
         }

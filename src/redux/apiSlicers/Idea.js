@@ -36,6 +36,14 @@ const extendedApi = apiSlice.injectEndpoints({
                 } catch { }
             }
         }),
+        deleteIdea: builder.mutation({
+            query: (item) => ({
+                url: `${TypeAPI}/${item.id}`,
+                method: "DELETE",
+                body: item
+            }),
+            invalidatesTags: [TypeName]
+        }),
         updateIdeaStatus: builder.mutation({
             query: (item) => ({
                 url: `${TypeAPI}/${item.id}`,
@@ -99,4 +107,4 @@ const extendedApi = apiSlice.injectEndpoints({
     overrideExisting: false,
 })
 
-export const { useAddIdeaMutation, useGetIdeasQuery, useUpdateIdeaStatusMutation, useGetPersonalIdeasQuery, useUpsertReactMutation, endpoints } = extendedApi;
+export const { useAddIdeaMutation, useGetIdeasQuery, useUpdateIdeaStatusMutation, useGetPersonalIdeasQuery, useUpsertReactMutation, useDeleteIdeaMutation, endpoints } = extendedApi;
