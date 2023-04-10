@@ -1,4 +1,4 @@
-import { getMailMessage } from "../../utils/emailMessage";
+import { getMailMessageForCordinator } from "../../utils/emailMessage";
 import { apiSlice } from "./_index";
 import { endpoints as externalService } from "./_index";
 
@@ -29,7 +29,7 @@ const extendedApi = apiSlice.injectEndpoints({
                     if (email_service.recipients.length > 0) {
                         await dispatch(externalService.sendMail.initiate({
                             recipients: email_service.recipients,
-                            message_html: getMailMessage(email_service),
+                            message_html: getMailMessageForCordinator(email_service),
                             subject: "New Idea Arrived"
                         }))
                     }

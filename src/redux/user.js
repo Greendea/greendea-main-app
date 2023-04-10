@@ -23,6 +23,7 @@ export const userSlice = createSlice({
                 state.image = payload.image
                 state.role = payload.Role
                 state.department = payload.Department
+                state.email = payload.email
             }
         })
     }

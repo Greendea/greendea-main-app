@@ -140,7 +140,8 @@ export const getAllIdeas = async () => {
             User: {
                 select: {
                     id: true,
-                    name: true
+                    name: true,
+                    email: true
                 }
             },
             Topic: {

@@ -1,4 +1,6 @@
+import { getMailMessageForIdeaCreator } from "../../utils/emailMessage";
 import { apiSlice } from "./_index";
+import { endpoints as externalService } from "./_index";
 
 const TypeAPI = "comment"
 
@@ -11,6 +13,21 @@ const extendedApi = apiSlice.injectEndpoints({
                 body: item
             }),
             invalidatesTags: ["Idea", "Comment"],
+            async onQueryStarted({ email_service }, { dispatch, queryFulfilled }) {
+                console.log(email_service)
+                try {
+                    await queryFulfilled
+                    if (email_service.recipients.length > 0) {
+                        await dispatch(externalService.sendMail.initiate({
+                            recipients: email_service.recipients,
+                            message_html: getMailMessageForIdeaCreator(email_service),
+                            subject: "New comment for your idea"
+                        }))
+                    }
+                } catch {
+                    console.log("failt to sent email")
+                }
+            }
         }),
         getCommentByIdea: builder.query({
             query: (ideaId) => ({

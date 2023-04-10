@@ -66,7 +66,6 @@ const menu = (departments) => {
 export default function Index({ children }) {
     const router = useRouter();
     const { status } = useSession();
-
     const { data: departments } = useGetDepartmentsQuery()
 
     if (status === "unauthenticated") {

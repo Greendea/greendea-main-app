@@ -122,8 +122,9 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                 </Descriptions>
                 {dataIdea.id && <CommentList idea={dataIdea.id} />}
                 {dataIdea.id && <CommentForm
+                    ideaCreator={dataIdea.User}
                     disableComment={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
-                    form={form} idea={dataIdea.id} addComment={addComment} commentAnomyous={commentAnomyous} />}
+                    form={form} idea={dataIdea} addComment={addComment} commentAnomyous={commentAnomyous} />}
 
             </Spin>
         </Modal >
@@ -170,14 +171,22 @@ function CommentList({ idea }) {
 
 
 
-function CommentForm({ form, idea, addComment, commentAnomyous, disableComment }) {
-    const { image } = useSelector(state => state.user)
+function CommentForm({ form, idea, addComment, commentAnomyous, disableComment, ideaCreator }) {
+    const { image, name, email } = useSelector(state => state.user)
     const handleFinish = (values) => {
-        console.log(commentAnomyous)
+        console.log(ideaCreator.email, email)
+        console.log(ideaCreator.email === email ? [] : ideaCreator.email)
         addComment({
             ...values,
             isAnomyous: commentAnomyous,
-            idea
+            idea: idea.id,
+            email_service: {
+                comment: values.content,
+                commenter: name,
+                isAnomyous: commentAnomyous,
+                recipients: ideaCreator.email === email ? [] : [ideaCreator.email],
+                idea: idea.content
+            }
         }).unwrap().then(res => {
             message.success("Message sent!")
             form.resetFields()
