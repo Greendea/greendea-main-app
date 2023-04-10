@@ -157,7 +157,7 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         });
     }
 
-    const additionalColumns = department === true ? [
+    const additionalColumns = (department === true) ? [
         {
             title: 'Department',
             dataIndex: 'Department',
@@ -173,12 +173,39 @@ export default function DepartmentTableTopic({ department, editable = false, dow
         },
     ] : []
 
+    const editableColumns = editable ? [{
+        title: "Action",
+        dataIndex: "action",
+        key: "action",
+        width: "10%",
+        render: (value, record) => {
+            return <>
+                <Tag color="blue" style={{ cursor: "pointer" }}
+                    onClick={() => {
+                        setDataView(record)
+                        setIsModalOpen(true)
+                    }}
+                >Edit</Tag>
+                {
+                    deletable &&
+                    <DeleteTopic topic={record} />
+                }
+
+                {downloadable &&
+                    <Tag color="blue" style={{ cursor: "pointer", marginTop: 5 }} icon={<HiOutlineDownload />} onClick={() => handleDownload(record)}>DOWNLOAD</Tag>
+                }
+            </>
+        }
+    },] : [{
+
+    }]
+
     const columns = [
         {
             title: 'Topic',
             dataIndex: 'name',
             key: 'name',
-            width: "30%"
+            width: "40%"
         },
         {
             title: 'Creator',
@@ -200,8 +227,6 @@ export default function DepartmentTableTopic({ department, editable = false, dow
             render: (value, record) => {
                 return ParseDate(value)
             }
-
-            // moment(i.closureDateIdea).diff(moment(), "seconds") > 0
         },
         {
             title: 'Close Date Idea',
@@ -229,35 +254,8 @@ export default function DepartmentTableTopic({ department, editable = false, dow
                 </Tooltip>
             }
         },
-        editable ? {
-            title: "Action",
-            dataIndex: "action",
-            key: "action",
-            width: "20%",
-            render: (value, record) => {
-                return <>
-                    <Tag color="blue" style={{ cursor: "pointer" }}
-                        onClick={() => {
-                            setDataView(record)
-                            setIsModalOpen(true)
-                        }}
-                    >Edit</Tag>
-                    {
-                        deletable &&
-                        <DeleteTopic topic={record} />
-                    }
-
-                    {downloadable &&
-                        <Tag color="blue" style={{ cursor: "pointer", marginTop: 5 }} icon={<HiOutlineDownload />} onClick={() => handleDownload(record)}>DOWNLOAD</Tag>
-                    }
-                </>
-            }
-        } : {}
-
+        ...editableColumns
     ];
-    // useEffect(() => {
-    //     refetch()
-    // }, [department.id])
 
     return (
         <>
