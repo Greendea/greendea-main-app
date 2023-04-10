@@ -1,110 +1,106 @@
 import React from 'react'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Statistic } from 'antd';
+import { Card, Col, Row, Statistic, Tooltip } from 'antd';
+import { useGetIdeasQuery } from "../../../redux/apiSlicers/Idea"
+import moment from 'moment';
+import { useGetTopicsQuery } from '../../../redux/apiSlicers/Topic';
+
+function ColWrapper({ children }) {
+    return <Col xs={{ span: 12 }} sm={{ span: 8 }} xxl={{ span: 4 }}>
+        {children}
+    </Col>
+}
 
 export default function StatisticDepartment({ department }) {
+    const { data: ideas } = useGetIdeasQuery(undefined, {
+        selectFromResult: ({ data }) => {
+            return {
+                data: data?.filter(({ Topic }) => Topic.Department.id === department.id).map(idea => {
+                    return {
+                        ...idea,
+                        isClosed: moment(idea.Topic.closureDateTopic).diff(moment(), "hours") < 0
+                    }
+                })
+            }
+        }
+    })
+    console.log(ideas)
+    const { data: topics } = useGetTopicsQuery(undefined, {
+        selectFromResult: ({ data }) => {
+            return {
+                data: data?.map(topic => {
+                    return {
+                        ...topic,
+                        isClosed: moment(topic.closureDateTopic).diff(moment(), "hours") < 0
+                    }
+                })
+            }
+        }
+    })
     return (
         <div>
             <Row gutter={16}>
-                <Col span={6}>
+                <ColWrapper>
                     <Card bordered={false}>
                         <Statistic
                             title="Total ideas"
-                            value={11.28}
-                            precision={2}
+                            value={ideas?.filter(({ status }) => status === 1).length}
                             valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="%"
                         />
                     </Card>
-                </Col>
-                <Col span={6}>
+                </ColWrapper>
+                <ColWrapper>
                     <Card bordered={false}>
                         <Statistic
                             title="Available ideas"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
+                            value={ideas?.filter(({ isClosed, status }) => !isClosed && status === 1).length}
+                            valueStyle={{ color: '#3f8600' }}
                         />
                     </Card>
-                </Col>
-                <Col span={6}>
+                </ColWrapper>
+                <ColWrapper>
                     <Card bordered={false}>
                         <Statistic
-                            title="Total topics"
-                            value={11.28}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="%"
+                            title="Waiting ideas"
+                            value={ideas?.filter(({ status }) => status === 0).length}
+                            valueStyle={{ color: '#000' }}
                         />
                     </Card>
-                </Col>
-                <Col span={6}>
+                </ColWrapper>
+                <ColWrapper>
+                    <Card bordered={false}>
+                        <Statistic
+                            title="topics"
+                            value={topics?.length}
+                            valueStyle={{ color: '#3f8600' }}
+                        />
+                    </Card>
+                </ColWrapper>
+                <ColWrapper>
                     <Card bordered={false}>
                         <Statistic
                             title="Available topics"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                        />
-                    </Card>
-                </Col>
-            </Row>
-            <br />
-            <Row gutter={16}>
-                <Col span={6}>
-                    <Card bordered={false}>
-                        <Statistic
-                            title="Total announcements"
-                            value={11.28}
-                            precision={2}
+                            value={topics?.filter(({ isClosed }) => !isClosed).length}
                             valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="%"
                         />
                     </Card>
-                </Col>
-                <Col span={6}>
-                    <Card bordered={false}>
-                        <Statistic
-                            title="Total likes"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                        />
-                    </Card>
-                </Col>
-                <Col span={6}>
-                    <Card bordered={false}>
-                        <Statistic
-                            title="Total dislikes"
-                            value={11.28}
-                            precision={2}
-                            valueStyle={{ color: '#3f8600' }}
-                            prefix={<ArrowUpOutlined />}
-                            suffix="%"
-                        />
-                    </Card>
-                </Col>
-                <Col span={6}>
-                    <Card bordered={false}>
-                        <Statistic
-                            title="Total comments"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{ color: '#cf1322' }}
-                            prefix={<ArrowDownOutlined />}
-                            suffix="%"
-                        />
-                    </Card>
-                </Col>
+                </ColWrapper>
+                <ColWrapper>
+                    <Tooltip placement='bottom' title={<>
+                        {
+                            ideas?.map(({ User }) => User.name).filter((v, i, a) => a.indexOf(v) == i).map(user => <div key={user}>{user}</div>)
+                        }
+
+                    </>}>
+                        <Card bordered={false}>
+                            <Statistic
+                                title="Contributors"
+                                value={ideas?.map(({ User }) => User.name).filter((v, i, a) => a.indexOf(v) == i).length}
+                                valueStyle={{ color: '#3f8600' }}
+                            />
+                        </Card>
+                    </Tooltip>
+                </ColWrapper>
             </Row>
             <br />
             <p>
