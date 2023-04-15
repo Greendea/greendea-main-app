@@ -20,7 +20,7 @@ export default function TermConditon() {
         if (isSuccess) {
             valueRef.current = data?.description
         }
-    }, [isSuccess])
+    }, [isSuccess, data?.description])
     return (
         <div>
             <div style={{ textAlign: "right", padding: "10px 5px", marginBottom: 10 }}>

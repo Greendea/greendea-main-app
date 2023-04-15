@@ -55,7 +55,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                 idea: dataIdea.id
             })
         }
-    }, [])
+    }, [addView, dataIdea?.id, dataIdea?.views, userId])
 
     const [form] = Form.useForm()
     const [addComment, { isLoading: loadingAddComment }] = useAddCommentMutation()

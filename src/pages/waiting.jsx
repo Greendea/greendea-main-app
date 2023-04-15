@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
@@ -12,7 +13,7 @@ export default function Waiting() {
         if (session === null) {
             router.push("/")
         }
-    }, [session])
+    }, [session, router])
     return (
         <div className='waiting-wrapper'>
             <Head>
@@ -23,7 +24,7 @@ export default function Waiting() {
             <div class="waiting">
                 <form>
                     <div class="title">
-                        <img src="/logowaiting.png" />
+                        <img src="/logowaiting.png" alt="img" />
                         <h1>Please wait for the admin to set your role and department.</h1>
                         <h1>Come back later!</h1>
                         <button type='button'

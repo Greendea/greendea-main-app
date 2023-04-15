@@ -29,7 +29,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView, categor
         form.setFieldsValue({
             ...dataView,
         })
-    }, [dataView])
+    }, [dataView, form])
 
     return <Modal title="EDIT CATEGORY" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={600}
         footer={[

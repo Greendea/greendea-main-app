@@ -11,7 +11,7 @@ export default function Login() {
         } else {
             router.push("/api/auth/signin")
         }
-    }, [status])
+    }, [status, router])
     return <>
     </>
 }

@@ -23,7 +23,7 @@ const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             })
             setContent(dataView?.content)
         }
-    }, [dataView?.id])
+    }, [dataView?.id, dataView, form])
 
     return <Modal title="VIEW ANNOUCEMENT" open={isModalOpen} width={1080} closable={false}
         footer={[
@@ -65,7 +65,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
                 content: dataView?.content
             })
         }
-    }, [dataView])
+    }, [dataView, form])
     const handleFinish = (values) => {
 
         updateAnnouncement({

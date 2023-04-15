@@ -38,15 +38,13 @@ const ModalEditUser = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) =
         })
     };
     useEffect(() => {
-        console.log(dataView)
-        console.log(form.getFieldValue("department"))
         form.setFieldsValue({
             ...dataView,
             department: dataView?.Department?.id,
             role: dataView?.Role?.id,
             status: dataView?.status
         })
-    }, [dataView.id])
+    }, [dataView?.id, dataView, form])
 
     return <Modal closable={false} title="EDIT STAFF" open={isModalOpen} width={400}
         footer={[

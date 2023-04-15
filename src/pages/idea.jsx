@@ -146,7 +146,7 @@ export default function Idea() {
             form.setFieldValue("topic", topicId)
         }
 
-    }, [departmentId, topicId])
+    }, [departmentId, topicId, form])
     return (
         <Layout>
             <Head>

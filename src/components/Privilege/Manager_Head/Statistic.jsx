@@ -169,7 +169,7 @@ function AnomyousComment({ department }) {
         fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
             setComments(res.data)
         })
-    }, [refetch])
+    }, [refetch, department?.id])
 
 
     const columns = [

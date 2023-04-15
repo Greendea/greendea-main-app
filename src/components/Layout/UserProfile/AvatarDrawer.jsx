@@ -89,7 +89,7 @@ export default function ProfileDrawer() {
             })
 
         }
-    }, [isSuccess])
+    }, [isSuccess, User, form, router])
 
     const [open, setOpen] = useState(false);
 

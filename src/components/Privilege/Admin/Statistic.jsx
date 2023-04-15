@@ -140,7 +140,7 @@ function LeftChart({ Bar }) {
                 }
             })
         }
-    }, [isSuccess])
+    }, [isSuccess, departments])
     return <Bar {...conf} />
 
 }

@@ -27,7 +27,7 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
         form.setFieldsValue({
             ...dataView,
         })
-    }, [dataView])
+    }, [dataView, form])
 
     return <Modal title="EDIT DEPARTMENT / FACULTY" open={isModalOpen} onCancel={() => setIsModalOpen(false)} width={600}
         footer={[

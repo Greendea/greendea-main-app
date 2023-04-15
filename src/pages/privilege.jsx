@@ -23,7 +23,7 @@ export default function Privilege() {
             setRole(User?.Role?.name)
             setDepartment(User?.Department)
         }
-    }, [isSuccess])
+    }, [isSuccess, User?.Department, User?.Role.name])
 
     return (
         <Layout>

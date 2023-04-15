@@ -45,7 +45,7 @@ export default function TopicForm({ department }) {
     }
     useEffect(() => {
         form.setFieldValue("department", department.name)
-    }, [])
+    }, [department?.name, form])
     return <>
         <Divider>
             <span style={{ fontSize: 24 }}>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { getProviders, signIn } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]";
@@ -13,9 +14,9 @@ export default function SignIn({ providers }) {
                 <div className="wrapperLogin" key={provider.name}>
                     <div className="login">
                         <form>
-                            <img src="/logo.png" />
+                            <img src="/logo.png" alt="logo" />
                             <div className="button_wrapper">
-                                <img src="/google.avif" />
+                                <img src="/google.avif" alt="logo" />
                                 <div onClick={() => signIn(provider.id)}>Log in with Google</div>
                             </div>
                         </form>
