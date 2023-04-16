@@ -102,18 +102,15 @@ export default function ProfileDrawer() {
 
     return (
         <>
-            {
-                image &&
-                <Avatar src={image}
-                    onClick={showDrawer}
-                    className="avatar"
-                    style={{
-                        position: "absolute",
-                        right: 50,
-                        top: 15,
-                        cursor: "pointer"
-                    }} />
-            }
+            <Avatar src={image || "https://static.thenounproject.com/png/5034901-200.png"}
+                onClick={showDrawer}
+                className="avatar"
+                style={{
+                    position: "absolute",
+                    right: 50,
+                    top: 15,
+                    cursor: "pointer"
+                }} />
             <Drawer placement="right" onClose={onClose} open={open} width={380}
                 extra={
                     <Space>
