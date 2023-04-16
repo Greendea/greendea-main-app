@@ -66,7 +66,6 @@ export const addAnnouncement = async ({ title, content, department }) => {
 }
 
 export const updateAnnouncementByID = async (id, { title, content }) => {
-    console.log("req.query.id", id)
     return await prisma.announcement.update({
         where: {
             id: id

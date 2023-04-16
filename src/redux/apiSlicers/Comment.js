@@ -14,7 +14,6 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Idea", "Comment"],
             async onQueryStarted({ email_service }, { dispatch, queryFulfilled }) {
-                console.log(email_service)
                 try {
                     await queryFulfilled
                     if (email_service.recipients.length > 0) {

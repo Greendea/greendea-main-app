@@ -2,7 +2,6 @@ import DepartmentTableTopic from "../../components/Department/DepartmentTableIde
 import TopicForm from "../../components/Department/TopicForm";
 
 export default function TopicIdea({ department, role }) {
-    console.log("rolerolerolerolerole", role)
     return (
         <>
             {department && <>

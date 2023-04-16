@@ -20,8 +20,8 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView, categor
             setIsModalOpen(false)
             setDataView(null)
             message.success("Category Updated")
-        }).catch(res => {
-            console.log(res.data)
+        }).catch(err => {
+            console.log(err)
             message.error(res.data.message)
         })
     }
@@ -58,9 +58,9 @@ const AddModal = ({ categories }) => {
             form.resetFields()
             setIsModalOpen(false)
             message.success("Category Added")
-        }).catch(res => {
-            console.log(res.data)
-            message.error(res.data.message)
+        }).catch(err => {
+            console.log(err.data)
+            message.error(err.data.message)
         })
     }
     return <div style={{ textAlign: "right", margin: "20px 0 10px 0" }}>
@@ -80,7 +80,6 @@ const AddModal = ({ categories }) => {
     </div >
 }
 const ConfirmDelete = ({ id, name }, deleteCategory) => {
-    console.log(id)
     Modal.confirm({
         title: 'Do you Want to delete this item ?',
         icon: <ExclamationCircleFilled />,

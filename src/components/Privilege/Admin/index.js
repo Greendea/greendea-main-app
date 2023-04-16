@@ -7,7 +7,6 @@ import TermConditon from './TermConditon';
 import TopicIdea from '../../Department/TopicIdeaPannel';
 import { Categories } from './Categories';
 const onChange = (key) => {
-    console.log(key);
 };
 
 const items = [

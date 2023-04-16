@@ -60,8 +60,6 @@ const AddModal = () => {
     const [form] = Form.useForm()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleSubmit = (values) => {
-        console.log(values)
-        // addDepartment
         addDepartment(values).unwrap().then(res => {
             console.log(res)
             form.resetFields()
@@ -101,7 +99,6 @@ const AddModal = () => {
     </div>
 }
 const ConfirmDelete = ({ id, name, status }, deleteDepartment) => {
-    console.log(id)
     Modal.confirm({
         title: 'Do you Want to delete this item ?',
         icon: <ExclamationCircleFilled />,
@@ -112,7 +109,6 @@ const ConfirmDelete = ({ id, name, status }, deleteDepartment) => {
             </Descriptions>
         </>,
         onOk() {
-            console.log(id)
             deleteDepartment(id).unwrap().then(res => message.success("Department Deleted")).catch(err => {
                 console.log(err)
                 message.error("Failed To Delete This!")

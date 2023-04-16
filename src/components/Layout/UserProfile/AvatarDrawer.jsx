@@ -72,7 +72,6 @@ export default function ProfileDrawer() {
     const [form] = Form.useForm()
     const router = useRouter()
     const { image } = useSelector(state => state.user)
-    console.log(image, "*****************")
 
 
     useEffect(() => {
@@ -123,7 +122,6 @@ export default function ProfileDrawer() {
 
                         <Button onClick={() => {
                             signOut().then(res => {
-                                console.log(res)
                                 onClose()
                                 localStorage.clear()
                             }).catch(err => {

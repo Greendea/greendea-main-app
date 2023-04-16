@@ -3,13 +3,11 @@ import Announcement from '../../Department/Announcement';
 import Staff from '../../Staff/Staff';
 import TopicIdea from '../../Department/TopicIdeaPannel';
 const onChange = (key) => {
-    console.log(key);
 };
 
 
 
 export default function Index({ department, role }) {
-    console.log(department, role)
     const items = [
         {
             key: '1',

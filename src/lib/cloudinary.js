@@ -31,7 +31,6 @@ export const uploadImage = async (imagePath, cfg) => {
     try {
         // Upload the media
         const result = await cloudinary.uploader.upload(imagePath, { ...options, ...cfg });
-        console.log(result);
         return result;
     } catch (error) {
         console.log(error)

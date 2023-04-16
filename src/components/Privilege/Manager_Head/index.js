@@ -4,7 +4,6 @@ import Announcement from '../../Department/Announcement';
 import TopicIdea from '../../Department/TopicIdeaPannel';
 import Statistic from './Statistic';
 const onChange = (key) => {
-    console.log(key);
 };
 
 

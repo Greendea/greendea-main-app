@@ -5,7 +5,6 @@ export const AddView = async (req, res, userSession) => {
 }
 
 export const addView = async (idea, user) => {
-    console.log("ADDDDDDDD", idea, user)
     return await prisma.view.create({
         data: {
             ideaId: idea,

@@ -31,15 +31,6 @@ const nodeBinding = {
 
 function SystemChart({ departments, users }) {
     const [rootItem, setRootItem] = useState(null)
-    console.log(departments.map(dpm => {
-        return {
-            [dpm.tags[1]]: {
-                subTreeConfig: {
-                    columns: 1
-                }
-            }
-        }
-    }))
     function Orgchart({ nodes, nodeBinding }) {
         if (typeof window === 'object') {
             let tags = {
@@ -98,7 +89,6 @@ export default function System() {
             }
         }
     })
-    console.log(departments)
     const { data: users, isLoading } = useGetUsersQuery(undefined, {
         selectFromResult: ({ data, isLoading }) => {
             return {
@@ -126,7 +116,6 @@ export default function System() {
             }
         }
     })
-    console.log(users)
 
     return (
         <Layout>

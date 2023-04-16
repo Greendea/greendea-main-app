@@ -177,8 +177,6 @@ function CommentList({ idea, department }) {
 function CommentForm({ form, idea, addComment, commentAnomyous, disableComment, ideaCreator }) {
     const { image, name, email } = useSelector(state => state.user)
     const handleFinish = (values) => {
-        console.log(ideaCreator.email, email)
-        console.log(ideaCreator.email === email ? [] : ideaCreator.email)
         addComment({
             ...values,
             isAnomyous: commentAnomyous,

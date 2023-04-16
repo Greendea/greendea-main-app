@@ -29,7 +29,6 @@ const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
         footer={[
             <Button key="Close" onClick={() => {
                 form.resetFields()
-                console.log(dataView)
                 setContent(null)
                 setIsModalOpen(false)
                 setDataView(null)
@@ -172,7 +171,6 @@ export default function AnnouncementTable({ department, editable = false, deleta
             render: (_, record) => (
                 <Space size="middle">
                     <Tag color="blue" style={{ cursor: "pointer" }} onClick={() => {
-                        console.log(record)
                         setDataView(record)
                         setIsModalOpenView(true)
                     }}>View Detail</Tag>

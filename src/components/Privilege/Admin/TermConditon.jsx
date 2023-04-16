@@ -31,7 +31,6 @@ export default function TermConditon() {
                     {data && <Editor
                         value={data.description}
                         onChange={(v) => {
-                            console.log(v)
                             valueRef.current = v
                         }}
                     />}

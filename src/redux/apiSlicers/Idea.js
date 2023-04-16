@@ -23,7 +23,6 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [TypeName],
             async onQueryStarted({ email_service }, { dispatch, queryFulfilled }) {
-                console.log(email_service)
                 try {
                     await queryFulfilled
                     if (email_service.recipients.length > 0) {
@@ -62,7 +61,6 @@ const extendedApi = apiSlice.injectEndpoints({
             }),
             // invalidatesTags: ["Idea"],
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
-                console.log("argargargargargargarg", arg)
                 const patchResult = dispatch(
                     extendedApi.util.updateQueryData("getIdeas", undefined, (draft) => {
                         return draft.map(i => {

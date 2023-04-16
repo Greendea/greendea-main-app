@@ -16,7 +16,6 @@ export const GetAllUser = async (req, res, userSession) => {
 }
 
 export const GetUserByEmail = async (req, res, userSession) => {
-    console.log("userSession", userSession)
     if (userSession.email === req.query.email) {
         return res.status(200).json(await findUserByEmail(req.query.email))
     } else {

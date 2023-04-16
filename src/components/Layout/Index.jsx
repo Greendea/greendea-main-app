@@ -133,69 +133,69 @@ export default function Index({ children }) {
 }
 
 
-function VoiceControl({ children }) {
-    const [recognition, setRecognition] = useState(null)
-    const [transcript, setTranscript] = useState('');
-    const [recording, setRecording] = useState(false)
+// function VoiceControl({ children }) {
+//     const [recognition, setRecognition] = useState(null)
+//     const [transcript, setTranscript] = useState('');
+//     const [recording, setRecording] = useState(false)
 
-    useEffect(() => {
-        const reg = new webkitSpeechRecognition();
-        reg.continuous = true;
-        reg.interimResults = true;
-        reg.onstart = function () {
-            setRecording(true)
-            console.log('Speech recognition has started');
-        }
-        reg.onerror = function (event) {
-            setRecording(false)
-            setTranscript(null)
-            console.log('Speech recognition error: ' + event.error);
-            message.warning("Micro not allowed, please enable micro")
-        }
+//     useEffect(() => {
+//         const reg = new webkitSpeechRecognition();
+//         reg.continuous = true;
+//         reg.interimResults = true;
+//         reg.onstart = function () {
+//             setRecording(true)
+//             console.log('Speech recognition has started');
+//         }
+//         reg.onerror = function (event) {
+//             setRecording(false)
+//             setTranscript(null)
+//             console.log('Speech recognition error: ' + event.error);
+//             message.warning("Micro not allowed, please enable micro")
+//         }
 
-        reg.onend = function () {
-            setRecording(false)
-            setTranscript(null)
-            console.log('Speech recognition has ended');
-        }
+//         reg.onend = function () {
+//             setRecording(false)
+//             setTranscript(null)
+//             console.log('Speech recognition has ended');
+//         }
 
-        reg.onresult = (event) => {
-            let interimTranscript = '';
-            let finalTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript;
-                    console.log(finalTranscript)
-                    setTranscript(finalTranscript)
-                } else {
-                    interimTranscript += event.results[i][0].transcript;
-                    console.log(interimTranscript)
-                    setTranscript(interimTranscript)
-                }
-            }
-        };
-        setRecognition(reg)
-    }, []);
-    return (
-        <>
-            {children}
-            <div style={{ position: "fixed", right: 5, bottom: 10, zIndex: 100, width: "fit-content", cursor: "pointer" }} >
-                <div style={{ overflow: "visible", width: 50 }}>
-                    {
-                        recognition &&
-                        (
+//         reg.onresult = (event) => {
+//             let interimTranscript = '';
+//             let finalTranscript = '';
+//             for (let i = event.resultIndex; i < event.results.length; i++) {
+//                 if (event.results[i].isFinal) {
+//                     finalTranscript += event.results[i][0].transcript;
+//                     console.log(finalTranscript)
+//                     setTranscript(finalTranscript)
+//                 } else {
+//                     interimTranscript += event.results[i][0].transcript;
+//                     console.log(interimTranscript)
+//                     setTranscript(interimTranscript)
+//                 }
+//             }
+//         };
+//         setRecognition(reg)
+//     }, []);
+//     return (
+//         <>
+//             {children}
+//             <div style={{ position: "fixed", right: 5, bottom: 10, zIndex: 100, width: "fit-content", cursor: "pointer" }} >
+//                 <div style={{ overflow: "visible", width: 50 }}>
+//                     {
+//                         recognition &&
+//                         (
 
-                            recording ?
-                                <img src={"sound_gif.gif"} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.stop()} />
-                                :
-                                <img src={'/voice_icon.svg'} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.start()} />
-                        )
-                    }
-                    <div style={{ position: "relative" }}>
-                        {transcript}
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
+//                             recording ?
+//                                 <img src={"sound_gif.gif"} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.stop()} />
+//                                 :
+//                                 <img src={'/voice_icon.svg'} alt="micro" style={{ widtth: 50, height: 50 }} onClick={() => recognition.start()} />
+//                         )
+//                     }
+//                     <div style={{ position: "relative" }}>
+//                         {transcript}
+//                     </div>
+//                 </div>
+//             </div>
+//         </>
+//     )
+// }

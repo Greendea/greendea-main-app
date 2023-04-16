@@ -31,19 +31,18 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             closureDateIdea: values.date[1].$d,
             closureDateTopic: values.closureDateTopic.$d
         }
-        console.log(submitData)
+            (submitData)
         updateTopic(submitData).unwrap().then(res => {
             form.resetFields()
             setIsModalOpen(false)
             setDataView(null)
             message.success("Topic Updated")
-        }).catch(res => {
-            console.log(res)
+        }).catch(err => {
+            console.log(err)
             message.error("Failed to update topic")
         })
     }
     useEffect(() => {
-        console.log(dataView)
         form.setFieldsValue({
             department: dataView?.Department.name,
             name: dataView?.name,

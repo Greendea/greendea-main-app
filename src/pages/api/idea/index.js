@@ -33,7 +33,6 @@ export default async function handler(req, res) {
         }
         if (req.method === "POST") {
             const files = req.body.files
-            console.log(files.length)
             const uploadedFiles = await Promise.all(files.map(async (item) => {
                 let { secure_url } = await cloudinary.uploader.upload(item.url, {
                     use_filename: true,
@@ -41,11 +40,9 @@ export default async function handler(req, res) {
                     overwrite: true,
                     public_id: item.name
                 })
-                console.log(secure_url)
                 return secure_url
             }))
 
-            console.log(uploadedFiles)
             // if (files.length > 0) {
             //     for (let item of files) {
             //         // let { secure_url } = await uploadImage(item.url, {

@@ -10,7 +10,6 @@ export default function AnnouncementForm({ department }) {
     const [addAnnoucement, { isLoading }] = useAddAnnouncementMutation()
     const [form] = Form.useForm()
     const handleFinish = (values) => {
-        console.log(values)
         addAnnoucement({
             ...values,
             department: department.id

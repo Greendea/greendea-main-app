@@ -36,8 +36,6 @@ export default function Department({ department }) {
 export async function getStaticPaths() {
     const res = await fetch(`${process.env.BE_URL}api/department`)
     const deps = await res.json()
-    console.log(deps)
-
     // Get the paths we want to pre-render based on posts
     const paths = deps.map((dep) => ({
         params: { id: dep.id },

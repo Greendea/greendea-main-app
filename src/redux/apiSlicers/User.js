@@ -11,7 +11,6 @@ const extendedApi = apiSlice.injectEndpoints({
         }),
         getUserByEmail: builder.query({
             query: (email) => {
-                console.log("EMAIL", email)
                 return `${TypeAPI}/${email}`
             },
             providesTags: [TypeName]
