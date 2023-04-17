@@ -43,9 +43,13 @@ export default function Test() {
                 <div onClick={() => handleClick("phamcaosang235@gmail.com")}>Manager / Head</div>
               </div>
               <div className="button_wrapper" >
+                <div onClick={() => handleClick("dungdtgcs200419@fpt.edu.vn")}>Coordinator</div>
+              </div>
+              <div className="button_wrapper" >
                 <div onClick={() => handleClick("sangpcgcs200809@fpt.edu.vn")}>Staff</div>
               </div>
             </form>
+
           </Spin>
         </div>
       </div>

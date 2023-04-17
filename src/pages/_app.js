@@ -33,7 +33,7 @@ function Wrapper({ children }) {
       store.dispatch(IdeaEndpoints.getPersonalIdeas.initiate())
       triggerOnline = setInterval(() => {
         store.dispatch(ExternalEnpoint.activeUser.initiate(session.user.email))
-      }, 10000);
+      }, 1000);
     }
     return () => {
       clearInterval(triggerOnline);
