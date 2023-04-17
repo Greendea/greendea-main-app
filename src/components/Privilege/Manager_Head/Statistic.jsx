@@ -170,7 +170,7 @@ function AnomyousComment({ department }) {
             return fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
                 setComments(res.data)
             })
-        }, 3000)
+        }, 2000)
 
         return () => {
             clearInterval(apiCall)
