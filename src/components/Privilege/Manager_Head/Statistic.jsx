@@ -166,9 +166,16 @@ function AnomyousComment({ department }) {
     const { data: ideas, isLoading } = useGetIdeasQuery()
     const [refetch, setRefetch] = useState(false)
     useEffect(() => {
-        fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
-            setComments(res.data)
-        })
+        const apiCall = setInterval(() => {
+            return fetch(`${process.env.BE_URL}api/dashboard?type=2&department=${department.id}`).then(res => res.json()).then(res => {
+                setComments(res.data)
+            })
+        }, 2000)
+
+        return () => {
+            clearInterval(apiCall)
+        }
+
     }, [refetch, department?.id])
 
 
@@ -209,8 +216,6 @@ function AnomyousComment({ department }) {
 
     return (
         <>
-            <Button type='primary' onClick={() => setRefetch(prev => !prev)}>Reload</Button>
-            <br />
             <Table columns={columns} dataSource={comments} pagination={{ pageSize: 3 }}
                 title={() => <div >
                     <Divider><span style={{ textAlign: "center", fontSize: 20, fontWeight: 500 }}>Anomyous Comments</span></Divider>
