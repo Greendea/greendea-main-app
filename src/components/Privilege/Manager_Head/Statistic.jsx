@@ -209,6 +209,8 @@ function AnomyousComment({ department }) {
 
     return (
         <>
+            <Button type='primary' onClick={() => setRefetch(prev => !prev)}>Reload</Button>
+            <br />
             <Table columns={columns} dataSource={comments} pagination={{ pageSize: 3 }}
                 title={() => <div >
                     <Divider><span style={{ textAlign: "center", fontSize: 20, fontWeight: 500 }}>Anomyous Comments</span></Divider>
