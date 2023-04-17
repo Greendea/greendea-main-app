@@ -101,7 +101,6 @@ function DeleteTopic({ topic }) {
 
 export default function DepartmentTableTopic({ department, editable = false, downloadable = false, deletable = false }) {
     const router = useRouter()
-    console.log(router.isFallback)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [dataView, setDataView] = useState(null)
     const { data, isLoading, refetch } = useGetTopicsQuery(undefined, {
