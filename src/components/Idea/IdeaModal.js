@@ -121,7 +121,7 @@ export const ModalIdea = ({ isShowIdea, setIsShowIdea, dataIdea, setDataIdea, to
                     <Descriptions.Item label="Date Submit">{ParseDate(dataIdea.createdAt)}</Descriptions.Item>
                     <Descriptions.Item label="Content" span={3}>{dataIdea.content}</Descriptions.Item>
                 </Descriptions>
-                {dataIdea.id && <CommentList idea={dataIdea.id} department={topic.Department} />}
+                {(dataIdea.id && topic) && <CommentList idea={dataIdea.id} department={topic.Department} />}
                 {dataIdea.id && <CommentForm
                     ideaCreator={dataIdea.User}
                     disableComment={moment(topic.closureDateTopic).diff(moment(), "hours") < 0}
@@ -261,7 +261,7 @@ const CommentIdeas = (
                 }
 
                 {
-                    (["manager", "head"].includes(role?.name) && department.id === userDepartment?.id) &&
+                    (["manager", "head"].includes(role?.name) && department?.id === userDepartment?.id) &&
                     <DeleteComment comment={id} department={department.id} />
                 }
             </p>
