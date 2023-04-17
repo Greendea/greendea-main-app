@@ -31,7 +31,6 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             closureDateIdea: values.date[1].$d,
             closureDateTopic: values.closureDateTopic.$d
         }
-            (submitData)
         updateTopic(submitData).unwrap().then(res => {
             form.resetFields()
             setIsModalOpen(false)
