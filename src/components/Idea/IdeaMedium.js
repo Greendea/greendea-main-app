@@ -111,8 +111,8 @@ export default function Ideas({ ideas, isLoading, title, header }) {
 
                 />
                 {
-                    dataIdea &&
-                    <ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={ideas.find(({ id }) => id === dataIdea).Topic} loading={isLoading} />
+                    (dataIdea && ideas.find(({ id }) => id === dataIdea)?.Topic) &&
+                    < ModalIdea isShowIdea={isShowIdea} setIsShowIdea={setIsShowIdea} dataIdea={ideas.find(i => i.id === dataIdea)} setDataIdea={setDataIdea} topic={ideas.find(({ id }) => id === dataIdea).Topic} loading={isLoading} />
                 }
             </div>
         </Layout>
