@@ -10,6 +10,7 @@ import parse from 'html-react-parser';
 import dynamic from "next/dynamic";
 import { validateMessages } from '../../utils/validateMessage';
 
+const Editor = dynamic(() => import("../../utils/editor"), { ssr: false });
 
 const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     const [form] = Form.useForm()
@@ -55,7 +56,6 @@ const ModalView = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
 
 const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
     const [form] = Form.useForm()
-    const Editor = dynamic(() => import("../../utils/editor"), { ssr: false });
     const [updateAnnouncement, { isLoading }] = useUpdateAnnouncementByIdMutation()
     useEffect(() => {
         if (dataView) {
@@ -66,7 +66,6 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
         }
     }, [dataView, form])
     const handleFinish = (values) => {
-
         updateAnnouncement({
             ...values,
             id: dataView?.id
@@ -80,7 +79,6 @@ const ModalEdit = ({ isModalOpen, setIsModalOpen, dataView, setDataView }) => {
             message.error("Failed to updated annoucement")
         })
     }
-
     return <Modal title="VIEW ANNOUCEMENT" open={isModalOpen} width={1580} closable={false}
         footer={[
             <Button key="Close" onClick={() => {
